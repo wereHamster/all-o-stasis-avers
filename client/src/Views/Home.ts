@@ -46,7 +46,7 @@ homeView(app: App) {
     var boulders = app.data.ownedBoulderCollection.ids.get([]).map(boulderId => {
         let boulderC = Avers.lookupEditable<Boulder>(app.data.aversH, boulderId);
 
-        return boulderC.then((boulder) => {
+        return boulderC.fmap((boulder) => {
              return Card({ app: app, key: boulder.objectId, boulderE: boulder });
         }).get(boulderLoadingCard(app, boulderId));
     });

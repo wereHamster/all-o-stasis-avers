@@ -11,12 +11,6 @@ export interface CardProps {
 
 export function tileHeader(app: App, boulderId: string) {
 
-    //FIXME: why??
-    if(boulderId === undefined) {
-        console.log("undefined boulderId.. why??");
-        return;
-    }
-
     var colorClass = "unknown";
 
     let meta = Avers.lookupEditable<Boulder>(
