@@ -9,10 +9,16 @@ import * as Avers from '../../lib/avers';
 import {App, navigateTo, navigateToFn} from '../../app';
 import * as Boulder from '../Boulder';
 
+var sideBarItem = React.DOM.div
+    ( { className: 'navbar-item', onClick: navigateToFn('/') }
+    , React.DOM.i({ className: 'sidebar icon' })
+    , ''
+    );
+
 var homeItem = React.DOM.div
     ( { className: 'navbar-item', onClick: navigateToFn('/') }
-    , React.DOM.i({ className: 'server icon' })
-    , 'Boulders'
+    , React.DOM.i({ className: 'home icon' })
+    , ''
     );
 
 // spacer
@@ -21,21 +27,19 @@ var flexItem = React.DOM.div
     );
 
 // end session
+// FIXME: that should show a dropdown with signout and preferences
 function signOutItem(app: App) {
     return React.DOM.div
         ( { className: 'navbar-item', onClick: doSignOutF(app) }
+        , React.DOM.i({ className: 'setting icon' })
         , 'Sign out'
         );
 }
 
-var signUpItem = React.DOM.div
-    ( { className: 'navbar-item', onClick: navigateToFn('/signup') }
-    , 'Sign up'
-    );
-
 var signInItem = React.DOM.div
     ( { className: 'navbar-item', onClick: navigateToFn('/login') }
-    , 'Sign in'
+    , React.DOM.i({ className: 'sign in icon' })
+    , 'Login'
     );
 
 
@@ -44,6 +48,7 @@ navBar(app: App) {
     if (app.data.session.objId) {
         return React.DOM.div
             ( { className: 'navbar' }
+            , sideBarItem
             , homeItem
             , flexItem
             , Boulder.createBoulderItem(app)
@@ -53,10 +58,10 @@ navBar(app: App) {
     } else {
         return React.DOM.div
             ( { className: 'navbar' }
+            , sideBarItem
             , homeItem
-            , flexItem
-            , signUpItem
             , signInItem
+            , flexItem
             );
     }
 }
