@@ -21,26 +21,34 @@ var homeItem = React.DOM.div
     , ''
     );
 
+var teamItem = React.DOM.div
+    ( { className: 'navbar-item', onClick: navigateToFn('/team') }
+    , React.DOM.i({ className: 'users icon' })
+    , ''
+    );
+
 // spacer
 var flexItem = React.DOM.div
     ( { className: 'flex-navbar-item' }
     );
 
-// end session
-// FIXME: that should show a dropdown with signout and preferences
-function signOutItem(app: App) {
-    return React.DOM.div
-        ( { className: 'navbar-item', onClick: doSignOutF(app) }
-        , React.DOM.i({ className: 'setting icon' })
-        , 'Sign out'
-        );
-}
-
+// Account options
 var signInItem = React.DOM.div
     ( { className: 'navbar-item', onClick: navigateToFn('/login') }
     , React.DOM.i({ className: 'sign in icon' })
     , 'Login'
     );
+
+// FIXME: that should show a dropdown with signout and account preferences
+function accountSettingsItem(app: App) {
+    var accountId = app.data.session.objId;
+
+    return React.DOM.div
+        ( { className: 'navbar-item', onClick: navigateToFn('/account/' + accountId) }
+        , React.DOM.i({ className: 'user icon' })
+        , 'Account'
+        );
+}
 
 
 export function
@@ -50,9 +58,10 @@ navBar(app: App) {
             ( { className: 'navbar' }
             , sideBarItem
             , homeItem
+            , teamItem
             , flexItem
-            , Boulder.createBoulderItem(app)
-            , signOutItem(app)
+            , Boulder.createBoulderItem(app) //FIXME: if has permissions (role)
+            , accountSettingsItem(app)
             );
 
     } else {
@@ -60,8 +69,9 @@ navBar(app: App) {
             ( { className: 'navbar' }
             , sideBarItem
             , homeItem
-            , signInItem
+            , teamItem
             , flexItem
+            , signInItem
             );
     }
 }

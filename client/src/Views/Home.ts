@@ -55,7 +55,7 @@ homeView(app: App) {
     return site
         ( app
         , navBar(app)
-        , sideBar(app)
+        //, sideBar(app)
         , React.DOM.div({ className: 'boulders' }, boulders)
         );
 }

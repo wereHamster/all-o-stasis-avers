@@ -6,7 +6,7 @@ module Login
 
 
 import * as Avers from '../lib/avers';
-import {App, refresh, navigateTo} from '../app';
+import {App, refresh, navigateTo, navigateToFn} from '../app';
 import * as Site from './Components/Site';
 import * as NavBar from './Components/NavBar';
 
@@ -40,13 +40,25 @@ loginView(app: App) {
         ( app
         , NavBar.navBar(app)
         , React.DOM.div
-            ( {}
+            ( { className: 'login' }
+            , React.DOM.div
+                ( { className: 'logo' }
+                , 'All-o-stasis'
+                )
+            , React.DOM.p
+                ( { className: 'about' }
+                , 'Use your account identifier or user name to login.'
+                )
             , React.DOM.input
-                ( { type: 'text', value: accountId, onClick: stopPropagation, onChange: changeAccountId }
+                ( { className: 'wide', type: 'text', value: accountId, onClick: stopPropagation, onChange: changeAccountId }
                 )
             , React.DOM.div
                 ( { className: 'button', onClick: doSignin }
                 , 'Sign in'
+                )
+            , React.DOM.div
+                ( { className: 'button', onClick: navigateToFn('/signup') }
+                , 'Sign up'
                 )
             )
         );

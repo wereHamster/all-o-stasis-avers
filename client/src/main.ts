@@ -4,9 +4,11 @@
 import * as Avers from './lib/avers';
 import {Data, App, infoTable, refresh, loadView} from './app';
 
+import {accountView} from './Views/Account';
 import {boulderView} from './Views/Boulder';
 import {homeView} from './Views/Home';
 import {loadingView, notFoundView} from './views';
+import {teamView} from './Views/Team';
 import {loginView} from './Views/Login';
 import {signupView} from './Views/Signup';
 
@@ -83,11 +85,24 @@ function setupRoutes(app: App) {
         });
     });
 
+    page('/account/:accountId', function(ctx) {
+        loadView(app, app => {
+            return accountView(app, ctx.params.accountId);
+         });
+    });
+
     page('/boulder/:boulderId', function(ctx) {
         loadView(app, app => {
             return boulderView(app, ctx.params.boulderId);
          });
     });
+
+    page('/team', function() {
+        loadView(app, app => {
+            return teamView(app);
+        });
+    });
+
 
     // Your router MUST have a catch-all handler, otherwise you'll get
     // a redirect loop on the client!

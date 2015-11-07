@@ -8,6 +8,7 @@ module Signup
 import * as Avers from '../lib/avers';
 import {App, refresh, navigateToFn} from '../app';
 import {site} from './Components/Site';
+import * as NavBar from './Components/NavBar';
 
 var signupInProgress = false;
 
@@ -39,6 +40,7 @@ signupView(app: App) {
     if (app.data.session.objId && signupInProgress === false) {
         return site
             ( app
+            , NavBar.navBar(app)
             , React.DOM.div
                 ( { className: 'login' }
                 , React.DOM.div
@@ -51,6 +53,12 @@ signupView(app: App) {
                     , "Write it down somewhere, you will need it to log in again. "
                     , "If you forget it it you will lose access all-o-stasis. "
                     , "You have been warned."
+                    )
+                , React.DOM.p
+                    ( { className: 'about' }
+                    , "In order to be able to login with a username/password, "
+                    , "see the account prefences. Note that until you set a "
+                    , "password, your account is not protected."
                     )
                 , React.DOM.div
                     ( { className: 'account-identifier' }
@@ -78,7 +86,7 @@ signupView(app: App) {
                     )
                 , React.DOM.div
                     ( { className: 'text' }
-                    , 'The hamsters in the server are busy opening a new account for you.'
+                    , 'We are busy opening a new account for you.'
                     )
                 );
         } else {
@@ -87,23 +95,29 @@ signupView(app: App) {
                 , 'Sign up'
                 );
             other = React.DOM.div
-                ( { className: 'other', onClick: () => { navigateToFn('/login'); } }
-                , "If you already have an account, click here to login in with it."
+                ( { className: 'button', onClick: () => { navigateToFn('/login'); } }
+                , "I already have an account (Login)"
                 );
         }
 
         return site
             ( app
+            , NavBar.navBar(app)
             , React.DOM.div
                 ( { className: 'login' }
                 , React.DOM.div
                     ( { className: 'logo' }
-                    , 'Battery Tracker'
+                    , 'All-o-stasis'
                     )
                 , React.DOM.p
                     ( { className: 'about' }
                     , "Signing up is as easy as clicking the button below. "
-                    , "We don't ask for any personal identifying information."
+                    , "We don't ask for any personal identifying information. "
+                    )
+                , React.DOM.p
+                    ( { className: 'about' }
+                    , "Once your account has been created you can provide "
+                    , "additional information at your discression."
                     )
                 , btn
                 , other

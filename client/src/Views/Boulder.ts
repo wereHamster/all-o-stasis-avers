@@ -29,14 +29,14 @@ createBoulderItem(app: App) {
     if (app.createBoulderPromise) {
         return React.DOM.div
             ( { className: 'plain-navbar-item ' }
-            , React.DOM.i({ className: 'plus icon' })
+            , React.DOM.i({ className: 'plus square outlined icon' })
             , 'Creating boulder...'
             );
 
     } else {
         return React.DOM.div
             ( { className: 'navbar-item', onClick: createNewBoulder }
-            , React.DOM.i({ className: 'plus icon' })
+            , React.DOM.i({ className: 'plus square outlined icon' })
             , 'Create boulder'
             );
     }
