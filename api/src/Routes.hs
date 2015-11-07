@@ -339,9 +339,7 @@ data SignupResponse = SignupResponse
 signupHandler :: RequestHandler()
 signupHandler = do
     SignupRequest{..} <- parseRequestBody
-    -- per default every account is a User first
-    let role    = User
-    let content = Account reqLogin role
+    let content = Account reqLogin "" "" User
 
     res <- reqAvers $ do
         accId <- Avers.createObject accountObjectType rootObjId content
