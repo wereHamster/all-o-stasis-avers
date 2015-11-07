@@ -27,6 +27,13 @@ var teamItem = React.DOM.div
     , ''
     );
 
+var statsItem = React.DOM.div
+    ( { className: 'navbar-item', onClick: navigateToFn('/stats') }
+    , React.DOM.i({ className: 'line chart icon' })
+    , ''
+    );
+
+
 // spacer
 var flexItem = React.DOM.div
     ( { className: 'flex-navbar-item' }
@@ -56,8 +63,9 @@ navBar(app: App) {
     if (app.data.session.objId) {
         return React.DOM.div
             ( { className: 'navbar' }
-            , sideBarItem
+            //, sideBarItem
             , homeItem
+            , statsItem
             , teamItem
             , flexItem
             , Boulder.createBoulderItem(app) //FIXME: if has permissions (role)
@@ -67,8 +75,9 @@ navBar(app: App) {
     } else {
         return React.DOM.div
             ( { className: 'navbar' }
-            , sideBarItem
+            //, sideBarItem
             , homeItem
+            , statsItem
             , teamItem
             , flexItem
             , signInItem
