@@ -11,11 +11,15 @@ import * as Avers from './lib/avers';
 
 
 export class Account
-    { login : string;
-      role  : string;
+    { login  : string;
+      role   : string;
+      email  : string;
+      user   : string;
     }
 Avers.definePrimitive(Account, 'login', '');
 Avers.definePrimitive(Account, 'role',  'user');
+Avers.definePrimitive(Account, 'email', '');
+Avers.definePrimitive(Account, 'user',  '');
 
 
 export class BoulderStats
