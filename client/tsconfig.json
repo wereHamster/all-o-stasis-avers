@@ -31,6 +31,7 @@
         "./src/env/config.d.ts",
         "./src/env/local.ts",
         "./src/ext/react.d.ts",
+        "./src/ext/react-dom.d.ts",
         "./src/lib/avers.ts",
         "./src/lib/avers/core.ts",
         "./src/lib/avers/session.ts",

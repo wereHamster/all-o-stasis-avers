@@ -1,4 +1,6 @@
 /// <reference path="./env/config.d.ts" />
+/// <reference path="./ext/react.d.ts" />
+/// <reference path="./ext/react-dom.d.ts" />
 
 /*
 module App
@@ -22,8 +24,9 @@ export class App {
     createBoulderPromise : Promise<string> = undefined;
 
     constructor
-      ( public data     : Data
-      , public mkViewFn : (app: App) => any
+      ( public containerElement : Element
+      , public data             : Data
+      , public mkViewFn         : (app: App) => any
       ) {}
 }
 
@@ -55,11 +58,11 @@ export class Data {
 
 export function
 refresh(app: App): void {
-    React.render(app.mkViewFn(app), document.body);
+    ReactDOM.render(app.mkViewFn(app), app.containerElement);
 }
 
 export function
-loadView(app: App, mkViewFn: (app: App) => React.ReactElement<any>): void {
+loadView(app: App, mkViewFn: (app: App) => __React.ReactElement<any>): void {
     app.mkViewFn = mkViewFn;
     refresh(app);
 }
