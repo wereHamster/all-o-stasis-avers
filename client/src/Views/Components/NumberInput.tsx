@@ -1,5 +1,3 @@
-/// <reference path="../../ext/react.d.ts" />
-
 export interface NumberInputProps {
     object : any;
     field  : string;
@@ -36,33 +34,30 @@ class NumberInputSpec extends React.Component<NumberInputProps, NumberInputState
         this.state = this.initialState(props);
     }
 
-    render() {
-        var valueLink =
-            { value: this.state.rawValue
-            , requestChange: value => {
-                this.setState({ rawValue: value });
-                if (isValidNumber(value)) {
-                    this.props.object[this.props.field] = parseFloat(value);
-                }
-              }
-            };
+    onChange = (e: __React.FormEvent) => {
+        let value = (e.target as HTMLInputElement).value;
 
-        var className = React.addons.classSet(
-            { invalid : !isValidNumber(this.state.rawValue)
-            }
-        );
+        this.setState({ rawValue: value });
+        if (isValidNumber(value)) {
+            this.props.object[this.props.field] = parseFloat(value);
+        }
+    };
+
+    render() {
+        let className = '';
+        if (!isValidNumber(this.state.rawValue)) {
+            className = 'invalid';
+        }
 
         function onClick(e) {
             e.stopPropagation();
         }
 
-        return React.DOM.input
-            ( { type: 'text', className: className, valueLink: valueLink, onClick: onClick }
-            );
+        return <input type="text" className={className} value={this.state.rawValue} onChange={this.onChange} onClick={onClick} />;
     }
 
     componentWillReceiveProps(props) {
-        if (React.findDOMNode(this) !== document.activeElement) {
+        if (ReactDOM.findDOMNode(this) !== document.activeElement) {
             this.setState(this.initialState(props));
         }
     }

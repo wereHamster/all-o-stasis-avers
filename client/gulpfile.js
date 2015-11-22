@@ -14,12 +14,11 @@ var gulp       = require('gulp')
 
 
 
-var app = ts.createProject({
-    declarationFiles: false,
-    target: 'ES6',
-    typescript: require('typescript')
-});
+// Load config from the tsconfig.json file, to keep it in a central place.
+// This way the editor can see the same config, and when you run the TypeScript
+// compiler from the commandline it will also use the same config.
 
+var app = ts.createProject('tsconfig.json');
 
 
 // Linting keeps the codebase clean and bugfree!
@@ -42,13 +41,13 @@ gulp.task('lint', function() {
 // immediately upon save.
 
 gulp.task('compile', function() {
-    return gulp.src(['src/**/*.ts'])
+    return gulp.src(['src/**/*.ts', 'src/**/*.tsx'])
         .pipe(ts(app)).js
         .pipe(gulp.dest('dist/js/'));
 });
 
 gulp.task('compile:watch', function() {
-    gulp.watch('src/**/*.ts', ['compile']);
+    gulp.watch(['src/**/*.ts', 'src/**/*.tsx'], ['compile']);
 });
 
 

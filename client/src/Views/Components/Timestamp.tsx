@@ -40,31 +40,27 @@ class TimestampSpec extends React.Component<TimestampProps, TimestampState> {
         this.state = this.initialState(props);
     }
 
-    render() {
-        var valueLink =
-            { value: this.state.rawValue
-            , requestChange: value => {
-                this.setState({ rawValue: value });
-                var parsed = parseTimestamp(value);
-                if (isValidTimestamp(value)) {
-                    this.props.object[this.props.field] = parsed;
-                }
-              }
-            };
+    onChange = (e: __React.FormEvent) => {
+        let value = (e.target as HTMLInputElement).value;
 
-        var className = React.addons.classSet(
-            { invalid : !isValidTimestamp(this.state.rawValue)
-            , wide    : true
-            }
-        );
+        this.setState({ rawValue: value });
+        var parsed = parseTimestamp(value);
+        if (isValidTimestamp(value)) {
+            this.props.object[this.props.field] = parsed;
+        }
+    };
+
+    render() {
+        let className = 'wide';
+        if (!isValidTimestamp(this.state.rawValue)) {
+            className += ' invalid';
+        }
 
         function onClick(e) {
             e.stopPropagation();
         }
 
-        return React.DOM.input
-            ( { type: 'text', className: className, valueLink: valueLink, onClick: onClick }
-            );
+        return <input type="text" className={className} value={this.state.rawValue} onChange={this.onChange} onClick={onClick} />;
     }
 }
 

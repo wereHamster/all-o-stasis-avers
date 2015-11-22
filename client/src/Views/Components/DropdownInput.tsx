@@ -41,40 +41,41 @@ class DropdownInputSpec extends React.Component<DropdownInputProps, DropdownInpu
         this.state = this.initialState(props);
     }
 
-    render() {
-        var valueLink =
-            { value: this.state.selectedValue
-            , requestChange: value => {
-                this.setState({ selectedValue: value });
-                this.props.object[this.props.field] = value;
-              }
-            };
+    onChange = (e: __React.FormEvent) => {
+        let value = (e.target as HTMLSelectElement).value;
 
-        //FIXME:
-        var className = React.addons.classSet(
-            { invalid : !isValidNumber(this.state.selectedValue)
-            }
-        );
+        this.setState({ selectedValue: value });
+        if (isValidNumber(value)) {
+            this.props.object[this.props.field] = parseFloat(value);
+        }
+    };
+
+    render() {
+        let className = '';
+        if (!isValidNumber(this.state.selectedValue)) {
+            className = 'invalid';
+        }
 
         function onClick(e) {
             e.stopPropagation();
         }
 
         var options = this.props.options.map( entry => {
-            return React.DOM.option
-                ( { value : entry }
-                , entry
-                );
+            return (
+              <option value={entry}>
+                entry
+              </option>
+            );
         });
 
-        return React.DOM.select
-            ( { name : this.props.field, className: className, valueLink: valueLink, onClick: onClick }
-            , options
-            );
+        return (
+            <select name={this.props.field} className={className} onClick={onClick} onChange={this.onChange}>
+              options
+            </select>);
     }
 
     componentWillReceiveProps(props) {
-        if (React.findDOMNode(this) !== document.activeElement) {
+        if (ReactDOM.findDOMNode(this) !== document.activeElement) {
             this.setState(this.initialState(props));
         }
     }
