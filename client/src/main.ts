@@ -2,7 +2,7 @@
 /// <reference path="./ext/react-dom.d.ts" />
 
 import * as Avers from './lib/avers';
-import {Data, App, infoTable, refresh, loadView} from './app';
+import {Data, App, config, infoTable, refresh, loadView} from './app';
 
 import {accountView} from './Views/Account';
 import {boulderView} from './Views/Boulder';

@@ -1,4 +1,3 @@
-/// <reference path="./env/config.d.ts" />
 /// <reference path="./ext/react.d.ts" />
 /// <reference path="./ext/react-dom.d.ts" />
 
@@ -17,7 +16,27 @@ module App
 import * as Avers from './lib/avers';
 import {Account, Boulder} from './storage';
 
+import configObject from './config';
+
 declare var page;
+
+// -----------------------------------------------------------------------------
+// Config
+//
+// Static coniguration that is loaded during initialiation.
+
+export class Config {
+    apiHost : string;
+}
+
+Avers.definePrimitive(Config, 'apiHost', '//localhost:8000');
+
+export const config = Avers.mk<Config>(Config, configObject);
+
+
+
+// -----------------------------------------------------------------------------
+// App
 
 export class App {
 
