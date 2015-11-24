@@ -11,7 +11,6 @@ import {App} from '../app';
 
 import {Card, tileHeader} from './Components/Card';
 import {navBar} from './Components/NavBar';
-import {sideBar} from './Components/SideBar';
 import {site} from './Components/Site';
 
 import {Boulder} from '../storage';
