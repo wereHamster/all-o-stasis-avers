@@ -22,7 +22,7 @@
         "./src/Views/Components/DropDownInput.tsx",
         "./src/Views/Components/NavBar.ts",
         "./src/Views/Components/NumberInput.tsx",
-        "./src/Views/Components/Site.ts",
+        "./src/Views/Components/Site.tsx",
         "./src/Views/Components/TimeAgo.ts",
         "./src/Views/Components/Timestamp.tsx",
         "./src/Views/Home.ts",
