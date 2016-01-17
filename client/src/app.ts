@@ -65,10 +65,29 @@ export class Data {
     // clientVersion : Avers.Ephemeral<string>;
     // accountsCollection : Avers.ObjectCollection;
 
-    public ownedBoulderCollection : any;
+    public accountsCollection : Avers.ObjectCollection;
+    public bouldersCollection : Avers.ObjectCollection;
+
+    public adminAccountCollection : Avers.ObjectCollection;
+    public activeBoulderCollection : Avers.ObjectCollection;
+    public ownedBoulderCollection : Avers.ObjectCollection;
+
+    public role : string;
 
     constructor(public aversH: Avers.Handle) {
         this.session = new Avers.Session(aversH);
+
+        this.role = 'setter';
+
+        this.accountsCollection =
+            new Avers.ObjectCollection(aversH, 'accounts');
+        this.bouldersCollection =
+            new Avers.ObjectCollection(aversH, 'boulders');
+
+        this.adminAccountCollection =
+            new Avers.ObjectCollection(aversH, 'adminAccounts');
+        this.activeBoulderCollection =
+            new Avers.ObjectCollection(aversH, 'activeBoulders');
         this.ownedBoulderCollection =
             new Avers.ObjectCollection(aversH, 'ownedBoulders');
     }

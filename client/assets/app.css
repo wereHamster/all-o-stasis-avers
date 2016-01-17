@@ -489,6 +489,20 @@ input.invalid {
     color: rgb(182, 182, 185);
 }
 
+.team {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.team img {
+}
+
+.setter-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
 
 
 .login {

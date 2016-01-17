@@ -28,6 +28,12 @@ createBoulderItem(app: App) {
         createBoulder(app);
     }
 
+    if(app.data.role == "user")
+        return React.DOM.div
+            ( { className: 'plain-navbar-item ' }
+            , ''
+            );
+
     if (app.createBoulderPromise) {
         return React.DOM.div
             ( { className: 'plain-navbar-item ' }

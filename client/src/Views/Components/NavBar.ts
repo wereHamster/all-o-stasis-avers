@@ -9,6 +9,8 @@ import * as Avers from 'avers';
 import {App, navigateTo, navigateToFn} from '../../app';
 import * as Boulder from '../Boulder';
 
+import {Account} from '../../storage';
+
 var sideBarItem = React.DOM.div
     ( { className: 'navbar-item', onClick: navigateToFn('/') }
     , React.DOM.i({ className: 'sidebar icon' })
@@ -63,19 +65,17 @@ navBar(app: App) {
     if (app.data.session.objId) {
         return React.DOM.div
             ( { className: 'navbar' }
-            //, sideBarItem
             , homeItem
             , statsItem
             , teamItem
             , flexItem
-            , Boulder.createBoulderItem(app) //FIXME: if has permissions (role)
+            , Boulder.createBoulderItem(app)
             , accountSettingsItem(app)
             );
 
     } else {
         return React.DOM.div
             ( { className: 'navbar' }
-            //, sideBarItem
             , homeItem
             , statsItem
             , teamItem
