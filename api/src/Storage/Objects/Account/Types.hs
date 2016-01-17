@@ -8,9 +8,9 @@ import Avers.TH
 
 data Account = Account
     { accountLogin :: Text
-    , accountEmail :: Text
-    , accountName  :: Text
     , accountRole  :: AccountRole
+    , accountEmail :: Maybe Text
+    , accountName  :: Maybe Text
     } deriving (Show)
 
 data AccountRole

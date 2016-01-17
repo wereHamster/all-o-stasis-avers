@@ -9,6 +9,8 @@ import Avers
 import Avers.TH
 
 
+-- FIXME: split in datatypes so that they are editable by everyone with the
+-- propper role
 data Boulder = Boulder
     { boulderSetter     :: [ObjId]
     , boulderGrade      :: BoulderGrade

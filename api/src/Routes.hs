@@ -32,6 +32,7 @@ import Avers.TH
 
 import Snap
 
+import Queries
 import Types
 import Session
 
@@ -39,17 +40,6 @@ import Storage.ObjectTypes
 import Storage.Objects.Account
 import Storage.Objects.Boulder
 
-
-mapId:: R.Exp R.Object -> R.Exp Text
-mapId = R.GetField "id"
-
-isNotDeleted :: R.Exp R.Object -> R.Exp Bool
-isNotDeleted x = R.Any
-    [ R.Not $ R.HasFields ["deleted"] x
-    , R.Eq
-        (R.GetField "deleted" x :: R.Exp Bool)
-        (R.lift False)
-    ]
 
 
 createSessionHandler :: RequestHandler ()
@@ -83,10 +73,6 @@ deleteSessionHandler = do
 
 
 
-objAndRevIds :: RequestHandler (ObjId, RevId)
-objAndRevIds = (,) <$> (textParam "objId" >>= asObjId) <*> (textParam "revId" >>= asRevId)
-
-
 -----------------------------------------------------------------------------
 -- Collection: :objectType
 
@@ -105,6 +91,34 @@ objectsOfTypeCollectionHandler objType = do
 
 
 -----------------------------------------------------------------------------
+-- Collection: active Boulders
+
+activeBouldersCollectionRoute :: Route
+activeBouldersCollectionRoute =
+    ( GET
+    , "collection/activeBoulders"
+    , activeBoulderCollectionHandler
+    )
+
+activeBoulderCollectionHandler :: RequestHandler ()
+activeBoulderCollectionHandler = do
+    session <- requireSession
+
+    objIds <- reqAvers $ do
+        runQueryCollect $
+            R.Map mapId $
+            R.OrderBy [R.Descending "timestamp"] $
+            R.Filter isNotRemoved $
+            viewTable bouldersView
+
+    case objIds :: Either AversError (V.Vector Text) of
+        Right x -> sendResponse $ map ObjId $ V.toList x
+        Left e -> do
+            liftIO $ print e
+            failWith NotFound
+
+
+-----------------------------------------------------------------------------
 -- Collection: own Boulders
 
 ownedBouldersCollectionRoute :: Route
@@ -119,14 +133,16 @@ ownBoulderCollectionHandler = do
     session <- requireSession
 
     objIds <- reqAvers $ do
-        {-let predicate :: R.Exp R.Object -> R.Exp Bool-}
-            {-predicate = \x -> R.Eq-}
-                {-(R.GetField "setter" x :: R.Exp Text)-}
-                {-(R.lift $ unObjId $ sessionObjId session)-}
+        -- FIXME: we should check if the setter is in the list of setters
+        let isOwnBoulder :: R.Exp R.Object -> R.Exp Bool
+            isOwnBoulder = \x -> R.Eq
+                (R.GetField "setter" x :: R.Exp Text)
+                (R.lift $ unObjId $ sessionObjId session)
 
         runQueryCollect $
             R.Map mapId $
-            R.OrderBy [R.Descending "id"] $
+            R.OrderBy [R.Descending "timestamp"] $
+            R.Filter isOwnBoulder $
             viewTable bouldersView
 
     case objIds :: Either AversError (V.Vector Text) of
@@ -135,34 +151,30 @@ ownBoulderCollectionHandler = do
             liftIO $ print e
             failWith NotFound
 
------------------------------------------------------------------------------
--- Collection: batteryEvents
 
-{-
-batteryEventsCollectionRoute :: Route
-batteryEventsCollectionRoute =
+-----------------------------------------------------------------------------
+-- Collection: setters and admins
+
+adminAccountCollectionRoute :: Route
+adminAccountCollectionRoute =
     ( GET
-    , "collection/batteryEvents/:batteryId"
-    , batteryEventsCollectionHandler
+    , "collection/adminAccounts"
+    , adminAccountCollectionHandler
     )
 
-batteryEventsCollectionHandler :: RequestHandler ()
-batteryEventsCollectionHandler = do
-    session <- requireSession
-    batteryId <- asObjId =<< textParam "batteryId"
-
+adminAccountCollectionHandler :: RequestHandler ()
+adminAccountCollectionHandler = do
     objIds <- reqAvers $ do
-        let predicate :: R.Exp R.Object -> R.Exp Bool
-            predicate = \x -> R.Eq
-                (R.GetField "batteryId" x :: R.Exp Text)
-                (R.lift $ unObjId $ batteryId)
+        let isSetter :: R.Exp R.Object -> R.Exp Bool
+            isSetter = \x -> R.Ne
+                (R.GetField "role" x :: R.Exp Text)
+                ("user" :: R.Exp Text)
 
         runQueryCollect $
             R.Map mapId $
-            R.OrderBy [R.Ascending "timestamp"] $
-            R.Filter isNotDeleted $
-            R.Filter predicate $
-            viewTable eventsView
+            R.OrderBy [R.Descending "id"] $
+            R.Filter isSetter $
+            viewTable accountsView
 
     case objIds :: Either AversError (V.Vector Text) of
         Right x -> sendResponse $ map ObjId $ V.toList x
@@ -170,8 +182,8 @@ batteryEventsCollectionHandler = do
             liftIO $ print e
             failWith NotFound
 
--}
 
+-----------------------------------------------------------------------------
 
 data CreateObjectRequest = CreateObjectRequest
   { reqType    :: Text
@@ -339,7 +351,7 @@ data SignupResponse = SignupResponse
 signupHandler :: RequestHandler()
 signupHandler = do
     SignupRequest{..} <- parseRequestBody
-    let content = Account reqLogin "" "" User
+    let content = Account reqLogin User (Just "") (Just "")
 
     res <- reqAvers $ do
         accId <- Avers.createObject accountObjectType rootObjId content
@@ -363,11 +375,13 @@ routes =
     , ( DELETE, "session",                         deleteSessionHandler)
 
     , ( POST,   "signup",                          signupHandler)
-    -- , ( POST,   "secret",                          changeSecretHandler)
 
+    , adminAccountCollectionRoute
+    , activeBouldersCollectionRoute
     , ownedBouldersCollectionRoute
 
-    {-, objectsOfTypeCollectionRoute "batteries" batteryObjectType-}
+    , objectsOfTypeCollectionRoute "accounts" accountObjectType
+    , objectsOfTypeCollectionRoute "boulders" boulderObjectType
     ]
 
 

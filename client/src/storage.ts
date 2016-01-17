@@ -14,12 +14,12 @@ export class Account
     { login  : string;
       role   : string;
       email  : string;
-      user   : string;
+      name   : string;
     }
 Avers.definePrimitive(Account, 'login', '');
 Avers.definePrimitive(Account, 'role',  'user');
 Avers.definePrimitive(Account, 'email', '');
-Avers.definePrimitive(Account, 'user',  '');
+Avers.definePrimitive(Account, 'name',  '');
 
 
 export class BoulderStats

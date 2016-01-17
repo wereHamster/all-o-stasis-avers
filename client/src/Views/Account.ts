@@ -40,8 +40,8 @@ function accountHeader(accountE: Avers.Editable<Account>) {
         return;
 
     var title = accountE.objectId;
-    if(accountE.content.user != '')
-        title = accountE.content.user;
+    if(accountE.content.name != '')
+        title = accountE.content.name;
 
 
     return React.DOM.div
@@ -81,14 +81,14 @@ function accountDetailsEditor(accountE: Avers.Editable<Account>) {
      var roles = ['user', 'setter', 'admin'];
 
      return React.DOM.div
-        ( { className: 'boulder-details-editor' }
+        ( { className: 'account-detail-editor' }
         , React.DOM.div
              ( { className: 'form' }
              , formRow
                  ( 'User name'
                  , React.DOM.input
-                     ( { className: 'wide', type: 'text', value: account.user, onChange: function(ev) {
-                         account.user = (<HTMLInputElement>ev.target).value;
+                     ( { className: 'wide', type: 'text', value: account.name, onChange: function(ev) {
+                         account.name = (<HTMLInputElement>ev.target).value;
                          }
                      }
                      )
