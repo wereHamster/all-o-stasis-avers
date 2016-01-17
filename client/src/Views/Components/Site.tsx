@@ -1,5 +1,6 @@
 import * as Avers from 'avers';
 import {App} from '../../app';
+import {navBar} from './NavBar';
 
 export function site(app: App, ...content) {
 
@@ -26,6 +27,7 @@ export function site(app: App, ...content) {
 
     return (
         <div className="site" onClick={onClick}>
+            {navBar(app)}
             {React.DOM.div.apply(React.DOM, content)}
             {transientNotification}
         </div>

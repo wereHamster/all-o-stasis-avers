@@ -10,8 +10,7 @@ import Computation from 'computation';
 import {App} from '../app';
 
 import {Card, tileHeader} from './Components/Card';
-import {navBar} from './Components/NavBar';
-import {site} from './Components/Site';
+import {Site} from './Components/Site';
 
 import {Boulder} from '../storage';
 
@@ -43,7 +42,7 @@ function boulderLoadingCard(app: App, boulderId) {
 
 export function
 homeView(app: App) {
-    var boulders = app.data.ownedBoulderCollection.ids.get([]).map(boulderId => {
+    var boulders = app.data.activeBoulderCollection.ids.get([]).map(boulderId => {
         let boulderC = Avers.lookupEditable<Boulder>(app.data.aversH, boulderId);
 
         return boulderC.fmap((boulder) => {
@@ -51,10 +50,9 @@ homeView(app: App) {
         }).get(boulderLoadingCard(app, boulderId));
     });
 
-    return site
-        ( app
-        , navBar(app)
-        //, sideBar(app)
-        , React.DOM.div({ className: 'boulders' }, boulders)
-        );
+    return (
+        <Site app={app}>
+            <div className="boulders">{boulders}</div>
+        </Site>
+    );
 }
