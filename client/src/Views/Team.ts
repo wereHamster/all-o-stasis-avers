@@ -5,8 +5,8 @@ module Team
 */
 
 
-import * as Avers from '../lib/avers';
-import Computation from '../lib/computation';
+import * as Avers from 'avers';
+import Computation from 'computation';
 import {App} from '../app';
 
 import {navBar} from './Components/NavBar';
