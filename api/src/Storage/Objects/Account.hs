@@ -7,7 +7,6 @@ module Storage.Objects.Account
 
 import Avers
 import Control.Monad.State
-import Control.Applicative
 import Storage.Objects.Account.Types
 
 

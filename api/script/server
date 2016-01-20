@@ -4,4 +4,4 @@ cd "$(dirname "$0")/.."
 
 
 stack build
-stack exec all-o-stasis-api
+stack exec all-o-stasis-api -- 8000

@@ -6,6 +6,8 @@ maintainer:          iff@yvesineichen.com
 build-type:          Simple
 cabal-version:       >=1.10
 
+extra-source-files:
+    GIT-REVISION-FILE
 
 executable all-o-stasis-api
     hs-source-dirs:      src
@@ -15,7 +17,11 @@ executable all-o-stasis-api
 
     build-depends      : base
                        , avers
-                       , snap
+                       , avers-api
+                       , avers-server
+                       , either
+                       , servant
+                       , servant-server
                        , directory
                        , aeson
                        , bytestring
@@ -27,4 +33,10 @@ executable all-o-stasis-api
                        , vector
                        , rethinkdb-client-driver
                        , unordered-containers
+                       , template-haskell
+                       , safe
                        , network-uri
+                       , wai
+                       , wai-extra
+                       , wai-cors
+                       , warp

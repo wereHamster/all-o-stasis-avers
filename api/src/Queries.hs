@@ -14,7 +14,6 @@ import qualified Data.Vector as V
 
 import qualified Database.RethinkDB     as R
 
-import           Session
 import           Storage.ObjectTypes
 
 

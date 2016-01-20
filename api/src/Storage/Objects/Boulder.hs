@@ -9,7 +9,6 @@ module Storage.Objects.Boulder
 
 import Avers
 import Control.Monad.State
-import Control.Applicative
 import Storage.Objects.Boulder.Types
 
 

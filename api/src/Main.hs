@@ -2,43 +2,44 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards   #-}
 {-# LANGUAGE TemplateHaskell   #-}
+{-# LANGUAGE TypeOperators     #-}
 
 module Main (main) where
 
-import           Control.Applicative
-import           Control.Concurrent
-import           Control.Exception hiding (Handler, catches)
+import           Safe
+
 import           Control.Monad.State
-import           Control.Monad.CatchIO hiding (Handler, catch)
-import           Control.Monad.Trans.Maybe
 
 import           Data.Text (Text)
-import qualified Data.Text as T
-import qualified Data.Text.Encoding as T
 import           Data.Maybe
-import qualified Data.ByteString as BS
 import           Data.ByteString.Lazy (ByteString)
-import qualified Data.ByteString.Lazy   as BL
-import qualified Data.ByteString.Char8  as C
-import           Data.IORef
-import           Data.Time
-import           Data.Aeson
+import           Data.Proxy
 
 import           Network.URI
 
 import           System.IO
-import           System.Directory
 import           System.Environment
 
-import           Snap
-
 import           Avers
+import           Avers.API
+import           Avers.Server
 
-import           Types
+import           Servant.API
+import           Servant.Server
+
 import           Routes
 
 import           Storage.ObjectTypes
-import           Storage.Objects.Boulder.Types
+
+import           Network.Wai
+import           Network.Wai.Handler.Warp
+
+import           Network.Wai.Middleware.RequestLogger
+import           Network.Wai.Middleware.Cors
+
+import           Prelude
+
+
 
 databaseConfig :: IO URI
 databaseConfig = do
@@ -47,35 +48,8 @@ databaseConfig = do
 
 
 createBlobStorageConfig :: IO (BlobId -> Text -> ByteString -> IO (Either AversError ()))
-createBlobStorageConfig = return $ \blobId contentType content ->
+createBlobStorageConfig = return $ \_blobId _contentType _content ->
     error "Not supported"
-
-
-enableCors :: RequestHandler ()
-enableCors = do
-    origin <- getHeader "Origin" <$> getRequest
-    case origin of
-        Nothing -> return ()
-        Just x -> do
-            -- CORS (http://www.w3.org/TR/cors/)
-            modifyResponse $ setHeader "Access-Control-Allow-Origin"      x
-            modifyResponse $ setHeader "Access-Control-Allow-Credentials" "true"
-            modifyResponse $ setHeader "Access-Control-Allow-Headers"     "Content-Type, X-Requested-With"
-            modifyResponse $ setHeader "Access-Control-Allow-Methods"     "GET, POST, PATCH, DELETE"
-            modifyResponse $ setHeader "Access-Control-Max-Age"           "3600"
-
-            -- This is needed so that the browser doens't cache the CORS
-            -- headers across origins (see http://www.w3.org/TR/cors/#resource-implementation)
-            modifyResponse $ setHeader "Vary" "Origin"
-
-            -- Resource Timing (http://www.w3.org/TR/resource-timing/)
-            modifyResponse $ setHeader "Timing-Allow-Origin" x
-
-
-handleExceptions :: RequestHandler () -> RequestHandler ()
-handleExceptions m = m `catches`
-    [ -- Handler handleRequestException
-    ]
 
 
 allObjectTypes :: [SomeObjectType]
@@ -96,43 +70,48 @@ createAversHandle = do
         Right h -> return h
 
     res <- evalAvers h Avers.bootstrap
-    case res of
+    void $ case res of
         Left e -> error $ show e
         Right _ -> return $ Right ()
 
     return h
 
-ignoreException :: SomeException -> IO ()
-ignoreException e = do
-    putStrLn $ "ignoreException: " ++ show e
+
+type API = AversCoreAPI :<|> AversSessionAPI :<|> LocalAPI
+
+api :: Proxy API
+api = Proxy
 
 
-mainSnaplet :: Avers.Handle -> SnapletInit AppState AppState
-mainSnaplet h = makeSnaplet "iff.io" "boulder tracker api" Nothing $ do
-    addRoutes $ map toRoute routes
+server :: Avers.Handle -> Server API
+server aversH =
+         serveAversCoreAPI aversH defaultAuthorizations
+    :<|> serveAversSessionAPI aversH
+    :<|> serveLocalAPI aversH
 
-    wrapSite $ \site -> do
-        enableCors
-        handleExceptions $ method OPTIONS (return ()) <|> site
 
-    return $ AppState h
+app :: Avers.Handle -> Application
+app aversH = logStdout $ cors mkCorsPolicy $ serve api $ server aversH
 
+mkCorsPolicy :: Request -> Maybe CorsResourcePolicy
+mkCorsPolicy req = Just $ simpleCorsResourcePolicy
+    { corsOrigins = Just ([origin], True)
+    , corsMethods = ["HEAD", "GET", "POST", "PATCH"]
+    , corsRequestHeaders = simpleHeaders
+    }
   where
-    toRoute (m, p, action) = (T.encodeUtf8 p, method m action)
+    headers = requestHeaders req
+    origin = fromMaybe "localhost" $ lookup "Origin" headers
 
 
 main :: IO ()
 main = do
+    args <- getArgs
     h <- createAversHandle
 
-    -- Start the web server (using custom snap config).
-    snapConfig <- do
-        let stdioLogger h = ConfigIoLog $ \msg -> BS.hPut h msg >> hFlush h
+    mbPort <- pure $ case args of
+        x:_ -> readMay x
+        _   -> Nothing
 
-        config <- commandLineConfig defaultConfig
-        return $ setAccessLog (stdioLogger stdout)
-               $ setErrorLog (stdioLogger stderr)
-               $ config
-
-    serveSnaplet snapConfig $ mainSnaplet h
+    run (fromMaybe 8000 mbPort) (app h)
 
