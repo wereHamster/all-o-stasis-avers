@@ -11,6 +11,7 @@ import Control.Applicative
 import Avers
 
 import Storage.Objects.Account
+import Storage.Objects.Activity
 import Storage.Objects.Boulder
 
 

@@ -6,13 +6,15 @@ import Data.Text (Text)
 import Avers.TH
 
 
+-- FIXME: proper salt?
 data Account = Account
-    { accountLogin :: Text
-    , accountRole  :: AccountRole
-    , accountEmail :: Maybe Text
-    , accountName  :: Maybe Text
+    { accountLogin  :: Text
+    , accountRole   :: AccountRole
+    , accountEmail  :: Maybe Text
+    , accountName   :: Maybe Text
     } deriving (Show)
 
+-- Available ACL groups
 data AccountRole
     = User
     | Setter
