@@ -16,21 +16,30 @@ data Activity = Activity
     , activityBoulder   :: ObjId
     , activityTimestamp :: UTCTime
     , activityAction    :: AccountActivity
-    , activityGrade     :: Maybe B.BoulderGrade -- FIXME: redesign
     } deriving (Show)
 
 
 data AccountActivity
+    = AcTick
+    | AcRating              Rating
+    | AcGrade               Grade
+    | AcSetProblem
+    | AcRemoveProblem
+    | AcUpgradeProblem      Grade
+    | AcDowngradeProblem    Grade
+    deriving (Show)
+
+data Rating
     = Like
     | Dislike
-    | Tick
-    | Grade
-    | Climb
-    | SetProblem
-    | RemoveProblem
-    | UpgradeProblem
-    | DowngradeProblem
+    deriving (Show)
+
+data Grade = Grade
+    { gradeValue :: [B.BoulderGrade]
+    }
     deriving (Show)
 
 $(deriveEncoding (deriveJSONOptions "activity")     ''Activity)
-$(deriveEncoding (defaultVariantOptions "")         ''AccountActivity)
+$(deriveEncoding (deriveJSONOptions "grade")        ''Grade)
+$(deriveEncoding (defaultVariantOptions "Ac")       ''AccountActivity)
+$(deriveEncoding (defaultVariantOptions "")         ''Rating)
