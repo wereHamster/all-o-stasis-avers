@@ -49,14 +49,14 @@ type LocalAPI
     = "revision"
       :> Get '[PlainText] Text
 
-    :<|> "collection/ownedBoulders" :> "ownedBoulders"
+    :<|> "collection" :> "ownedBoulders"
       :> Credentials
       :> Get '[JSON] [ObjId]
 
-    :<|> "collection/activeBoulders" :> "activeBoulders"
+    :<|> "collection" :> "activeBoulders"
       :> Get '[JSON] [ObjId]
 
-    :<|> "collection/adminAccounts" :> "adminAccounts"
+    :<|> "collection" :> "adminAccounts"
       :> Credentials
       :> Get '[JSON] [ObjId]
 
