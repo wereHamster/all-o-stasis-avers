@@ -1,6 +1,9 @@
+{-# LANGUAGE DeriveGeneric   #-}
 {-# LANGUAGE TemplateHaskell #-}
 
 module Storage.Objects.Activity.Types where
+
+import GHC.Generics
 
 import Data.Text
 import Data.Time
@@ -11,35 +14,41 @@ import Avers.TH
 import qualified Storage.Objects.Boulder as B
 
 
+-- see http://activitystrea.ms/
 data Activity = Activity
-    { activityAccount   :: ObjId
-    , activityBoulder   :: ObjId
-    , activityTimestamp :: UTCTime
-    , activityAction    :: AccountActivity
-    } deriving (Show)
+    { activityActor     :: ObjId
+    , activityObject    :: ObjId
+    , activityVerb      :: AccountActivity
+    , activityDevice    :: String
+    } deriving (Show, Generic)
 
-
+-- FIXME: naming
 data AccountActivity
-    = AcTick
-    | AcRating              Rating
-    | AcGrade               Grade
-    | AcSetProblem
-    | AcRemoveProblem
-    | AcUpgradeProblem      Grade
-    | AcDowngradeProblem    Grade
-    deriving (Show)
+    = DoTick
+    | DoComment             Comment
+    | DoRate                Rating
+    | DoGrade               Grade
+    | DoSetProblem
+    | DoRemoveProblem
+    deriving (Show, Generic)
 
 data Rating
     = Like
     | Dislike
-    deriving (Show)
+    deriving (Show, Generic)
 
 data Grade = Grade
-    { gradeValue :: [B.BoulderGrade]
+    { gradeValue :: B.BoulderGrade
     }
-    deriving (Show)
+    deriving (Show, Generic)
+
+data Comment = Comment
+    { commentValue :: Text
+    }
+    deriving (Show, Generic)
 
 $(deriveEncoding (deriveJSONOptions "activity")     ''Activity)
 $(deriveEncoding (deriveJSONOptions "grade")        ''Grade)
-$(deriveEncoding (defaultVariantOptions "Ac")       ''AccountActivity)
+$(deriveEncoding (deriveJSONOptions "comment")      ''Comment)
+$(deriveEncoding (defaultVariantOptions "")         ''AccountActivity)
 $(deriveEncoding (defaultVariantOptions "")         ''Rating)
