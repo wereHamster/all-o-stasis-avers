@@ -2,6 +2,7 @@
 
 module Storage.Objects.Activity
     ( module Storage.Objects.Activity.Types
+    , activityObjectType
     , activitiesView
     ) where
 
@@ -9,11 +10,20 @@ import Avers
 import Control.Monad.State
 import Storage.Objects.Activity.Types
 
+mkObjId :: Int -> Avers ObjId
+mkObjId len = ObjId <$> liftIO (newId len)
 
-views :: [SomeView Activity]
-views =
+activityViews :: [SomeView Activity]
+activityViews =
     [ SomeView activitiesView
     ]
+
+activityObjectType :: ObjectType Activity
+activityObjectType = ObjectType
+    { otType   = "boulder"
+    , otId     = mkObjId 42
+    , otViews  = activityViews
+    }
 
 activitiesView :: View Activity Activity
 activitiesView = View

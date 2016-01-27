@@ -11,29 +11,20 @@ import Avers
 import Control.Monad.State
 import Storage.Objects.Boulder.Types
 
-
 mkObjId :: Int -> Avers ObjId
 mkObjId len = ObjId <$> liftIO (newId len)
 
-mkStdObjId :: Avers ObjId
-mkStdObjId = mkObjId 13
+boulderViews :: [SomeView Boulder]
+boulderViews =
+    [ SomeView bouldersView
+    ]
 
 boulderObjectType :: ObjectType Boulder
 boulderObjectType = ObjectType
     { otType   = "boulder"
-    , otId     = mkStdObjId
-    , otViews  = views
+    , otId     = mkObjId 42
+    , otViews  = boulderViews
     }
-
-
-------------------------------------------------------------------------------
--- Views
-
-views :: [SomeView Boulder]
-views =
-    [ SomeView bouldersView
-    ]
-
 
 bouldersView :: View Boulder Boulder
 bouldersView = View

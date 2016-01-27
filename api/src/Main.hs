@@ -55,6 +55,7 @@ createBlobStorageConfig = return $ \_blobId _contentType _content ->
 allObjectTypes :: [SomeObjectType]
 allObjectTypes =
     [ SomeObjectType accountObjectType
+    , SomeObjectType activityObjectType
     , SomeObjectType boulderObjectType
     ]
 
