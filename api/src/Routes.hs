@@ -46,16 +46,34 @@ data SignupResponse2 = SignupResponse2
 
 
 type LocalAPI
+    -- server the git revsion sha
     = "revision"
       :> Get '[PlainText] Text
 
-    :<|> "collection" :> "ownedBoulders"
-      :> Credentials
+    -- serve a list of all activities
+    :<|> "collection" :> "activites"
       :> Get '[JSON] [ObjId]
 
+    -- serve a list of activityIds that involve the actor
+    :<|> "collection" :> "actorActivities"
+      :> Capture "objId" ObjId
+      :> Get '[JSON] [ObjId]
+
+    -- serve a list of activityIds that involve the object
+    :<|> "collection" :> "objectActivities"
+      :> Capture "objId" ObjId
+      :> Get '[JSON] [ObjId]
+
+    -- serve a list of all active bouldersIds in the gym
     :<|> "collection" :> "activeBoulders"
       :> Get '[JSON] [ObjId]
 
+    -- serve a list of boulderIds that are owned/authored by the user
+    :<|> "collection" :> "ownBoulders"
+      :> Credentials
+      :> Get '[JSON] [ObjId]
+
+    -- serve a list of all non-user accountIds
     :<|> "collection" :> "adminAccounts"
       :> Credentials
       :> Get '[JSON] [ObjId]
@@ -68,15 +86,68 @@ type LocalAPI
 serveLocalAPI :: Avers.Handle -> Server LocalAPI
 serveLocalAPI aversH =
          serveRevision
-    :<|> serveOwnedBouldersCollection
+    :<|> serveActivitiesCollection
+    :<|> serveActorActivitiesCollection
+    :<|> serveObjectActivitiesCollection
     :<|> serveActiveBouldersCollection
+    :<|> serveOwnBouldersCollection
     :<|> serveAdminAccounts
     :<|> serveSignup
   where
     serveRevision =
         pure $ T.pack $ fromMaybe "HEAD" $(revision)
 
-    serveOwnedBouldersCollection cred = do
+    serveActivitiesCollection = do
+        activities <- reqAvers2 aversH $ do
+            runQueryCollect $
+                R.Map mapId $
+                R.OrderBy [R.Descending "timestamp"] $
+                R.Filter isNotRemoved $
+                viewTable activitiesView
+
+        pure $ map ObjId $ V.toList activities
+
+    serveActorActivitiesCollection actorId = do
+        objIds <- reqAvers2 aversH $ do
+            let isActor :: R.Exp R.Object -> R.Exp Bool
+                isActor = \x -> R.Eq
+                    (R.GetField "actor" x :: R.Exp Text)
+                    (R.lift $ unObjId actorId)
+
+            runQueryCollect $
+                R.Map mapId $
+                R.OrderBy [R.Descending "timestamp"] $
+                R.Filter isActor $
+                viewTable activitiesView
+
+        pure $ map ObjId $ V.toList objIds
+
+    serveObjectActivitiesCollection objectId = do
+        objIds <- reqAvers2 aversH $ do
+            let isObject :: R.Exp R.Object -> R.Exp Bool
+                isObject = \x -> R.Eq
+                    (R.GetField "object" x :: R.Exp Text)
+                    (R.lift $ unObjId objectId)
+
+            runQueryCollect $
+                R.Map mapId $
+                R.OrderBy [R.Descending "timestamp"] $
+                R.Filter isObject $
+                viewTable activitiesView
+
+        pure $ map ObjId $ V.toList objIds
+
+    serveActiveBouldersCollection = do
+        boulders <- reqAvers2 aversH $ do
+            runQueryCollect $
+                R.Map mapId $
+                R.OrderBy [R.Descending "timestamp"] $
+                R.Filter isNotRemoved $
+                viewTable bouldersView
+
+        pure $ map ObjId $ V.toList boulders
+
+    serveOwnBouldersCollection cred = do
         ownerId <- credentialsObjId aversH cred
         objIds <- reqAvers2 aversH $ do
             -- FIXME: we should check if the setter is in the list of setters
@@ -92,16 +163,6 @@ serveLocalAPI aversH =
                 viewTable bouldersView
 
         pure $ map ObjId $ V.toList objIds
-
-    serveActiveBouldersCollection = do
-        boulders <- reqAvers2 aversH $ do
-            runQueryCollect $
-                R.Map mapId $
-                R.OrderBy [R.Descending "timestamp"] $
-                R.Filter isNotRemoved $
-                viewTable bouldersView
-
-        pure $ map ObjId $ V.toList boulders
 
     serveAdminAccounts cred = do
         ownerId <- credentialsObjId aversH cred
