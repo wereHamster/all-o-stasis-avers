@@ -25,7 +25,8 @@ export function tileHeader(app: App, boulderId: string) : JSX.Element {
 
         setters += ']';
 
-        var bDate = boulder.date;
+        //FIXME: get from object
+        var bDate = "01.01.01"; //boulder.date;
         //bDate.getDay() + '.' + bDate.getMonth()+1 + '.' + bDate.getFullYear()
 
         return (
