@@ -8,7 +8,6 @@ module Signup
 import * as Avers from 'avers';
 import {App, refresh, navigateToFn} from '../app';
 import {site} from './Components/Site';
-import * as NavBar from './Components/NavBar';
 
 var signupInProgress = false;
 
@@ -40,7 +39,6 @@ signupView(app: App) {
     if (app.data.session.objId && signupInProgress === false) {
         return site
             ( app
-            , NavBar.navBar(app)
             , React.DOM.div
                 ( { className: 'login' }
                 , React.DOM.div
@@ -102,7 +100,6 @@ signupView(app: App) {
 
         return site
             ( app
-            , NavBar.navBar(app)
             , React.DOM.div
                 ( { className: 'login' }
                 , React.DOM.div

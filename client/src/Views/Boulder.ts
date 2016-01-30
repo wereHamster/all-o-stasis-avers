@@ -10,7 +10,6 @@ import * as Avers from 'avers';
 import {App, refresh, navigateTo, navigateToFn} from '../app';
 
 import {site} from './Components/Site';
-import {navBar} from './Components/NavBar';
 
 import {DropDownInput} from './Components/DropdownInput';
 import {NumberInput} from './Components/NumberInput';
@@ -61,7 +60,6 @@ boulderView(app: App, boulderId: string) {
 
     return site
         ( app
-        , navBar(app)
         , boulderHeader(boulderE)
         , boulderDetailsEditor(boulderE)
         );
@@ -119,15 +117,6 @@ function boulderDetailsEditor(boulderE: Avers.Editable<Boulder>) {
              , formRow
                  ( 'Grade Nr'
                  , NumberInput({ object: boulder, field: 'gradeNr' })
-                 )
-             , formRow
-                 ( 'Comments'
-                 , React.DOM.input
-                     ( { type: 'text', value: boulder.comments, onChange: function(ev) {
-                         boulder.comments = (<HTMLInputElement>ev.target).value;
-                         }
-                     }
-                     )
                  )
              )
         );

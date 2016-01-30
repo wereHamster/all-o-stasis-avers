@@ -9,7 +9,6 @@ import * as Avers from 'avers';
 import Computation from 'computation';
 import {App} from '../app';
 
-import {navBar} from './Components/NavBar';
 import {site} from './Components/Site';
 import {SetterCard} from './Components/Setter';
 
@@ -36,7 +35,6 @@ teamView(app: App) {
 
     return site
         ( app
-        , navBar(app)
         , React.DOM.div
             ( { className: 'team' }
             , React.DOM.h1

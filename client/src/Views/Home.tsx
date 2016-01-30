@@ -42,7 +42,7 @@ function boulderLoadingCard(app: App, boulderId) {
 
 export function
 homeView(app: App) {
-    var boulders = app.data.activeBoulderCollection.ids.get([]).map(boulderId => {
+    var boulders = app.data.activeBouldersCollection.ids.get([]).map(boulderId => {
         let boulderC = Avers.lookupEditable<Boulder>(app.data.aversH, boulderId);
 
         return boulderC.fmap((boulder) => {

@@ -69,7 +69,7 @@ export class Data {
     public bouldersCollection : Avers.ObjectCollection;
 
     public adminAccountCollection : Avers.ObjectCollection;
-    public activeBoulderCollection : Avers.ObjectCollection;
+    public activeBouldersCollection : Avers.ObjectCollection;
     public ownedBoulderCollection : Avers.ObjectCollection;
 
     public role : string;
@@ -86,7 +86,7 @@ export class Data {
 
         this.adminAccountCollection =
             new Avers.ObjectCollection(aversH, 'adminAccounts');
-        this.activeBoulderCollection =
+        this.activeBouldersCollection =
             new Avers.ObjectCollection(aversH, 'activeBoulders');
         this.ownedBoulderCollection =
             new Avers.ObjectCollection(aversH, 'ownedBoulders');

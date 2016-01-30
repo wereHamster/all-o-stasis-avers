@@ -4,13 +4,13 @@
 import * as Avers from 'avers';
 import {Data, App, config, infoTable, refresh, loadView} from './app';
 
+import {loadingView, notFoundView} from './views';
 import {accountView} from './Views/Account';
 import {boulderView} from './Views/Boulder';
-import {homeView} from './Views/Home';
-import {loadingView, notFoundView} from './views';
-import {teamView} from './Views/Team';
-import {loginView} from './Views/Login';
-import {signupView} from './Views/Signup';
+import {homeView}    from './Views/Home';
+import {loginView}   from './Views/Login';
+import {teamView}    from './Views/Team';
+import {signupView}  from './Views/Signup';
 
 
 function mkApp(): App {
@@ -81,7 +81,7 @@ function setupRoutes(app: App) {
     });
 
     page('/login', function() {
-        loadView(app, app => {
+        loadView(app, () => {
             return loginView(app);
         });
     });

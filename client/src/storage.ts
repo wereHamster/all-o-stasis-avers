@@ -1,7 +1,7 @@
 /*
 module Storage
 ( Account
-, BoulderStats
+, Activity
 , Boulder
 ) where
 */
@@ -21,36 +21,44 @@ Avers.definePrimitive(Account, 'role',  'user');
 Avers.definePrimitive(Account, 'email', '');
 Avers.definePrimitive(Account, 'name',  '');
 
+export class Activity
+    { actor  : string;
+      object : string;
+      verb   : string;
+      device : string;
+    }
+Avers.definePrimitive(Activity, 'actor',  '');
+Avers.definePrimitive(Activity, 'object', '');
+Avers.definePrimitive(Activity, 'verb',   '');
+Avers.definePrimitive(Activity, 'device', '');
 
-export class BoulderStats
-    { likes      : number;
-      dislikes   : number;
-      gradeVotes : number[];
+export class BoulderGrade
+    { value : string;
     }
 
-Avers.definePrimitive(BoulderStats, 'likes',       0);
-Avers.definePrimitive(BoulderStats, 'dislikes',    0);
-Avers.definePrimitive(BoulderStats, 'gradeVotes',  []);
+Avers.definePrimitive(BoulderGrade, 'value', '');
+
+export class BoulderComment
+    { value : string;
+    }
+
+Avers.definePrimitive(BoulderComment, 'value', '');
 
 
 export class Boulder
     { setter     : string[];
+      sector     : string;
       grade      : string;
       gradeNr    : number;
-      sector     : string;
-      date       : Date;
       removed    : Date;
       name       : string;
-      comments   : string;
-      stats      : BoulderStats;
     }
 
 Avers.definePrimitive(Boulder, 'setter');
+Avers.definePrimitive(Boulder, 'sector',   '');
 Avers.definePrimitive(Boulder, 'grade',    'yellow');
 Avers.definePrimitive(Boulder, 'gradeNr',  0);
-Avers.definePrimitive(Boulder, 'sector',   '');
-Avers.definePrimitive(Boulder, 'date');
 Avers.definePrimitive(Boulder, 'removed');
 Avers.definePrimitive(Boulder, 'name',     '');
-Avers.definePrimitive(Boulder, 'comments', '');
-Avers.defineObject(Boulder,    'stats',    BoulderStats, {});
+
+//Avers.defineObject(Boulder,    'stats',    BoulderStats, {});

@@ -34,8 +34,8 @@ export function site(app: App, ...content) {
     );
 }
 
-
-export function Site({ app, children }) {
+// FIXME: any to fix typechecker
+export function Site({ app, children } : any) {
     return site(app, React.Children.toArray(children));
 }
 

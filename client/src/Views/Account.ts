@@ -9,7 +9,6 @@ import * as Avers from 'avers';
 import {App, refresh, navigateTo, navigateToFn} from '../app';
 
 import {site} from './Components/Site';
-import {navBar} from './Components/NavBar';
 
 import {DropDownInput} from './Components/DropdownInput';
 
@@ -27,7 +26,6 @@ accountView(app: App, accountId: string) {
 
     return site
         ( app
-        , navBar(app)
         , accountHeader(accountE)
         , accountDetailsEditor(accountE)
         );
