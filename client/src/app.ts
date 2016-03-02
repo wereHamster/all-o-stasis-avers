@@ -14,16 +14,11 @@ module App
 
 
 import * as Avers from 'avers';
-import {Account, Boulder} from './storage';
+import {Account, Activity, Boulder} from './storage';
 
 import configObject from './config';
 
 declare var page;
-
-// -----------------------------------------------------------------------------
-// Config
-//
-// Static coniguration that is loaded during initialiation.
 
 export class Config {
     apiHost : string;
@@ -32,11 +27,6 @@ export class Config {
 Avers.definePrimitive(Config, 'apiHost', '//localhost:8000');
 
 export const config = Avers.mk<Config>(Config, configObject);
-
-
-
-// -----------------------------------------------------------------------------
-// App
 
 export class App {
 
@@ -107,10 +97,10 @@ loadView(app: App, mkViewFn: (app: App) => __React.ReactElement<any>): void {
 
 export function
 navigateTo(p : String) {
-        page(p);
+    page(p);
 }
 
 export function
 navigateToFn(p: String) {
-        return () => { navigateTo(p); }
+    return () => { navigateTo(p); }
 }

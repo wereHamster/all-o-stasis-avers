@@ -55,10 +55,9 @@ export class Boulder
     }
 
 Avers.definePrimitive(Boulder, 'setter');
-Avers.definePrimitive(Boulder, 'sector',   '');
+Avers.definePrimitive(Boulder, 'sector',   'spektrumone');
 Avers.definePrimitive(Boulder, 'grade',    'yellow');
 Avers.definePrimitive(Boulder, 'gradeNr',  0);
 Avers.definePrimitive(Boulder, 'removed');
 Avers.definePrimitive(Boulder, 'name',     '');
 
-//Avers.defineObject(Boulder,    'stats',    BoulderStats, {});

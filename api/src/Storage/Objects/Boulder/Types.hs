@@ -24,11 +24,11 @@ data Boulder = Boulder
     deriving (Show, Generic)
 
 data BoulderSector
-    = SpektrumOne
-    | SpektrumTwo
-    | SpektrumThree
-    | SpektrumFour
-    | BigBoss
+    = Spektrumone
+    | Spektrumtwo
+    | Spektrumthree
+    | Spektrumfour
+    | Bigboss
     | Dune
     | Starship
     | Kurswand
@@ -36,11 +36,11 @@ data BoulderSector
     deriving (Generic)
 
 instance Show BoulderSector where
-    show SpektrumOne   = "Spektrum 1"
-    show SpektrumTwo   = "Spektrum 2"
-    show SpektrumThree = "Spektrum 3"
-    show SpektrumFour  = "Spektrum 4"
-    show BigBoss       = "Big Boss"
+    show Spektrumone   = "Spektrum 1"
+    show Spektrumtwo   = "Spektrum 2"
+    show Spektrumthree = "Spektrum 3"
+    show Spektrumfour  = "Spektrum 4"
+    show Bigboss       = "Big Boss"
     show Dune          = "Dune"
     show Starship      = "Starship"
     show Kurswand      = "Kurswand"

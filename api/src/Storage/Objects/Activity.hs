@@ -20,7 +20,7 @@ activityViews =
 
 activityObjectType :: ObjectType Activity
 activityObjectType = ObjectType
-    { otType   = "boulder"
+    { otType   = "activity"
     , otId     = mkObjId 42
     , otViews  = activityViews
     }

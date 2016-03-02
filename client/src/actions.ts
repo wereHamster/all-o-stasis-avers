@@ -10,11 +10,9 @@ import * as Avers from 'avers';
 import * as Storage from './Storage';
 import {App, navigateTo, refresh} from './app';
 
-function mkBoulder(app: App) {
+function mkBoulder(app: App) : Storage.Boulder {
     return Avers.mk(Storage.Boulder,
         { setter : [app.data.session.objId]
-        , date : new Date().toISOString()
-        , removed : null
         }
     );
 }

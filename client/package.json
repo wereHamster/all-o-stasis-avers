@@ -5,7 +5,7 @@
   "license": "MIT",
   "author": "Yves Ineichen <yves.ineichen@gmail.com>",
   "devDependencies": {
-    "avers": "0.0.3",
+    "avers": "0.0.4",
     "babel": "^6.3.13",
     "babel-preset-es2015": "^6.3.13",
     "babelify": "^7.2.0",
