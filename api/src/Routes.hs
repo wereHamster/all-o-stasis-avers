@@ -30,7 +30,6 @@ import Types
 
 import Storage.ObjectTypes
 import Storage.Objects.Account
-import Storage.Objects.Activity
 import Storage.Objects.Boulder
 
 import Prelude
@@ -54,16 +53,6 @@ type LocalAPI
     :<|> "collection" :> "activites"
       :> Get '[JSON] [ObjId]
 
-    -- serve a list of activityIds that involve the actor
-    :<|> "collection" :> "actorActivities"
-      :> Capture "objId" ObjId
-      :> Get '[JSON] [ObjId]
-
-    -- serve a list of activityIds that involve the object
-    :<|> "collection" :> "objectActivities"
-      :> Capture "objId" ObjId
-      :> Get '[JSON] [ObjId]
-
     -- serve a list of all active bouldersIds in the gym
     :<|> "collection" :> "activeBoulders"
       :> Get '[JSON] [ObjId]
@@ -71,6 +60,10 @@ type LocalAPI
     -- serve a list of boulderIds that are owned/authored by the user
     :<|> "collection" :> "ownBoulders"
       :> Credentials
+      :> Get '[JSON] [ObjId]
+
+    -- serve a list of all accountIds
+    :<|> "collection" :> "accounts"
       :> Get '[JSON] [ObjId]
 
     -- serve a list of all non-user accountIds
@@ -86,56 +79,14 @@ type LocalAPI
 serveLocalAPI :: Avers.Handle -> Server LocalAPI
 serveLocalAPI aversH =
          serveRevision
-    :<|> serveActivitiesCollection
-    :<|> serveActorActivitiesCollection
-    :<|> serveObjectActivitiesCollection
     :<|> serveActiveBouldersCollection
     :<|> serveOwnBouldersCollection
+    :<|> serveAccounts
     :<|> serveAdminAccounts
     :<|> serveSignup
   where
     serveRevision =
         pure $ T.pack $ fromMaybe "HEAD" $(revision)
-
-    serveActivitiesCollection = do
-        activities <- reqAvers2 aversH $ do
-            runQueryCollect $
-                R.Map mapId $
-                R.OrderBy [R.Descending "timestamp"] $
-                R.Filter isNotRemoved $
-                viewTable activitiesView
-
-        pure $ map ObjId $ V.toList activities
-
-    serveActorActivitiesCollection actorId = do
-        objIds <- reqAvers2 aversH $ do
-            let isActor :: R.Exp R.Object -> R.Exp Bool
-                isActor = \x -> R.Eq
-                    (R.GetField "actor" x :: R.Exp Text)
-                    (R.lift $ unObjId actorId)
-
-            runQueryCollect $
-                R.Map mapId $
-                R.OrderBy [R.Descending "timestamp"] $
-                R.Filter isActor $
-                viewTable activitiesView
-
-        pure $ map ObjId $ V.toList objIds
-
-    serveObjectActivitiesCollection objectId = do
-        objIds <- reqAvers2 aversH $ do
-            let isObject :: R.Exp R.Object -> R.Exp Bool
-                isObject = \x -> R.Eq
-                    (R.GetField "object" x :: R.Exp Text)
-                    (R.lift $ unObjId objectId)
-
-            runQueryCollect $
-                R.Map mapId $
-                R.OrderBy [R.Descending "timestamp"] $
-                R.Filter isObject $
-                viewTable activitiesView
-
-        pure $ map ObjId $ V.toList objIds
 
     serveActiveBouldersCollection = do
         boulders <- reqAvers2 aversH $ do
@@ -161,6 +112,15 @@ serveLocalAPI aversH =
                 R.OrderBy [R.Descending "timestamp"] $
                 R.Filter isOwnBoulder $
                 viewTable bouldersView
+
+        pure $ map ObjId $ V.toList objIds
+
+    serveAccounts = do
+        objIds <- reqAvers2 aversH $ do
+            runQueryCollect $
+                R.Map mapId $
+                R.OrderBy [R.Descending "name"] $
+                viewTable accountsView
 
         pure $ map ObjId $ V.toList objIds
 
