@@ -1,7 +1,6 @@
 /*
 module Storage
 ( Account
-, Activity
 , Boulder
 ) where
 */
@@ -21,16 +20,6 @@ Avers.definePrimitive(Account, 'role',  'user');
 Avers.definePrimitive(Account, 'email', '');
 Avers.definePrimitive(Account, 'name',  '');
 
-export class Activity
-    { actor  : string;
-      object : string;
-      verb   : string;
-      device : string;
-    }
-Avers.definePrimitive(Activity, 'actor',  '');
-Avers.definePrimitive(Activity, 'object', '');
-Avers.definePrimitive(Activity, 'verb',   '');
-Avers.definePrimitive(Activity, 'device', '');
 
 export class BoulderGrade
     { value : string;
