@@ -12,7 +12,7 @@ import Avers
 import Avers.TH
 
 
--- Date and user automatically in rethinkDB
+-- Date and creator automatically available in rethinkDB (object)
 data Boulder = Boulder
     { boulderSetter     :: [ObjId]
     , boulderSector     :: BoulderSector
@@ -35,6 +35,7 @@ data BoulderSector
     | Klagemauer
     deriving (Generic)
 
+-- FIXME should be configurable
 instance Show BoulderSector where
     show Spektrumone   = "Spektrum 1"
     show Spektrumtwo   = "Spektrum 2"
@@ -46,6 +47,7 @@ instance Show BoulderSector where
     show Kurswand      = "Kurswand"
     show Klagemauer    = "Klagemauer"
 
+-- FIXME should be configurable
 data BoulderGrade
     = Yellow
     | Green

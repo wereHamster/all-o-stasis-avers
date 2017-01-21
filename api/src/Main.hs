@@ -47,6 +47,7 @@ databaseConfig = do
     return $ fromJust $ parseRelativeReference uri
 
 
+-- Currently we dont need a blob storage (inline avatar images)
 createBlobStorageConfig :: IO (BlobId -> Text -> ByteString -> IO (Either AversError ()))
 createBlobStorageConfig = return $ \_blobId _contentType _content ->
     error "Not supported"
@@ -55,7 +56,6 @@ createBlobStorageConfig = return $ \_blobId _contentType _content ->
 allObjectTypes :: [SomeObjectType]
 allObjectTypes =
     [ SomeObjectType accountObjectType
-    , SomeObjectType activityObjectType
     , SomeObjectType boulderObjectType
     ]
 

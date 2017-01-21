@@ -19,9 +19,9 @@ data Account = Account
 
 -- Available ACL groups
 data AccountRole
-    = User
-    | Setter
-    | Admin
+    = User                          -- view only
+    | Setter                        -- modify own boulder
+    | Admin                         -- modify boulders and setters
     deriving (Show, Generic)
 
 $(deriveEncoding (deriveJSONOptions "account") ''Account)

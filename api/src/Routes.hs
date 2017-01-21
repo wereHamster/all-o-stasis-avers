@@ -49,10 +49,6 @@ type LocalAPI
     = "revision"
       :> Get '[PlainText] Text
 
-    -- serve a list of all activities
-    :<|> "collection" :> "activites"
-      :> Get '[JSON] [ObjId]
-
     -- serve a list of all active bouldersIds in the gym
     :<|> "collection" :> "activeBoulders"
       :> Get '[JSON] [ObjId]
