@@ -4,44 +4,57 @@ module Account
 ) where
 */
 
+/// <reference path="../ext/react.d.ts" />
 
 import * as Avers from 'avers';
 import {App, refresh, navigateTo, navigateToFn} from '../app';
 
-import {site} from './Components/Site';
+import {Site} from './Components/Site';
 
 import {DropDownInput} from './Components/DropdownInput';
 
 import {Account} from '../storage';
 
+enum AccountBody
+    { Home
+    }
 
-class AccountView extends React.Component<{ app: App }, { account: Account }> {
+class CreatingEvent {
+    constructor
+        ( public createEventPromise: Promise<string>
+        ) {}
+}
 
-    state = { account: '' };
+interface AccountViewState {
+    accountViewBody: AccountBody | CreatingEvent;
+}
 
-    changeAccountName = (e) => {
-        this.setState({ account.name = e.target.value });
-    };
+export interface AccountViewProps {
+    app: App;
+    accountE : Avers.Editable<Account>;
+}
 
-    changeAccountEmail = (e) => {
-        this.setState({ account.email = e.target.value });
-    };
+class AccountSpec extends React.Component<AccountViewProps, AccountViewState> {
+
+    initialState(props: AccountViewProps): AccountViewState {
+        return { accountViewBody: AccountBody.Home };
+    }
+
+    constructor(props) {
+        super(props);
+        this.state = this.initialState(props);
+    }
 
     render() {
-        var accountC = Avers.lookupEditable<Account>(
-            app.data.aversH, account.accountId);
-
-        var accountE = accountC.get(undefined);
-
         return (
-          <Site app={app}>
-            this.accountHeader(accountE)
-            this.accountDetailsEditor(accountE)
-          </Site>
+          <div>
+            {this.accountHeader(this.props.accountE)} 
+            {this.accountDetailsEditor(this.props.accountE)}
+          </div>
         );
-    };
+    }
 
-    accountHeader(accountE: Avers.Editable<Account>) {
+    accountHeader(accountE: Avers.Editable<Account>) : JSX.Element {
 
         if(accountE === undefined ||
            accountE.objectId === undefined) {
@@ -54,34 +67,48 @@ class AccountView extends React.Component<{ app: App }, { account: Account }> {
             title = accountE.content.name;
 
         return (
-          <div class="boulder-header">
-            <div class="login">
-              <div class="logo">
+          <div className="boulder-header">
+            <div className="login">
+              <div className="logo">
                 {title}
               </div>
-              <p class="about">
+              <p className="about">
                 "Customize your account."
               </p>
             </div>
           </div>
         );
-    };
+    }
 
-    formRow(label: string, content: React.DOM.Element) : React.DOM.div {
+    formRow(label: string, content: JSX.Element) : JSX.Element {
         return (
-          <div class="form-row">
-            <div class="label">
+          <div className="form-row">
+            <div className="label">
               {label}
             </div>
-            <div class="content">
+            <div className="content">
               {content}
             </div>
           </div>
         );
-    };
+    }
 
+    changeAccountName = (e: __React.FormEvent) => {
+        let value = (e.target as HTMLInputElement).value;
+        this.props.accountE.content.name = value;
+    }
 
-    accountDetailsEditor(accountE: Avers.Editable<Account>) : React.DOM.div {
+    changeAccountEmail = (e: __React.FormEvent) => {
+        let value = (e.target as HTMLInputElement).value;
+        this.props.accountE.content.email = value;
+    }
+
+     changeAccountLogin = (e: __React.FormEvent) => {
+        let value = (e.target as HTMLInputElement).value;
+        this.props.accountE.content.login = value;
+    }
+
+    accountDetailsEditor(accountE: Avers.Editable<Account>) : JSX.Element {
 
         if(accountE === undefined || accountE.objectId === undefined) {
             console.log("Undefined account objectId.. Should not happen!");
@@ -93,44 +120,59 @@ class AccountView extends React.Component<{ app: App }, { account: Account }> {
         // FIXME: role should only be changeable by admins
         var roles = ['user', 'setter', 'admin'];
 
+        function onClick(e) {
+            e.stopPropagation();
+        }
+
         return (
-          <div class="account-detail-editor">
-            <div class="form">
-              <div class="form-row">
-                <div class="label">'User name'</div>
-                <div class='wide' type='text' value={account.name} onChange={changeAccountName}></div>
+          <div className="account-detail-editor">
+            <div className="form">
+              <div className="form-row">
+                <div className="label">User name</div>
+                <div className="content">
+                  <input className='wide' type='text' value={account.name} 
+                         onChange={this.changeAccountName} onClick={onClick}></input>
+                </div>
+              </div>
+              <div className="form-row">
+                <div className="label">Email</div>
+                <div className="content">
+                  <input className='wide' type='text' value={account.email} 
+                         onChange={this.changeAccountEmail} onClick={onClick}></input>
+                </div>
+              </div>
+               <div className="form-row">
+                <div className="label">Login</div>
+                <div className="content">
+                  <input className='wide' type='text' value={account.login} 
+                         onChange={this.changeAccountLogin} onClick={onClick}></input>
+                </div>
+              </div>
+
+               <div className="form-row">
+                <div className="label">Role</div>
+                <div className="content">
+                  <DropDownInput object={account} field='role' options={roles}></DropDownInput>
+                </div>
               </div>
             </div>
           </div>
-        );
-
-                //formRow
-                    //( 'User name'
-                    //, React.DOM.input
-                        //( { className: 'wide', type: 'text', value: account.name,
-                            //onChange: function(ev) {
-                                //account.name = (<HTMLInputElement>ev.target).value;
-                            //}
-                        //}
-                        //)
-                    //)
-                //, formRow
-                    //( 'Email'
-                    //, React.DOM.input
-                        //( { className: 'wide', type: 'text', value: account.email,
-                            //onChange: function(ev) {
-                                //account.email = (<HTMLInputElement>ev.target).value;
-                            //}
-                        //}
-                        //)
-                    //)
-                //, formRow
-                    //( 'Role'
-                    //, DropDownInput
-                        //( { object: account, field: 'role', options: roles }
-                        //)
-                    //)
-                //)
-    };
+        )
+    }
 }
 
+var AccountView = React.createFactory(AccountSpec);
+
+export function
+accountView(app: App, accountId: string) {
+    let accountC = Avers.lookupEditable<Account>(app.data.aversH, accountId);
+    let accountE = accountC.get(undefined);
+
+    return (
+        <Site app={app}>
+            <div className="account">
+                {AccountView({ app: app, accountE: accountE })}
+            </div>
+        </Site>
+    );
+}

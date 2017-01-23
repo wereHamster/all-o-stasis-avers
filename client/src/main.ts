@@ -5,7 +5,7 @@ import * as Avers from 'avers';
 import {Data, App, config, infoTable, refresh, loadView} from './app';
 
 import {loadingView, notFoundView} from './views';
-// import {accountView} from './Views/Account';
+import {accountView} from './Views/Account';
 import {boulderView} from './Views/Boulder';
 import {homeView}    from './Views/Home';
 import {loginView}   from './Views/Login';
@@ -73,7 +73,6 @@ function setupRoutes(app: App) {
         });
     });
 
-    // 1. define my routes! jaj!
     page('/signup', function() {
         loadView(app, app => {
             return signupView(app);
@@ -86,15 +85,15 @@ function setupRoutes(app: App) {
         });
     });
 
-    //page('/account/:accountId', function(ctx) {
-    //    loadView(app, app => {
-    //        return accountView(app, ctx.params.accountId);
-    //     });
-    //});
-
     page('/boulder/:boulderId', function(ctx) {
         loadView(app, app => {
             return boulderView(app, ctx.params.boulderId);
+         });
+    });
+
+    page('/account/:accountId', function(ctx) {
+        loadView(app, app => {
+            return accountView(app, ctx.params.accountId);
          });
     });
 
@@ -103,7 +102,6 @@ function setupRoutes(app: App) {
             return teamView(app);
         });
     });
-
 
     // Your router MUST have a catch-all handler, otherwise you'll get
     // a redirect loop on the client!

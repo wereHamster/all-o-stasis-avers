@@ -4,15 +4,10 @@ import * as Avers from 'avers';
 import {App, refresh, navigateTo, navigateToFn} from '../../app';
 import {Account, Boulder} from '../../storage';
 
-export interface CardProps {
-    app: App;
-    boulderE : Avers.Editable<Boulder>;
-}
-
 export function tileHeader(app: App, boulderId: string) : JSX.Element {
 
     var colorClass = "unknown";
-    var gradeNumber = "";
+    var gradeNumber = 0;
 
     // FIXME: group by date
     let meta : JSX.Element = Avers.lookupEditable<Boulder>(
@@ -65,12 +60,14 @@ interface CardState {
     cardBody: CardBody | CreatingEvent;
 }
 
+export interface CardProps {
+    app: App;
+    boulderE : Avers.Editable<Boulder>;
+}
+
 class CardSpec extends React.Component<CardProps, CardState> {
 
-    private app : App;
-
     initialState(props: CardProps): CardState {
-        // let boulder = props.boulderE.content;
         return { cardBody: CardBody.Home };
     }
 
