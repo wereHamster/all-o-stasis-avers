@@ -15,11 +15,6 @@ interface DropdownInputState {
     selectedValue : string;
 }
 
-// The value is only valid if it can be fully parsed into a number.
-function isValidNumber(value: string): boolean {
-    return true;
-}
-
 function asString(value) {
     if (value === null || value === undefined) {
         return '';
@@ -45,32 +40,25 @@ class DropdownInputSpec extends React.Component<DropdownInputProps, DropdownInpu
         let value = (e.target as HTMLSelectElement).value;
 
         this.setState({ selectedValue: value });
-        if (isValidNumber(value)) {
-            this.props.object[this.props.field] = parseFloat(value);
-        }
+        this.props.object[this.props.field] = value;
     };
 
     render() {
-        let className = '';
-        if (!isValidNumber(this.state.selectedValue)) {
-            className = 'invalid';
-        }
-
         function onClick(e) {
             e.stopPropagation();
         }
 
-        var options = this.props.options.map( entry => {
+        let options = this.props.options.map( entry => {
             return (
               <option value={entry}>
-                entry
+                {entry}
               </option>
             );
         });
 
         return (
-            <select name={this.props.field} className={className} onClick={onClick} onChange={this.onChange}>
-              options
+            <select name={this.props.field} onClick={onClick} onChange={this.onChange}>
+              {options}
             </select>);
     }
 

@@ -91,7 +91,7 @@ function boulderDetailsEditor(boulderE: Avers.Editable<Boulder>) {
      var boulder = boulderE.content;
 
      var grades  = ['yellow', 'green', 'orange', 'blue', 'red', 'white'];
-     var sectors = ['Starship', 'Big Boss', 'Dune', 'Klagemauer', 'Kurswand', 'Spektrum 1', 'Spektrum 2', 'Spektrum 3', 'Spektrum 4'];
+     var sectors = ['starship', 'bigboss', 'dune', 'klagemauer', 'kurswand', 'spektrumone', 'spektrumtwo', 'spektrumthree', 'spektrumfour'];
 
      return React.DOM.div
         ( { className: 'boulder-details-editor' }
