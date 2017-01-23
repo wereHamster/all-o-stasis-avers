@@ -16,27 +16,30 @@ import {Boulder} from '../storage';
 
 
 function threeBounceSpinner() {
-    return React.DOM.div
-        ( { className: 'sk-spinner sk-spinner-three-bounce' }
-        , React.DOM.div({ className: 'sk-bounce1' })
-        , React.DOM.div({ className: 'sk-bounce2' })
-        , React.DOM.div({ className: 'sk-bounce3' })
-        );
+    return (
+        <div className='sk-spinner sk-spinner-three-bounce'>
+            <div className='sk-bounce1'></div>
+            <div className='sk-bounce2'></div>
+            <div className='sk-bounce3'></div>
+        </div>
+    );
 }
 
 export function loadingTileBody() {
-    return React.DOM.div
-        ( { className: 'boulder-card-body' }
-        , threeBounceSpinner()
-        );
+    return (
+        <div className='boulder-card-body'>
+            {threeBounceSpinner()}
+        </div>
+    );
 }
 
 function boulderLoadingCard(app: App, boulderId) {
-    return React.DOM.div
-        ( { key: boulderId, className: 'boulder-card' }
-        , tileHeader(app, boulderId)
-        , loadingTileBody()
-        );
+    return (
+        <div key={boulderId} className={'boulder-card'}>
+            {tileHeader(app, boulderId)}
+            {loadingTileBody()}
+        </div>
+    );
 }
 
 
