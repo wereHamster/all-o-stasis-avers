@@ -52,7 +52,9 @@ homeView(app: App) {
 
     return (
         <Site app={app}>
-            <div className="boulders">{boulders}</div>
+            <div className="boulders">
+                <ul>{boulders}</ul>
+            </div>
         </Site>
     );
 }

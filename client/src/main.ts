@@ -5,7 +5,7 @@ import * as Avers from 'avers';
 import {Data, App, config, infoTable, refresh, loadView} from './app';
 
 import {loadingView, notFoundView} from './views';
-import {accountView} from './Views/Account';
+// import {accountView} from './Views/Account';
 import {boulderView} from './Views/Boulder';
 import {homeView}    from './Views/Home';
 import {loginView}   from './Views/Login';
@@ -86,11 +86,11 @@ function setupRoutes(app: App) {
         });
     });
 
-    page('/account/:accountId', function(ctx) {
-        loadView(app, app => {
-            return accountView(app, ctx.params.accountId);
-         });
-    });
+    //page('/account/:accountId', function(ctx) {
+    //    loadView(app, app => {
+    //        return accountView(app, ctx.params.accountId);
+    //     });
+    //});
 
     page('/boulder/:boulderId', function(ctx) {
         loadView(app, app => {

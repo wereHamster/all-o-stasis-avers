@@ -2,85 +2,52 @@
 
 import * as Avers from 'avers';
 import {App, refresh, navigateTo, navigateToFn} from '../../app';
-import {Boulder} from '../../storage';
+import {Account, Boulder} from '../../storage';
 
 export interface CardProps {
-    boulderE : Avers.Editable<Boulder>;
     app: App;
+    boulderE : Avers.Editable<Boulder>;
 }
 
 export function tileHeader(app: App, boulderId: string) : JSX.Element {
 
     var colorClass = "unknown";
+    var gradeNumber = "";
 
+    // FIXME: group by date
     let meta : JSX.Element = Avers.lookupEditable<Boulder>(
       app.data.aversH, boulderId).fmap(boulderE => {
         var boulder = boulderE.content;
-        var setters = '[';
+        
+        colorClass = boulder.grade.toLowerCase();
+        gradeNumber = boulder.gradeNr;
 
-        colorClass = boulder.grade;
+        let setters = ""
+        for (var i = 0; i < boulder.setter.length; i++) {
+            // FIXME: Avers.lookup<Account>(app.data.aversH, boulder.setter[i])
+            setters += boulder.setter[i].substring(0, 7) + ', ';
+        }
+        setters = setters.substring(0, setters.length - 2);
 
-        // let setterC = Avers.lookupEditable<bt.Storage.Account>(bt.data.aversH, boulder.setter[i]);
-        //setterC.then(s => { setters += s + ' '; });
-
-        setters += ']';
-
-        //FIXME: get from object
-        var bDate = "01.01.01"; //boulder.date;
-        //bDate.getDay() + '.' + bDate.getMonth()+1 + '.' + bDate.getFullYear()
+        let boulderDate = boulderE.createdAt.getDate() + '.' + 
+            (boulderE.createdAt.getMonth() + 1) + '.' +
+            boulderE.createdAt.getFullYear();
 
         return (
             <div className="boulder-tile-header-meta">
-              <div>{'' + boulder.name + ' :: ' + boulder.sector}</div>
-              <div>{bDate}</div>
+              {boulderDate + " :: " + boulder.sector + " :: " + setters}
             </div>
         );
     }).get(undefined);
 
-    var boulderClass = 'boulder-title-header ' + colorClass;
+    var boulderClass = 'boulder-tile-header ' + colorClass;
     var boulderLink  = navigateToFn('/boulder/' + boulderId);
-    var boulderName  = boulderId.substring(0, 5); //FIXME: replace with name
 
     return (
         <div className={boulderClass} onClick={boulderLink}>
-          <div className="boulder-tile-header-indicator"></div>
-          <div className="boulder-tile-header-title">{boulderName}</div>
+          <div className="boulder-tile-header-indicator">{gradeNumber}</div>
           {meta}
         </div>
-    );
-}
-
-function tileInfo(app: App, boulderId: string) : JSX.Element {
-
-    let info : JSX.Element =
-        Avers.lookupEditable<Boulder>(app.data.aversH, boulderId).fmap(boulderE => {
-        var boulder = boulderE.content;
-
-        return (
-          <div className="boulder-card-body-paragraph centered">
-            <div>{'' + boulder.gradeNr + ' :: ' + ' [ setters ]'}</div>
-          </div>
-        );
-    }).get(undefined);
-
-    return (
-        <div className="boulder-tile-info">{info}</div>
-    );
-}
-
-function tileStats(app: App, boulderId: string) : JSX.Element {
-
-    let stats :JSX.Element =
-        Avers.lookupEditable<Boulder>(app.data.aversH, boulderId).fmap(boulderE => {
-        var boulder = boulderE.content;
-
-        return (
-            <div>"stats"</div>
-        );
-    }).get(undefined);
-
-    return (
-        <div className="boulder-tile-stats">stats</div>
     );
 }
 
@@ -88,8 +55,14 @@ enum CardBody
     { Home
     }
 
+class CreatingEvent {
+    constructor
+        ( public createEventPromise: Promise<string>
+        ) {}
+}
+
 interface CardState {
-    cardBody: CardBody;
+    cardBody: CardBody | CreatingEvent;
 }
 
 class CardSpec extends React.Component<CardProps, CardState> {
@@ -110,11 +83,9 @@ class CardSpec extends React.Component<CardProps, CardState> {
         var boulderId = this.props.boulderE.objectId;
 
         return (
-            <div className="boulder-card">
+            <li className="boulder-entry">
               {tileHeader(this.props.app, boulderId)}
-              {tileInfo(this.props.app, boulderId)}
-              {tileStats(this.props.app, boulderId)}
-            </div>
+            </li>
         );
     }
 }

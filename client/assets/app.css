@@ -54,7 +54,6 @@ input.invalid {
 
 .boulder-header .id {
     font-size: 1.8rem;
-    /*font-family: "trajan-sans-pro";*/
     font-family: 'Muli', sans-serif;
 }
 
@@ -67,7 +66,7 @@ input.invalid {
     display: inline-block;
 }
 
-.boulder-header .type, .boulder-header .num-cells, .boulder-header .capacity {
+.boulder-header .type, .boulder-header .boulder-header {
     display: inline-block;
     padding: .2rem .6rem;
     background-color: #333;
@@ -169,10 +168,6 @@ input.invalid {
     background-color: rgb(157, 20, 10);
 }
 
-.voltage-summary, .duration, .charge-delta, .current {
-    font-weight: 700;
-}
-
 .editor-description {
     margin-top: .5rem;
 }
@@ -205,6 +200,8 @@ input.invalid {
     flex: 1;
 }
 
+
+
 .boulder-index-entry {
     padding: .3rem;
     display: flex;
@@ -236,6 +233,8 @@ input.invalid {
     margin-right: 2rem;
 }
 
+
+
 .boulders {
     margin-top: 1rem;
     display: flex;
@@ -243,9 +242,17 @@ input.invalid {
     flex-wrap: wrap;
 }
 
+.boulders ul {
+    list-style-type: none;
+}
+
+.boulders li {
+    margin: 10px 0;
+}
+
 .boulder-card {
     margin: .5rem;
-    width: 20rem;
+    width: 50rem;
     height: 12rem;
 
     display: flex;
@@ -264,13 +271,11 @@ input.invalid {
     background-color: rgb(96, 104, 126);
     cursor: pointer;
 }
-.boulder-card-header .current-voltage {
-    margin: -.3rem .4rem -.3rem -.4rem;
-    padding: .3rem .4rem;
-}
+
 .boulder-card-header-title {
     flex: 1;
 }
+
 .boulder-card-header-meta {
     margin-left: .3rem;
 }
@@ -389,48 +394,10 @@ input.invalid {
 }
 
 
-.boulder-tile-header {
-    display: flex;
-    flex-direction: row;
 
-    background-color: rgb(45, 48, 57);
-    color: rgb(236, 225, 233);
-}
-.boulder-tile-header:hover {
-    cursor: pointer;
-    color: rgb(161, 169, 207);
-}
-.boulder-tile-header-indicator {
-    width: 1.5rem;
-    height: 3rem;
 
-    background-color: rgb(158, 156, 156);
-    color: rgb(236, 225, 233);
 
-    line-height: 3rem;
-    font-size: 2.2rem;
-    text-align: center;
-}
-.boulder-tile-header-indicator .icon {
-    margin: 0;
-    width: auto;
-}
-.boulder-tile-header-title {
-    flex: 1;
-    font-size: 2.2rem;
-    line-height: 3rem;
-    margin-left: .6rem;
-}
-.boulder-tile-header-meta {
-    display: flex;
-    flex-direction: column;
-    text-align: right;
-    margin-right: .3rem;
-}
-.boulder-tile-header-meta > div {
-    height: 1.5rem;
-    line-height: 1.5rem;
-}
+
 
 .boulder-card .sk-spinner-three-bounce div {
     background-color: rgb(201, 112, 187);
@@ -635,7 +602,7 @@ input.invalid {
     fill-opacity: 0.8;
 }
 
-.green {
+.green_f {
     fill: #33cc00;
     fill-opacity: 0.8;
 }
@@ -660,8 +627,11 @@ input.invalid {
     fill-opacity: 0.8;
 }
 
+
+
+
 .boulder-tile-header.yellow {
-    background-color: rgba(255, 255, 0, 0.5);
+    background-color: rgba(255, 255, 0, 0.2);
 }
 .boulder-tile-header.yellow .boulder-tile-header-indicator {
     background-color: rgb(255, 255, 0);
@@ -700,4 +670,45 @@ input.invalid {
 }
 .boulder-tile-header.white .boulder-tile-header-indicator {
     background-color: rgb(255, 255, 255);
+}
+
+.boulder-tile-header {
+    display: flex;
+    flex-direction: row;
+    width: 500px;
+
+    background-color: rgb(45, 48, 57);
+    color: rgb(45, 48, 57);
+}
+.boulder-tile-header:hover {
+    cursor: pointer;
+    color: rgb(161, 169, 207);
+}
+.boulder-tile-header-indicator {
+    width: auto;
+    height: 3rem;
+    padding-left: 10px;
+    padding-right: 10px;
+
+    background-color: rgb(158, 156, 156);
+    color: rgb(236, 225, 233);
+
+    line-height: 3rem;
+    font-size: 2.2rem;
+    text-align: center;
+}
+.boulder-tile-header-indicator .icon {
+    margin: 0;
+    width: auto;
+}
+
+.boulder-tile-header-meta {
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+    margin-left: .3rem;
+}
+.boulder-tile-header-meta > div {
+    height: 1.5rem;
+    line-height: 1.5rem;
 }
