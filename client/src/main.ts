@@ -42,7 +42,7 @@ export default function() {
     // application. The 'console.info' shows you how frequently the application
     // data changes.
     Avers.attachGenerationListener(app.data.aversH, () => {
-        console.info('Generation', app.data.aversH.generationNumber);
+        // console.info('Generation', app.data.aversH.generationNumber);
         refresh(app);
     });
 
@@ -103,8 +103,6 @@ function setupRoutes(app: App) {
         });
     });
 
-    // Your router MUST have a catch-all handler, otherwise you'll get
-    // a redirect loop on the client!
     page('*', () => {
         loadView(app, app => {
             return notFoundView(app);

@@ -50,16 +50,18 @@ class DropdownInputSpec extends React.Component<DropdownInputProps, DropdownInpu
 
         let options = this.props.options.map( entry => {
             return (
-              <option value={entry}>
-                {entry}
-              </option>
+                <option value={entry} key={this.props.field + "-" + entry}>
+                    {entry}
+                </option>
             );
         });
 
         return (
-            <select name={this.props.field} onClick={onClick} onChange={this.onChange}>
+            <select name={this.props.field} onClick={onClick} 
+                    onChange={this.onChange} defaultValue={this.state.selectedValue}>
               {options}
-            </select>);
+            </select>
+        );
     }
 
     componentWillReceiveProps(props) {
