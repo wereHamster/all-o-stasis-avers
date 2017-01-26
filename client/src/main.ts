@@ -1,6 +1,3 @@
-/// <reference path="./ext/react.d.ts" />
-/// <reference path="./ext/react-dom.d.ts" />
-
 import * as Avers from 'avers';
 import {Data, App, config, infoTable, refresh, loadView} from './app';
 

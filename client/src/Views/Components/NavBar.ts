@@ -63,21 +63,28 @@ function accountSettingsItem(app: App) {
 export function
 navBar(app: App) {
     if (app.data.session.objId) {
-        return React.DOM.div
-            ( { className: 'navbar' }
-            , homeItem
-            , statsItem
-            , teamItem
-            , flexItem
-            , Boulder.createBoulderItem(app)
-            , accountSettingsItem(app)
-            );
-
+        if (app.data.role == "user") {
+            return React.DOM.div
+                ( { className: 'navbar' }
+                , homeItem
+                , teamItem
+                , flexItem
+                , accountSettingsItem(app)
+                );
+        } else {
+            return React.DOM.div
+                ( { className: 'navbar' }
+                , homeItem
+                , teamItem
+                , flexItem
+                , Boulder.createBoulderItem(app)
+                , accountSettingsItem(app)
+                );
+        }
     } else {
         return React.DOM.div
             ( { className: 'navbar' }
             , homeItem
-            , statsItem
             , teamItem
             , flexItem
             , signInItem

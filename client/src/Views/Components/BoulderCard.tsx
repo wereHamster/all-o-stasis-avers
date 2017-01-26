@@ -1,5 +1,3 @@
-/// <reference path="../../ext/react.d.ts" />
-
 import * as Avers from 'avers';
 import {App, refresh, navigateTo, navigateToFn} from '../../app';
 import {Account, Boulder} from '../../storage';
@@ -87,4 +85,4 @@ class CardSpec extends React.Component<CardProps, CardState> {
     }
 }
 
-export var Card = React.createFactory(CardSpec);
+export var BoulderCard = React.createFactory(CardSpec);

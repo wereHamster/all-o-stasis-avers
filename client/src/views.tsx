@@ -1,5 +1,3 @@
-/// <reference path="./ext/react.d.ts" />
-
 /*
 module Views
 ( loadingView

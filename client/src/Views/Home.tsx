@@ -9,7 +9,7 @@ import * as Avers from 'avers';
 import Computation from 'computation';
 import {App} from '../app';
 
-import {Card, tileHeader} from './Components/Card';
+import {BoulderCard, tileHeader} from './Components/BoulderCard';
 import {Site} from './Components/Site';
 
 import {Boulder} from '../storage';
@@ -49,7 +49,7 @@ homeView(app: App) {
         let boulderC = Avers.lookupEditable<Boulder>(app.data.aversH, boulderId);
 
         return boulderC.fmap((boulder) => {
-             return Card({ app: app, key: boulder.objectId, boulderE: boulder });
+             return BoulderCard({ app: app, key: boulder.objectId, boulderE: boulder });
         }).get(boulderLoadingCard(app, boulderId));
     });
 

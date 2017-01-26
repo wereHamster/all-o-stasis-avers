@@ -18,24 +18,15 @@
         "!./node_modules/**/*"
     ],
     "files": [
-        "./src/Views/Boulder.ts",
-        "./src/Views/Components/Card.ts",
-        "./src/Views/Components/DropDownInput.tsx",
-        "./src/Views/Components/NavBar.ts",
-        "./src/Views/Components/NumberInput.tsx",
-        "./src/Views/Components/Site.tsx",
-        "./src/Views/Components/TimeAgo.ts",
-        "./src/Views/Components/Timestamp.tsx",
-        "./src/Views/Home.tsx",
-        "./src/Views/Login.tsx",
-        "./src/Views/Signup.ts",
+        "./src/actions.ts",
         "./src/app.ts",
         "./src/config.ts",
-        "./src/ext/react.d.ts",
-        "./src/ext/react-dom.d.ts",
         "./src/main.ts",
         "./src/storage.ts",
-        "./src/views.tsx"
+        "./src/Views/Boulder.ts",
+        "./src/Views/Components/NavBar.ts",
+        "./src/Views/Components/Setter.ts",
+        "./src/Views/Team.ts"
     ],
     "atom": {
         "rewriteTsconfig": true

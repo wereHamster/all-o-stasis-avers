@@ -29,13 +29,13 @@ createBoulderItem(app: App) {
 
     if(app.data.role == "user")
         return React.DOM.div
-            ( { className: 'plain-navbar-item ' }
+            ( { className: 'plain-navbar-item' }
             , ''
             );
 
     if (app.createBoulderPromise) {
         return React.DOM.div
-            ( { className: 'plain-navbar-item ' }
+            ( { className: 'plain-navbar-item' }
             , React.DOM.i({ className: 'plus square outlined icon' })
             , 'Creating boulder...'
             );

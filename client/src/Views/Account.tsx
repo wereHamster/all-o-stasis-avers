@@ -4,8 +4,6 @@ module Account
 ) where
 */
 
-/// <reference path="../ext/react.d.ts" />
-
 import * as Avers from 'avers';
 import {App, refresh, navigateTo, navigateToFn} from '../app';
 
@@ -75,19 +73,6 @@ class AccountSpec extends React.Component<AccountViewProps, AccountViewState> {
               <p className="about">
                 "Customize your account."
               </p>
-            </div>
-          </div>
-        );
-    }
-
-    formRow(label: string, content: JSX.Element) : JSX.Element {
-        return (
-          <div className="form-row">
-            <div className="label">
-              {label}
-            </div>
-            <div className="content">
-              {content}
             </div>
           </div>
         );

@@ -53,7 +53,8 @@ class NumberInputSpec extends React.Component<NumberInputProps, NumberInputState
             e.stopPropagation();
         }
 
-        return <input type="text" className={className} value={this.state.rawValue} onChange={this.onChange} onClick={onClick} />;
+        return <input type="text" className={className} value={this.state.rawValue} 
+                      onChange={this.onChange} onClick={onClick} />;
     }
 
     componentWillReceiveProps(props) {

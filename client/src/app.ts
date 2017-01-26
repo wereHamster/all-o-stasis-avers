@@ -1,6 +1,3 @@
-/// <reference path="./ext/react.d.ts" />
-/// <reference path="./ext/react-dom.d.ts" />
-
 /*
 module App
 ( App
@@ -69,7 +66,7 @@ export class Data {
         this.accountsCollection =
             new Avers.ObjectCollection(aversH, 'accounts');
 
-        // Collection of admin/ssetter accounts (display team)
+        // Collection of admin/setter accounts (display team)
         this.adminAccountCollection =
             new Avers.ObjectCollection(aversH, 'adminAccounts');
 
