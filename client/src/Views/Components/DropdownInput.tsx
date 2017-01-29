@@ -48,9 +48,9 @@ class DropdownInputSpec extends React.Component<DropdownInputProps, DropdownInpu
             e.stopPropagation();
         }
 
-        let options = this.props.options.map( entry => {
+        let options = this.props.options.map( (entry, index) => {
             return (
-                <option value={entry} key={this.props.field + "-" + entry}>
+                <option value={entry} key={index}>
                     {entry}
                 </option>
             );

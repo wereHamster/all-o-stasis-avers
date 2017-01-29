@@ -11,15 +11,22 @@ export function tileHeader(app: App, boulderId: string) : JSX.Element {
     let meta : JSX.Element = Avers.lookupEditable<Boulder>(
       app.data.aversH, boulderId).fmap(boulderE => {
         var boulder = boulderE.content;
-        
+
         colorClass = boulder.grade.toLowerCase();
         gradeNumber = boulder.gradeNr;
 
-        let setters = ""
+        var setters = "";
         for (var i = 0; i < boulder.setter.length; i++) {
-            // FIXME: Avers.lookup<Account>(app.data.aversH, boulder.setter[i])
-            setters += boulder.setter[i].substring(0, 7) + ', ';
+            setters += Avers.lookupContent<Account>(app.data.aversH, boulder.setter[i]).fmap(account => {
+
+                var name = boulder.setter[i].substring(0, 7);
+                if (account.name != "")
+                    name = account.name;
+
+                return name + ', ';
+            }).get(undefined);
         }
+
         setters = setters.substring(0, setters.length - 2);
 
         let boulderDate = boulderE.createdAt.getDate() + '.' + 
