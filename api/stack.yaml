@@ -1,7 +1,6 @@
-resolver: nightly-2015-12-10
-
+resolver: nightly-2017-02-02
 packages:
 - '.'
-
-# Packages to be pulled from upstream that are not in the resolver (e.g., acme-missiles-0.3)
-extra-deps: [ avers-0.0.13, avers-api-0.0.1, avers-server-0.0.1, rethinkdb-client-driver-0.0.22 ]
+extra-deps:
+- avers-api-0.0.18.0
+- avers-server-0.0.18.0
