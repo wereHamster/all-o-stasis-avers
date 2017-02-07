@@ -16,16 +16,12 @@ function setterInfo(app: App, accountId: string) {
         if (account.name != "")
             name = account.name;
 
-        return React.DOM.div
-            ( { }
-            , React.DOM.img
-                ( { src: "http://ba.iff.im/avatars/W.jpg" }
-                )
-            , React.DOM.h3
-                ( { }
-                , name
-                )
-            );
+        return (
+          <div>
+            <img src="http://ba.iff.im/avatars/W.jpg"/>
+            <h3>{name}</h3>
+          </div>
+        );
     }).get(undefined);
 }
 
@@ -51,10 +47,11 @@ class CardSpec extends React.Component<CardProps, CardState> {
     }
 
     render() {
-        return React.DOM.div
-            ( { className: 'setter-card' }
-            , setterInfo(this.props.app, this.props.accountId)
-            );
+        return (
+          <div className='setter-card'>
+            {setterInfo(this.props.app, this.props.accountId)}
+          </div>
+        );
     }
 }
 
