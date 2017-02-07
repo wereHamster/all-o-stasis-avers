@@ -72,7 +72,7 @@ export interface CardProps {
     boulderE : Avers.Editable<Boulder>;
 }
 
-class CardSpec extends React.Component<CardProps, CardState> {
+export class BoulderCard extends React.Component<CardProps, CardState> {
 
     initialState(props: CardProps): CardState {
         return { cardBody: CardBody.Home };
@@ -93,5 +93,3 @@ class CardSpec extends React.Component<CardProps, CardState> {
         );
     }
 }
-
-export var BoulderCard = React.createFactory(CardSpec);
