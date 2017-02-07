@@ -53,9 +53,18 @@ createBoulderItem(app: App) {
 
 function boulderHeader(boulder : Avers.Editable<Boulder>) : any {
     return (
-        <div>
-            {boulder.objectId}
+      <div>
+        <div className="boulder-header">
+          <div className="login">
+            <div className="logo">
+              {boulder.objectId.substr(0, 10)}
+            </div>
+            <p className="about">
+              "Customize the boulder."
+            </p>
+          </div>
         </div>
+      </div>
     );
 }
 
@@ -118,10 +127,12 @@ boulderView(app: App, boulderId: string) {
     var boulderE = boulderC.get(undefined);
 
     return (
-        <Site app={app}>
-            {boulderHeader(boulderE)}
-            {boulderDetailsEditor(boulderE)}
-        </Site>
+      <Site app={app}>
+        <div className="boulder">
+          {boulderHeader(boulderE)}
+          {boulderDetailsEditor(boulderE)}
+        </div>
+      </Site>
     );
 }
 
