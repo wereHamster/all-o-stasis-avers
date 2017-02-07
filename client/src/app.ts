@@ -9,6 +9,8 @@ module App
 ) where
 */
 
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 
 import * as Avers from 'avers';
 import {Account, Boulder} from './storage';
@@ -91,7 +93,7 @@ refresh(app: App): void {
 }
 
 export function
-loadView(app: App, mkViewFn: (app: App) => __React.ReactElement<any>): void {
+loadView(app: App, mkViewFn: (app: App) => React.ReactElement<any>): void {
     app.mkViewFn = mkViewFn;
     refresh(app);
 }

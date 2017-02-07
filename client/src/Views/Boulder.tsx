@@ -6,6 +6,8 @@ module Boulder
 */
 
 
+import * as React from 'react';
+
 import * as Avers from 'avers';
 import {App, refresh, navigateTo, navigateToFn} from '../app';
 
@@ -80,7 +82,7 @@ function boulderDetailsEditor(boulderE: Avers.Editable<Boulder>) {
         e.stopPropagation();
      }
 
-    function changeName(e: __React.FormEvent) {
+    function changeName(e: React.FormEvent<any>) {
         let value = (e.target as HTMLInputElement).value;
         boulder.name = value;
     }

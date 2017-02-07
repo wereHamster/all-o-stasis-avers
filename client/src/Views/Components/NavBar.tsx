@@ -4,6 +4,7 @@ module NavBar
 ) where
 */
 
+import * as React from 'react';
 
 import * as Avers from 'avers';
 import {App, navigateTo, navigateToFn} from '../../app';

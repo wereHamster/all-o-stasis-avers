@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 import * as Avers from 'avers';
 import {App, refresh, navigateTo, navigateToFn} from '../../app';
 import {Account, Boulder} from '../../storage';
@@ -29,7 +31,7 @@ export function tileHeader(app: App, boulderId: string) : JSX.Element {
 
         setters = setters.substring(0, setters.length - 2);
 
-        let boulderDate = boulderE.createdAt.getDate() + '.' + 
+        let boulderDate = boulderE.createdAt.getDate() + '.' +
             (boulderE.createdAt.getMonth() + 1) + '.' +
             boulderE.createdAt.getFullYear();
 

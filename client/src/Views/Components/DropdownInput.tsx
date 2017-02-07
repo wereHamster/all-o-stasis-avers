@@ -4,6 +4,8 @@ module DropDownInput
 ) where
 */
 
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 
 export interface DropdownInputProps {
     object  : any;
@@ -36,7 +38,7 @@ class DropdownInputSpec extends React.Component<DropdownInputProps, DropdownInpu
         this.state = this.initialState(props);
     }
 
-    onChange = (e: __React.FormEvent) => {
+    onChange = (e: React.FormEvent<any>) => {
         let value = (e.target as HTMLSelectElement).value;
 
         this.setState({ selectedValue: value });
@@ -57,7 +59,7 @@ class DropdownInputSpec extends React.Component<DropdownInputProps, DropdownInpu
         });
 
         return (
-            <select name={this.props.field} onClick={onClick} 
+            <select name={this.props.field} onClick={onClick}
                     onChange={this.onChange} defaultValue={this.state.selectedValue}>
               {options}
             </select>

@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 import * as Avers from 'avers';
 import {App} from '../../app';
 import {navBar} from './NavBar';

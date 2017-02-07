@@ -1,3 +1,6 @@
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+
 export interface NumberInputProps {
     object : any;
     field  : string;
@@ -34,7 +37,7 @@ class NumberInputSpec extends React.Component<NumberInputProps, NumberInputState
         this.state = this.initialState(props);
     }
 
-    onChange = (e: __React.FormEvent) => {
+    onChange = (e: React.FormEvent<any>) => {
         let value = (e.target as HTMLInputElement).value;
 
         this.setState({ rawValue: value });
@@ -53,7 +56,7 @@ class NumberInputSpec extends React.Component<NumberInputProps, NumberInputState
             e.stopPropagation();
         }
 
-        return <input type="text" className={className} value={this.state.rawValue} 
+        return <input type="text" className={className} value={this.state.rawValue}
                       onChange={this.onChange} onClick={onClick} />;
     }
 

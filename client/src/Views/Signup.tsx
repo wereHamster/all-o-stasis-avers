@@ -4,6 +4,7 @@ module Signup
 ) where
 */
 
+import * as React from 'react';
 
 import * as Avers from 'avers';
 import {App, refresh, navigateToFn} from '../app';
@@ -71,7 +72,7 @@ signupView(app: App) {
                 </div>
             );
         } else {
-            btn = <div className="button" onClick={doSignUp(app)}>Sign up</div>;
+            btn = <div className="button" onClick={doSignUp()}>Sign up</div>;
             login = <div className="button" onClick={navigateToFn('/login')}>I already have an account (login)</div>;
         }
 

@@ -4,6 +4,7 @@ module Home
 ) where
 */
 
+import * as React from 'react';
 
 import * as Avers from 'avers';
 import Computation from 'computation';
@@ -49,7 +50,7 @@ homeView(app: App) {
         let boulderC = Avers.lookupEditable<Boulder>(app.data.aversH, boulderId);
 
         return boulderC.fmap((boulder) => {
-             return BoulderCard({ app: app, key: boulder.objectId, boulderE: boulder });
+             return BoulderCard({ app: app, key: boulder.objectId, boulderE: boulder }) as JSX.Element;
         }).get(boulderLoadingCard(app, boulderId));
     });
 

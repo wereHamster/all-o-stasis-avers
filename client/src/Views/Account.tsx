@@ -4,6 +4,8 @@ module Account
 ) where
 */
 
+import * as React from 'react';
+
 import * as Avers from 'avers';
 import {App, refresh, navigateTo, navigateToFn} from '../app';
 
@@ -46,7 +48,7 @@ class AccountSpec extends React.Component<AccountViewProps, AccountViewState> {
     render() {
         return (
           <div>
-            {this.accountHeader(this.props.accountE)} 
+            {this.accountHeader(this.props.accountE)}
             {this.accountDetailsEditor(this.props.accountE)}
           </div>
         );
@@ -78,17 +80,17 @@ class AccountSpec extends React.Component<AccountViewProps, AccountViewState> {
         );
     }
 
-    changeAccountName = (e: __React.FormEvent) => {
+    changeAccountName = (e: React.FormEvent<any>) => {
         let value = (e.target as HTMLInputElement).value;
         this.props.accountE.content.name = value;
     }
 
-    changeAccountEmail = (e: __React.FormEvent) => {
+    changeAccountEmail = (e: React.FormEvent<any>) => {
         let value = (e.target as HTMLInputElement).value;
         this.props.accountE.content.email = value;
     }
 
-     changeAccountLogin = (e: __React.FormEvent) => {
+     changeAccountLogin = (e: React.FormEvent<any>) => {
         let value = (e.target as HTMLInputElement).value;
         this.props.accountE.content.login = value;
     }
@@ -115,21 +117,21 @@ class AccountSpec extends React.Component<AccountViewProps, AccountViewState> {
               <div className="form-row">
                 <div className="label">User name</div>
                 <div className="content">
-                  <input className='wide' type='text' value={account.name} 
+                  <input className='wide' type='text' value={account.name}
                          onChange={this.changeAccountName} onClick={onClick}></input>
                 </div>
               </div>
               <div className="form-row">
                 <div className="label">Email</div>
                 <div className="content">
-                  <input className='wide' type='text' value={account.email} 
+                  <input className='wide' type='text' value={account.email}
                          onChange={this.changeAccountEmail} onClick={onClick}></input>
                 </div>
               </div>
                <div className="form-row">
                 <div className="label">Login</div>
                 <div className="content">
-                  <input className='wide' type='text' value={account.login} 
+                  <input className='wide' type='text' value={account.login}
                          onChange={this.changeAccountLogin} onClick={onClick}></input>
                 </div>
               </div>

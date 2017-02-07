@@ -4,6 +4,7 @@ module Team
 ) where
 */
 
+import * as React from 'react';
 
 import * as Avers from 'avers';
 import Computation from 'computation';
@@ -30,7 +31,7 @@ teamView(app: App) {
         let accountC = Avers.lookupContent<Account>(app.data.aversH, accountId);
 
         return accountC.fmap((account) => {
-            return SetterCard({ app: app, key: accountId, account: account, accountId: accountId });
+            return SetterCard({ app: app, key: accountId, account: account, accountId: accountId }) as JSX.Element;
         }).get(setterLoadingView(app, accountId));
     });
 
