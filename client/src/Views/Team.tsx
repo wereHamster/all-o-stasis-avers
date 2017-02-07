@@ -9,17 +9,18 @@ import * as Avers from 'avers';
 import Computation from 'computation';
 import {App} from '../app';
 
-import {site} from './Components/Site';
+import {Site} from './Components/Site';
 import {SetterCard} from './Components/Setter';
 
 import {Account} from '../storage';
 
 
 function setterLoadingView(app: App, accountId: string) {
-    return React.DOM.div
-        ( { key: accountId, className: 'setter-card' }
-        , accountId
-        );
+    return (
+      <div key={accountId} className='setter-card'>
+        {accountId}
+      </div>
+    );
 }
 
 
@@ -33,18 +34,14 @@ teamView(app: App) {
         }).get(setterLoadingView(app, accountId));
     });
 
-    return site
-        ( app
-        , React.DOM.div
-            ( { className: 'team' }
-            , React.DOM.h1
-                ( { }
-                , 'Team'
-                )
-            , React.DOM.div
-                ( { }
-                , setters
-                )
-            )
-        );
+    return (
+      <Site app={app}>
+        <div className='team'>
+          <h1>Team</h1>
+          <div>
+            {setters}
+          </div>
+        </div>
+      </Site>
+    );
 }
