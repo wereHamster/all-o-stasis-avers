@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 import * as Avers from 'avers';
 import {Data, App, config, infoTable, refresh, loadView} from './app';
 
@@ -8,6 +10,7 @@ import {homeView}    from './Views/Home';
 import {loginView}   from './Views/Login';
 import {teamView}    from './Views/Team';
 import {signupView}  from './Views/Signup';
+import {catalogView} from './Views/Catalog';
 
 
 function mkApp(): App {
@@ -97,6 +100,12 @@ function setupRoutes(app: App) {
     page('/team', function() {
         loadView(app, app => {
             return teamView(app);
+        });
+    });
+
+    page('/_catalog', function() {
+        loadView(app, app => {
+            return catalogView();
         });
     });
 
