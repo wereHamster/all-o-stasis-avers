@@ -100,54 +100,6 @@ input.invalid {
     margin-left: 12rem;
 }
 
-.boulder-event {
-    margin-bottom: 1rem;
-}
-.boulder-event-header {
-    margin-bottom: .3rem;
-}
-.boulder-event-header .delete {
-    font-size: .8rem;
-    display: none;
-    margin-left: 1rem;
-    float: right;
-}
-.boulder-event-header:hover .delete {
-    display: inline-block;
-}
-.boulder-event .id {
-    color: #888;
-    font-size: .7rem;
-    font-family: "trajan-sans-pro";
-}
-.boulder-event .name {
-    line-height: 1;
-    font-family: "trajan-sans-pro";
-}
-.boulder-event .timestamp {
-    display: inline-block;
-    color: #888;
-    font-size: .825rem;
-    margin-left: .6rem;
-}
-
-.event-property-field {
-    display: inline-block;
-    font-size: 1.2rem;
-    padding: .2rem .4rem;
-}
-.event-property-field.focus {
-    background-color: #ddd;
-}
-.event-property-field.interactive:hover {
-    cursor: pointer;
-    background-color: #eee;
-}
-
-.event-property-editor {
-    margin-top: .5rem;
-}
-
 .button {
     display: inline-block;
     padding: .2rem .5rem .1rem;

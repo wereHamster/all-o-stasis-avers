@@ -29,24 +29,24 @@ createBoulderItem(app: App) {
 
     if(app.data.role == "user") {
         return (
-            <div className='plain-navbar-item '></div>
+          <div className='plain-navbar-item '></div>
         );
     }
 
     if (app.createBoulderPromise) {
         return (
-            <div className='plain-navbar-item '>
-                <i className='plus square outlined icon'></i>
-                'Creating boulder...'
-            </div>
+          <div className='plain-navbar-item '>
+            <i className='plus square outlined icon'></i>
+            Creating boulder...
+          </div>
         );
 
     } else {
         return (
-            <div className='navbar-item' onClick={createNewBoulder}>
-                <i className='plus square outlined icon'></i>
-                'Create boulder'
-            </div>
+          <div className='navbar-item' onClick={createNewBoulder}>
+            <i className='plus square outlined icon'></i>
+            Create boulder
+          </div>
         );
     }
 }
@@ -60,7 +60,7 @@ function boulderHeader(boulder : Avers.Editable<Boulder>) : any {
               {boulder.objectId.substr(0, 10)}
             </div>
             <p className="about">
-              "Customize the boulder."
+              Customize the boulder
             </p>
           </div>
         </div>
