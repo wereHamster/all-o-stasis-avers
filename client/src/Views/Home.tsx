@@ -16,29 +16,25 @@ import {Site} from './Components/Site';
 import {Boulder} from '../storage';
 
 
-function threeBounceSpinner() {
-    return (
-        <div className='sk-spinner sk-spinner-three-bounce'>
-            <div className='sk-bounce1'></div>
-            <div className='sk-bounce2'></div>
-            <div className='sk-bounce3'></div>
-        </div>
-    );
-}
+const ThreeBounceSpinner = () => (
+    <div className='sk-spinner sk-spinner-three-bounce'>
+        <div className='sk-bounce1'></div>
+        <div className='sk-bounce2'></div>
+        <div className='sk-bounce3'></div>
+    </div>
+);
 
-export function loadingTileBody() {
-    return (
-        <div className='boulder-card-body'>
-            {threeBounceSpinner()}
-        </div>
-    );
-}
+export const LoadingTileBody = () => (
+    <div className='boulder-card-body'>
+        <ThreeBounceSpinner />
+    </div>
+);
 
 function boulderLoadingCard(app: App, boulderId) {
     return (
         <div key={boulderId} className={'boulder-card'}>
             {tileHeader(app, boulderId)}
-            {loadingTileBody()}
+            <LoadingTileBody />
         </div>
     );
 }
