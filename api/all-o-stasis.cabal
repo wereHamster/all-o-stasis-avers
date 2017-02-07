@@ -29,7 +29,6 @@ executable all-o-stasis-api
                        , time
                        , transformers
                        , mtl
-                       , MonadCatchIO-transformers
                        , vector
                        , rethinkdb-client-driver
                        , unordered-containers

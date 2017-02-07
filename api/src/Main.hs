@@ -65,7 +65,7 @@ createAversHandle = do
     dbURI <- databaseConfig
     bsc  <- createBlobStorageConfig
 
-    eH <- newState $ Avers.Config dbURI bsc allObjectTypes (\_ _ -> return ())
+    eH <- newHandle $ Avers.Config dbURI bsc allObjectTypes (\_ _ -> return ())
     h <- case eH of
         Left e -> error $ show e
         Right h -> return h
@@ -78,7 +78,7 @@ createAversHandle = do
     return h
 
 
-type API = AversCoreAPI :<|> AversSessionAPI :<|> LocalAPI
+type API = AversAPI :<|> LocalAPI
 
 api :: Proxy API
 api = Proxy
@@ -86,8 +86,7 @@ api = Proxy
 
 server :: Avers.Handle -> Server API
 server aversH =
-         serveAversCoreAPI aversH defaultAuthorizations
-    :<|> serveAversSessionAPI aversH
+         serveAversAPI aversH defaultAuthorizations
     :<|> serveLocalAPI aversH
 
 
