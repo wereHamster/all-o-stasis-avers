@@ -16,7 +16,7 @@ import {Site} from './Components/Site';
 import {DropDownInput} from './Components/DropdownInput';
 import {NumberInput} from './Components/NumberInput';
 
-import {Boulder} from '../storage';
+import {Boulder, grades, sectors} from '../storage';
 
 import {createBoulder} from '../actions';
 
@@ -73,11 +73,6 @@ function boulderHeader(boulder : Avers.Editable<Boulder>) : any {
 function boulderDetailsEditor(boulderE: Avers.Editable<Boulder>) {
      var boulder = boulderE.content;
 
-     // FIXME: refactor
-     var grades  = ['yellow', 'green', 'orange', 'blue', 'red', 'white'];
-     var sectors = ['starship', 'bigboss', 'dune', 'klagemauer', 'kurswand',
-         'spektrumone', 'spektrumtwo', 'spektrumthree', 'spektrumfour'];
-
      function onClick(e) {
         e.stopPropagation();
      }
@@ -100,13 +95,13 @@ function boulderDetailsEditor(boulderE: Avers.Editable<Boulder>) {
           <div className="form-row">
             <div className="label">Sector</div>
             <div className="content">
-              <DropDownInput object={boulder} field='sector' options={sectors}></DropDownInput>
+              <DropDownInput object={boulder} field='sector' options={sectors()}></DropDownInput>
             </div>
           </div>
           <div className="form-row">
             <div className="label">Grade</div>
             <div className="content">
-              <DropDownInput object={boulder} field='grade' options={grades}></DropDownInput>
+              <DropDownInput object={boulder} field='grade' options={grades()}></DropDownInput>
             </div>
           </div>
           <div className="form-row">

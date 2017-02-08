@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as Avers from 'avers';
 
 import {App, refresh, navigateTo, navigateToFn} from '../../app';
-import {Account, Boulder} from '../../storage';
+import {Account, Boulder, prettyPrintSector} from '../../storage';
 
 export function tileHeader(app: App, boulderId: string) : JSX.Element {
 
@@ -73,13 +73,15 @@ export class BoulderCard extends React.Component<BoulderCardProps, {}> {
             )).get(undefined);
         }).filter(x => x !== undefined);
 
+        const sectorName = prettyPrintSector(boulderE.content.sector);
+
         return (
             <div className="boulder-card" onClick={this.onClick}>
                 <div className={`boulder-card-id ${content.grade}`}>
                     {boulderE.content.gradeNr}
                 </div>
                 <div>
-                    <div className="boulder-card-sector">{boulderE.content.sector}</div>
+                    <div className="boulder-card-sector">{sectorName}</div>
                     <div className="boulder-card-setters">
                         {setters}
                     </div>
