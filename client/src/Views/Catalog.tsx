@@ -32,12 +32,37 @@ const boulderCardPage = () => {
         , type: 'boulder'
         , createdAt: '2017-02-02T01:30:55Z'
         , content:
-            { setter: []
+            { setter: ['setter-1', 'setter-2']
             , sector: 'spektrumone'
             , grade: 'yellow'
             , gradeNr: 1
             , removed: null
             , name: 'name'
+            }
+        }
+    );
+
+    Avers.resolveEditable(aversH, 'setter-1',
+        { id: 'setter-1'
+        , type: 'account'
+        , createdAt: '2017-02-02T01:30:55Z'
+        , content:
+            { login: 'wereHamster'
+            , role: 'admin'
+            , email: 'tomas.carnecky@gmail.com'
+            , name: 'Tomas Carnecky'
+            }
+        }
+    );
+    Avers.resolveEditable(aversH, 'setter-2',
+        { id: 'setter-2'
+        , type: 'account'
+        , createdAt: '2017-02-02T01:30:55Z'
+        , content:
+            { login: 'iff'
+            , role: 'admin'
+            , email: 'iff@yvesineichen.com'
+            , name: 'Yves Ineichen'
             }
         }
     );

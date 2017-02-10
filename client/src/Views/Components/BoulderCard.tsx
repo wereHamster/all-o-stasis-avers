@@ -1,8 +1,8 @@
 import * as React from 'react';
-
 import * as Avers from 'avers';
+
 import {App, refresh, navigateTo, navigateToFn} from '../../app';
-import {Account, Boulder} from '../../storage';
+import {Account, Boulder, prettyPrintSector} from '../../storage';
 
 export function tileHeader(app: App, boulderId: string) : JSX.Element {
 
@@ -53,43 +53,40 @@ export function tileHeader(app: App, boulderId: string) : JSX.Element {
     );
 }
 
-enum CardBody
-    { Home
-    }
-
-class CreatingEvent {
-    constructor
-        ( public createEventPromise: Promise<string>
-        ) {}
-}
-
-interface CardState {
-    cardBody: CardBody | CreatingEvent;
-}
-
-export interface CardProps {
+export interface BoulderCardProps {
     app: App;
-    boulderE : Avers.Editable<Boulder>;
+    boulderE: Avers.Editable<Boulder>;
 }
 
-export class BoulderCard extends React.Component<CardProps, CardState> {
-
-    initialState(props: CardProps): CardState {
-        return { cardBody: CardBody.Home };
-    }
-
-    constructor(props) {
-        super(props);
-        this.state = this.initialState(props);
+export class BoulderCard extends React.Component<BoulderCardProps, {}> {
+    onClick = () => {
+        navigateTo('/boulder/' + this.props.boulderE.objectId);
     }
 
     render() {
-        var boulderId = this.props.boulderE.objectId;
+        const {app, boulderE} = this.props;
+        const {objectId, content} = boulderE;
+
+        const setters = content.setter.map(setterId => {
+            return Avers.lookupContent<Account>(app.data.aversH, setterId).fmap(account => (
+                <img className="boulder-card-setter" src="http://ba.iff.im/avatars/W.jpg" />
+            )).get(undefined);
+        }).filter(x => x !== undefined);
+
+        const sectorName = prettyPrintSector(boulderE.content.sector);
 
         return (
-            <li className="boulder-entry">
-              {tileHeader(this.props.app, boulderId)}
-            </li>
+            <div className="boulder-card" onClick={this.onClick}>
+                <div className={`boulder-card-id ${content.grade}`}>
+                    {boulderE.content.gradeNr}
+                </div>
+                <div>
+                    <div className="boulder-card-sector">{sectorName}</div>
+                    <div className="boulder-card-setters">
+                        {setters}
+                    </div>
+                </div>
+            </div>
         );
     }
 }
