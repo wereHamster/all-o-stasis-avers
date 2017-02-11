@@ -80,7 +80,7 @@ export class BoulderCard extends React.Component<BoulderCardProps, {}> {
                 <div className={`boulder-card-id ${content.grade}`}>
                     {boulderE.content.gradeNr}
                 </div>
-                <div>
+                <div className="boulder-card-meta">
                     <div className="boulder-card-sector">{sectorName}</div>
                     <div className="boulder-card-setters">
                         {setters}
