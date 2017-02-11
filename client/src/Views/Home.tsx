@@ -30,24 +30,22 @@ export const LoadingTileBody = () => (
     </div>
 );
 
-function boulderLoadingCard(app: App, boulderId) {
-    return (
-        <div key={boulderId} className={'boulder-card'}>
-            {tileHeader(app, boulderId)}
-            <LoadingTileBody />
-        </div>
-    );
-}
+const BoulderCardLoading = ({ app, boulderId }: { app: App, boulderId: string }) => (
+    <div key={boulderId} className={'boulder-card'}>
+        {tileHeader(app, boulderId)}
+        <LoadingTileBody />
+    </div>
+);
 
 
 export function
 homeView(app: App) {
-    var boulders = app.data.activeBouldersCollection.ids.get([]).map(boulderId => {
+    const boulders = app.data.activeBouldersCollection.ids.get([]).map(boulderId => {
         const boulderC = Avers.lookupEditable<Boulder>(app.data.aversH, boulderId);
 
         return boulderC.fmap((boulder) =>
-             <BoulderCard app={app} key={boulder.objectId} boulderE={boulder} />
-        ).get(boulderLoadingCard(app, boulderId));
+             <BoulderCard key={boulder.objectId} app={app} boulderE={boulder} />
+        ).get(<BoulderCardLoading app={app} boulderId={boulderId} />);
     });
 
     return (
