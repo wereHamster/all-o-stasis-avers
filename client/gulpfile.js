@@ -42,7 +42,7 @@ gulp.task('lint', function() {
 
 gulp.task('compile', function() {
     return gulp.src(['src/**/*.ts', 'src/**/*.tsx'])
-        .pipe(ts(app)).js
+        .pipe(app()).js
         .pipe(gulp.dest('dist/js/'));
 });
 
