@@ -11,8 +11,10 @@ import * as Storage from './Storage';
 import {App, navigateTo, refresh} from './app';
 
 function mkBoulder(app: App) : Storage.Boulder {
+    const d = new Date();
     return Avers.mk(Storage.Boulder,
-        { setter : [app.data.session.objId]
+        { setter : [app.data.session.objId],
+          setDate : d.getTime()
         }
     );
 }
