@@ -88,7 +88,7 @@ serveLocalAPI aversH =
         boulders <- reqAvers2 aversH $ do
             runQueryCollect $
                 R.Map mapId $
-                R.OrderBy [R.Descending "timestamp"] $
+                R.OrderBy [R.Descending "setDate"] $
                 R.Filter isNotRemoved $
                 viewTable bouldersView
 
@@ -105,7 +105,7 @@ serveLocalAPI aversH =
 
             runQueryCollect $
                 R.Map mapId $
-                R.OrderBy [R.Descending "timestamp"] $
+                R.OrderBy [R.Descending "setDate"] $
                 R.Filter isOwnBoulder $
                 viewTable bouldersView
 

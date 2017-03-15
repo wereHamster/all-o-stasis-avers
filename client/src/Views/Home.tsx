@@ -41,21 +41,22 @@ const BoulderCardLoading = ({ app, boulderId }: { app: App, boulderId: string })
 
 export function
 homeView(app: App) {
-    // Get a list of all Editable<Boulder>, sort them by date.
-    // TODO: sort on the server.
     const editableBoulders = app.data.activeBouldersCollection.ids.get([])
         .map(boulderId => Avers.lookupEditable<Boulder>(app.data.aversH, boulderId).get(null))
-        .filter(x => x !== null)
-        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+        .filter(x => x !== null);
 
-    // Go through the list, render each boulder with <BoulderCard> and insert headings in
-    // between two cards when the day they were created at changes.
+    // Go through the list, render each boulder with <BoulderCard> and insert
+    // headings in between two cards when the day they were created at changes.
     const {boulders} = editableBoulders.reduce(({boulders, date}, boulder) => {
-        const {objectId, createdAt} = boulder;
+        const objectId = boulder.objectId;
+        const createdAt = new Date(boulder.content.setDate);
 
         if (date === null) {
             return {
-                boulders: boulders.concat([<BoulderCard key={objectId} app={app} boulderE={boulder} />]),
+                boulders: boulders.concat(
+                    [ <div className="boulder-separator">{strftime('%A, %e. %B', createdAt)}</div>
+                    , <BoulderCard key={objectId} app={app} boulderE={boulder} />
+                    ]),
                 date: createdAt
             };
         } else if (date.getMonth() === createdAt.getMonth() && date.getDate() === createdAt.getDate()) {
