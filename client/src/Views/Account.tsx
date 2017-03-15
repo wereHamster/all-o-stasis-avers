@@ -13,49 +13,41 @@ import {Site} from './Components/Site';
 
 import {DropDownInput} from './Components/DropdownInput';
 
-import {Account} from '../storage';
-
-enum AccountBody
-    { Home
-    }
-
-class CreatingEvent {
-    constructor
-        ( public createEventPromise: Promise<string>
-        ) {}
-}
-
-interface AccountViewState {
-    accountViewBody: AccountBody | CreatingEvent;
-}
+import {Account, roles} from '../storage';
 
 export interface AccountViewProps {
     app: App;
-    accountE : Avers.Editable<Account>;
+    accountE: Avers.Editable<Account>;
 }
 
-class AccountSpec extends React.Component<AccountViewProps, AccountViewState> {
-
-    initialState(props: AccountViewProps): AccountViewState {
-        return { accountViewBody: AccountBody.Home };
+class AccountSpec extends React.Component<AccountViewProps, {}> {
+    changeAccountName = (e: React.FormEvent<any>) => {
+        let value = (e.target as HTMLInputElement).value;
+        this.props.accountE.content.name = value;
     }
 
-    constructor(props) {
-        super(props);
-        this.state = this.initialState(props);
+    changeAccountEmail = (e: React.FormEvent<any>) => {
+        let value = (e.target as HTMLInputElement).value;
+        this.props.accountE.content.email = value;
+    }
+
+     changeAccountLogin = (e: React.FormEvent<any>) => {
+        let value = (e.target as HTMLInputElement).value;
+        this.props.accountE.content.login = value;
     }
 
     render() {
+        const {app, accountE} = this.props;
+
         return (
           <div>
-            {this.accountHeader(this.props.accountE)}
-            {this.accountDetailsEditor(this.props.accountE)}
+            {this.accountHeader(accountE)}
+            {this.accountDetailsEditor(accountE)}
           </div>
         );
     }
 
     accountHeader(accountE: Avers.Editable<Account>) : JSX.Element {
-
         if(accountE === undefined ||
            accountE.objectId === undefined) {
             console.log("Undefined account objectId.. Should not happen!");
@@ -80,21 +72,6 @@ class AccountSpec extends React.Component<AccountViewProps, AccountViewState> {
         );
     }
 
-    changeAccountName = (e: React.FormEvent<any>) => {
-        let value = (e.target as HTMLInputElement).value;
-        this.props.accountE.content.name = value;
-    }
-
-    changeAccountEmail = (e: React.FormEvent<any>) => {
-        let value = (e.target as HTMLInputElement).value;
-        this.props.accountE.content.email = value;
-    }
-
-     changeAccountLogin = (e: React.FormEvent<any>) => {
-        let value = (e.target as HTMLInputElement).value;
-        this.props.accountE.content.login = value;
-    }
-
     accountDetailsEditor(accountE: Avers.Editable<Account>) : JSX.Element {
 
         if(accountE === undefined || accountE.objectId === undefined) {
@@ -103,9 +80,6 @@ class AccountSpec extends React.Component<AccountViewProps, AccountViewState> {
         }
 
         var account = accountE.content;
-
-        // FIXME: role should only be changeable by admins
-        var roles = ['user', 'setter', 'admin'];
 
         function onClick(e) {
             e.stopPropagation();
@@ -139,7 +113,7 @@ class AccountSpec extends React.Component<AccountViewProps, AccountViewState> {
                <div className="form-row">
                 <div className="label">Role</div>
                 <div className="content">
-                  <DropDownInput object={account} field='role' options={roles}></DropDownInput>
+                  <DropDownInput object={account} field='role' options={roles()}></DropDownInput>
                 </div>
               </div>
             </div>

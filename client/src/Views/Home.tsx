@@ -11,7 +11,7 @@ import * as Avers from 'avers';
 import Computation from 'computation';
 import {App} from '../app';
 
-import {BoulderCard, tileHeader} from './Components/BoulderCard';
+import {BoulderCard} from './Components/BoulderCard';
 import {Site} from './Components/Site';
 
 import {Boulder} from '../storage';
@@ -31,9 +31,9 @@ export const LoadingTileBody = () => (
     </div>
 );
 
+//{tileHeader(app, boulderId)}
 const BoulderCardLoading = ({ app, boulderId }: { app: App, boulderId: string }) => (
     <div key={boulderId} className={'boulder-card'}>
-        {tileHeader(app, boulderId)}
         <LoadingTileBody />
     </div>
 );

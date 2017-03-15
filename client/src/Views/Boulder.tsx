@@ -9,12 +9,15 @@ module Boulder
 import * as React from 'react';
 
 import * as Avers from 'avers';
-import {App, refresh, navigateTo, navigateToFn} from '../app';
+import {App, refresh} from '../app';
 
 import {Site} from './Components/Site';
 
 import {DropDownInput} from './Components/DropdownInput';
 import {NumberInput} from './Components/NumberInput';
+
+import DatePicker from 'react-datepicker';
+import * as moment from 'moment';
 
 import {Boulder, grades, sectors} from '../storage';
 
@@ -70,16 +73,29 @@ function boulderHeader(boulder : Avers.Editable<Boulder>) : any {
     );
 }
 
-function boulderDetailsEditor(boulderE: Avers.Editable<Boulder>) {
-     var boulder = boulderE.content;
+function boulderDetailsEditor(boulderE: Avers.Editable<Boulder>, app: App) {
+    var boulder = boulderE.content;
 
-     function onClick(e) {
-        e.stopPropagation();
-     }
+    function onClick(e) {
+       e.stopPropagation();
+    }
 
     function changeName(e: React.FormEvent<any>) {
         let value = (e.target as HTMLInputElement).value;
         boulder.name = value;
+    }
+
+    function changeSetDate(date) {
+        //console.log(date.unix());
+        //boulder.setDate = date.unix();
+        boulder.setDate = date.valueOf();
+        refresh(app);
+    }
+
+    function getSetDate() : moment.Moment {
+        // FIXME: if (boulder.setDate == 0)
+        var initialDate = moment.unix(boulder.setDate / 1000.);
+        return initialDate;
     }
 
     return (
@@ -110,6 +126,12 @@ function boulderDetailsEditor(boulderE: Avers.Editable<Boulder>) {
               <NumberInput object={boulder} field='gradeNr'></NumberInput>
             </div>
           </div>
+          <div className="form-row">
+            <div className="label">Set Date</div>
+            <div className="content">
+              <DatePicker selected={getSetDate()} onChange={changeSetDate}/>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -127,7 +149,7 @@ boulderView(app: App, boulderId: string) {
       <Site app={app}>
         <div className="boulder">
           {boulderHeader(boulderE)}
-          {boulderDetailsEditor(boulderE)}
+          {boulderDetailsEditor(boulderE, app)}
         </div>
       </Site>
     );

@@ -6,7 +6,6 @@ module Storage.Objects.Boulder.Types where
 import GHC.Generics
 
 import Data.Text
-import Data.Time
 
 import Avers
 import Avers.TH
@@ -18,7 +17,8 @@ data Boulder = Boulder
     , boulderSector     :: BoulderSector
     , boulderGrade      :: BoulderGrade
     , boulderGradeNr    :: Int
-    , boulderRemoved    :: Maybe UTCTime
+    , boulderSetDate    :: Int                  -- Data.Time.Calendar.Day
+    , boulderRemoved    :: Maybe Int            -- Date.Time.Calendar.Day
     , boulderName       :: Maybe Text
     }
     deriving (Show, Generic)

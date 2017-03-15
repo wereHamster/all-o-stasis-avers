@@ -21,25 +21,13 @@ Avers.definePrimitive(Account, 'email', '');
 Avers.definePrimitive(Account, 'name',  '');
 
 
-export class BoulderGrade
-    { value : string;
-    }
-
-Avers.definePrimitive(BoulderGrade, 'value', '');
-
-export class BoulderComment
-    { value : string;
-    }
-
-Avers.definePrimitive(BoulderComment, 'value', '');
-
-
 export class Boulder
     { setter     : string[];
       sector     : string;
       grade      : string;
       gradeNr    : number;
-      removed    : Date;
+      setDate    : number;
+      removed    : number;
       name       : string;
     }
 
@@ -47,8 +35,14 @@ Avers.definePrimitive(Boulder, 'setter');
 Avers.definePrimitive(Boulder, 'sector',   'spektrumone');
 Avers.definePrimitive(Boulder, 'grade',    'yellow');
 Avers.definePrimitive(Boulder, 'gradeNr',  0);
+Avers.definePrimitive(Boulder, 'setDate',  0);
 Avers.definePrimitive(Boulder, 'removed');
 Avers.definePrimitive(Boulder, 'name',     '');
+
+export function
+roles() : string[] {
+    return ['user', 'setter', 'admin'];
+}
 
 export function
 grades() : string[] {
