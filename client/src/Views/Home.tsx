@@ -5,7 +5,7 @@ module Home
 */
 
 import * as React from 'react';
-import strftime from 'strftime';
+import timeago from 'timeago.js';
 
 import * as Avers from 'avers';
 import Computation from 'computation';
@@ -54,7 +54,7 @@ homeView(app: App) {
         if (date === null) {
             return {
                 boulders: boulders.concat(
-                    [ <div className="boulder-separator">{strftime('%A, %e. %B', createdAt)}</div>
+                    [ <div className="boulder-separator">{timeago().format(createdAt)}</div>
                     , <BoulderCard key={objectId} app={app} boulderE={boulder} />
                     ]),
                 date: createdAt
@@ -67,7 +67,7 @@ homeView(app: App) {
         } else {
             return {
                 boulders: boulders.concat(
-                    [ <div className="boulder-separator">{strftime('%A, %e. %B', createdAt)}</div>
+                    [ <div className="boulder-separator">{timeago().format(createdAt)}</div>
                     , <BoulderCard key={objectId} app={app} boulderE={boulder} />
                     ]),
                 date: createdAt
