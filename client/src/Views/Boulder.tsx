@@ -86,15 +86,12 @@ function boulderDetailsEditor(boulderE: Avers.Editable<Boulder>, app: App) {
     }
 
     function changeSetDate(date) {
-        //console.log(date.unix());
-        //boulder.setDate = date.unix();
         boulder.setDate = date.valueOf();
         refresh(app);
     }
 
     function getSetDate() : moment.Moment {
-        // FIXME: if (boulder.setDate == 0)
-        var initialDate = moment.unix(boulder.setDate / 1000.);
+        const initialDate = moment.unix(boulder.setDate / 1000.);
         return initialDate;
     }
 
