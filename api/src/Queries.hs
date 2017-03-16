@@ -38,14 +38,14 @@ isNotRemoved x = R.Any
 isOwnBoulder :: Session -> R.Exp R.Object -> R.Exp Bool
 isOwnBoulder session = \x -> R.Eq
     (R.GetField "setter" x :: R.Exp Text)
-    (R.lift $ unObjId $ sessionObjId session)
+    (R.lift $ unObjId $ sessionObjId session :: R.Exp Text)
 
 hasSetterAccessRights :: Session -> R.Exp R.Object -> R.Exp Bool
 hasSetterAccessRights session = \x -> R.Any
     [ R.Not $ R.HasFields ["accountRole"] x
     , R.Eq
         (R.GetField "accountRole" x :: R.Exp Text)
-        (R.lift $ pack $ show $ Account.Setter)
+        (R.lift $ pack $ show $ Account.Setter :: R.Exp Text)
     ]
 
 hasAdminAccessRights :: Session -> R.Exp R.Object -> R.Exp Bool
