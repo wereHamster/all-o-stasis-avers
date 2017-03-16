@@ -2,6 +2,7 @@
 module Actions
 ( createBoulder
 , createCustomBoulder
+, role
 ) where
 */
 
@@ -9,6 +10,7 @@ module Actions
 import * as Avers from 'avers';
 import * as Storage from './Storage';
 import {App, navigateTo, refresh} from './app';
+import {Account, roles} from './storage';
 
 function mkBoulder(app: App) : Storage.Boulder {
     const now = Date.now();
@@ -47,4 +49,15 @@ createCustomBoulder(app: App, boulderId: string) {
     refresh(app);
 
     return promise;
+}
+
+export function
+role(app: App) {
+    let accountC = Avers.lookupContent<Account>(app.data.aversH, app.data.session.objId);
+    let accountE = accountC.get(null);
+
+    if (accountE === null)
+        return "user";
+    else
+        return accountE.role;
 }

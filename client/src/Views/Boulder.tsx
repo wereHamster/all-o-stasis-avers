@@ -10,6 +10,7 @@ import * as React from 'react';
 
 import * as Avers from 'avers';
 import {App, refresh} from '../app';
+import {role} from '../actions';
 
 import {Site} from './Components/Site';
 
@@ -32,7 +33,7 @@ createBoulderItem(app: App) {
         createBoulder(app);
     }
 
-    if(app.data.role == "user") {
+    if(role(app) == "user") {
         return (
           <div className='plain-navbar-item '></div>
         );
@@ -87,6 +88,7 @@ function boulderDetailsEditor(boulderE: Avers.Editable<Boulder>, app: App) {
 
     function changeSetDate(date) {
         boulder.setDate = date.valueOf();
+        Avers.resetObjectCollection(app.data.activeBouldersCollection);
         refresh(app);
     }
 

@@ -47,6 +47,23 @@ class AccountSpec extends React.Component<AccountViewProps, {}> {
         );
     }
 
+    accountAdminFields(accountE: Avers.Editable<Account>) : JSX.Element {
+
+        var account = accountE.content;
+        if (account.role != 'admin') {
+            return;
+        }
+
+        return (
+          <div className="form-row">
+            <div className="label">Role</div>
+            <div className="content">
+              <DropDownInput object={account} field='role' options={roles()}></DropDownInput>
+            </div>
+          </div>
+        );
+    }
+
     accountHeader(accountE: Avers.Editable<Account>) : JSX.Element {
         if(accountE === undefined ||
            accountE.objectId === undefined) {
@@ -109,13 +126,7 @@ class AccountSpec extends React.Component<AccountViewProps, {}> {
                          onChange={this.changeAccountLogin} onClick={onClick}></input>
                 </div>
               </div>
-
-               <div className="form-row">
-                <div className="label">Role</div>
-                <div className="content">
-                  <DropDownInput object={account} field='role' options={roles()}></DropDownInput>
-                </div>
-              </div>
+              {this.accountAdminFields(accountE)}
             </div>
           </div>
         )

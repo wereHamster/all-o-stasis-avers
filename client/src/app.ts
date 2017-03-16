@@ -47,8 +47,6 @@ export class Data {
 
     session : Avers.Session;
 
-    public role : string;
-
     public accountsCollection     : Avers.ObjectCollection;
     public adminAccountCollection : Avers.ObjectCollection;
 
@@ -59,9 +57,6 @@ export class Data {
     constructor(public aversH: Avers.Handle) {
 
         this.session = new Avers.Session(aversH);
-
-        // FIXME: get/store role in session
-        this.role = 'setter';
 
         // Collection of all accounts for user view
         // FIXME: where do we need the this collection??
@@ -107,3 +102,4 @@ export function
 navigateToFn(p: String) {
     return () => { navigateTo(p); }
 }
+
