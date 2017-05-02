@@ -39,29 +39,19 @@ import Storage.Objects.Boulder
 import Prelude
 
 
-data SignupRequest2 = SignupRequest2
+data SignupRequest = SignupRequest
     { reqLogin :: Text
     }
 
-data SignupResponse2 = SignupResponse2
+data SignupResponse = SignupResponse
     { _resObjId :: ObjId
     }
 
-data ChangeSecretRequest2 = ChangeSecretRequest2
+data ChangeSecretRequest = ChangeSecretRequest
     { reqId     :: ObjId
     , reqSecret :: Text
     }
 
-data CreateObjectRequest2 = CreateObjectRequest2
-    { reqType    :: Text
-    , reqContent :: Value
-    }
-
-data CreateObjectResponse2 = CreateObjectResponse2
-    { _resId      :: ObjId
-    , _resType    :: Text
-    , _resContent :: Value
-    }
 
 type LocalAPI
     -- server the git revsion sha
@@ -87,17 +77,18 @@ type LocalAPI
       :> Get '[JSON] [ObjId]
 
     :<|> "signup"
-      :> ReqBody '[JSON] SignupRequest2
-      :> Post '[JSON] SignupResponse2
+      :> ReqBody '[JSON] SignupRequest
+      :> Post '[JSON] SignupResponse
 
     :<|> "updateSecret"
-      :> ReqBody '[JSON] ChangeSecretRequest2
-      :> Post '[JSON] SignupResponse2
-
-    :<|> "objects" -- handleCreateObject
       :> Credentials
-      :> ReqBody '[JSON] CreateObjectRequest2
-      :> Post '[JSON] CreateObjectResponse2
+      :> ReqBody '[JSON] ChangeSecretRequest
+      :> Post '[JSON] SignupResponse
+
+    :<|> "objects"
+      :> Credentials
+      :> ReqBody '[JSON] Avers.API.CreateObjectBody
+      :> Post '[JSON] Avers.API.CreateObjectResponse
 
 serveLocalAPI :: Avers.Handle -> Server LocalAPI
 serveLocalAPI aversH =
@@ -173,33 +164,34 @@ serveLocalAPI aversH =
             updateSecret (SecretId (unObjId accId)) ""
             pure accId
 
-        pure $ SignupResponse2 accId
+        pure $ SignupResponse accId
 
-    serveUpdateSecret body = do
-        -- TODO: use updateSecret(SecretId (unObjId accId)) newSecret
-        pure $ SignupResponse2 (ObjId "712912a1")
+    serveUpdateSecret cred body = do
+        ownerId <- credentialsObjId aversH cred
+        accId <- reqAvers2 aversH $ do
+            updateSecret (SecretId (unObjId ownerId)) (reqSecret body)
+            pure ownerId
+
+        pure $ SignupResponse accId
 
     objects cred body = do
         sessionId <- credentialsObjId aversH cred
         objId <- reqAvers2 aversH $ do
-            authorizeObjectCreate sessionId (reqType body)
+            authorizeObjectCreate sessionId (cobType body)
 
-            (SomeObjectType objType) <- Avers.lookupObjectType (reqType body)
-            content <- case parseValueAs objType (reqContent body) of
+            (SomeObjectType objType) <- Avers.lookupObjectType (cobType body)
+            content <- case parseValueAs objType (cobContent body) of
                 Left e -> throwError e
                 Right x -> pure x
 
             objId <- Avers.createObject objType sessionId content
             pure objId
 
-        pure $ CreateObjectResponse2 objId (reqType body) (reqContent body)
+        pure $ Avers.API.CreateObjectResponse objId (cobType body) (cobContent body)
 
 
-$(deriveJSON (deriveJSONOptions "req")  ''SignupRequest2)
 
-$(deriveJSON (deriveJSONOptions "req")  ''ChangeSecretRequest2)
-$(deriveJSON (deriveJSONOptions "_res") ''SignupResponse2)
-
-$(deriveJSON (deriveJSONOptions "req") ''CreateObjectRequest2)
-$(deriveJSON (deriveJSONOptions "_res") ''CreateObjectResponse2)
+$(deriveJSON (deriveJSONOptions "req")  ''SignupRequest)
+$(deriveJSON (deriveJSONOptions "_res") ''SignupResponse)
+$(deriveJSON (deriveJSONOptions "req")  ''ChangeSecretRequest)
 
