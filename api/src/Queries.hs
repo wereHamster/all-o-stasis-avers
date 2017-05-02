@@ -40,19 +40,19 @@ isOwnBoulder session = \x -> R.Eq
     (R.GetField "setter" x :: R.Exp Text)
     (R.lift $ unObjId $ sessionObjId session :: R.Exp Text)
 
-hasSetterAccessRights :: Session -> R.Exp R.Object -> R.Exp Bool
-hasSetterAccessRights session = \x -> R.Any
-    [ R.Not $ R.HasFields ["accountRole"] x
+hasSetterAccessRights :: R.Exp R.Object -> R.Exp Bool
+hasSetterAccessRights = \x -> R.Any
+    [ R.Not $ R.HasFields ["role"] x
     , R.Eq
-        (R.GetField "accountRole" x :: R.Exp Text)
+        (R.GetField "role" x :: R.Exp Text)
         (R.lift $ pack $ show $ Account.Setter :: R.Exp Text)
     ]
 
-hasAdminAccessRights :: Session -> R.Exp R.Object -> R.Exp Bool
-hasAdminAccessRights session = \x -> R.Any
-    [ R.Not $ R.HasFields ["accountRole"] x
+hasAdminAccessRights :: R.Exp R.Object -> R.Exp Bool
+hasAdminAccessRights = \x -> R.All
+    [ R.HasFields ["role"] x
     , R.Eq
-        (R.GetField "accountRole" x :: R.Exp Text)
+        (R.GetField "role" x :: R.Exp Text)
         (R.lift $ pack $ show $ Account.Admin :: R.Exp Text)
     ]
 

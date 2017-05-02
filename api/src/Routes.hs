@@ -8,8 +8,11 @@
 
 module Routes (LocalAPI, serveLocalAPI) where
 
+import Control.Monad.Except
+
 import Data.Maybe
 import Data.Text (Text)
+import Data.Aeson (Value)
 import qualified Data.Text as T
 
 import qualified Data.Vector as V
@@ -24,6 +27,7 @@ import Avers.Server
 import Servant.API hiding (Patch)
 import Servant.Server
 
+import Authorization
 import Queries
 import Revision
 import Types
@@ -43,6 +47,21 @@ data SignupResponse2 = SignupResponse2
     { _resObjId :: ObjId
     }
 
+data ChangeSecretRequest2 = ChangeSecretRequest2
+    { reqId     :: ObjId
+    , reqSecret :: Text
+    }
+
+data CreateObjectRequest2 = CreateObjectRequest2
+    { reqType    :: Text
+    , reqContent :: Value
+    }
+
+data CreateObjectResponse2 = CreateObjectResponse2
+    { _resId      :: ObjId
+    , _resType    :: Text
+    , _resContent :: Value
+    }
 
 type LocalAPI
     -- server the git revsion sha
@@ -71,6 +90,14 @@ type LocalAPI
       :> ReqBody '[JSON] SignupRequest2
       :> Post '[JSON] SignupResponse2
 
+    :<|> "updateSecret"
+      :> ReqBody '[JSON] ChangeSecretRequest2
+      :> Post '[JSON] SignupResponse2
+
+    :<|> "objects" -- handleCreateObject
+      :> Credentials
+      :> ReqBody '[JSON] CreateObjectRequest2
+      :> Post '[JSON] CreateObjectResponse2
 
 serveLocalAPI :: Avers.Handle -> Server LocalAPI
 serveLocalAPI aversH =
@@ -80,6 +107,8 @@ serveLocalAPI aversH =
     :<|> serveAccounts
     :<|> serveAdminAccounts
     :<|> serveSignup
+    :<|> serveUpdateSecret
+    :<|> objects
   where
     serveRevision =
         pure $ T.pack $ fromMaybe "HEAD" $(revision)
@@ -146,6 +175,31 @@ serveLocalAPI aversH =
 
         pure $ SignupResponse2 accId
 
+    serveUpdateSecret body = do
+        -- TODO: use updateSecret(SecretId (unObjId accId)) newSecret
+        pure $ SignupResponse2 (ObjId "712912a1")
+
+    objects cred body = do
+        sessionId <- credentialsObjId aversH cred
+        objId <- reqAvers2 aversH $ do
+            authorizeObjectCreate sessionId (reqType body)
+
+            (SomeObjectType objType) <- Avers.lookupObjectType (reqType body)
+            content <- case parseValueAs objType (reqContent body) of
+                Left e -> throwError e
+                Right x -> pure x
+
+            objId <- Avers.createObject objType sessionId content
+            pure objId
+
+        pure $ CreateObjectResponse2 objId (reqType body) (reqContent body)
+
 
 $(deriveJSON (deriveJSONOptions "req")  ''SignupRequest2)
+
+$(deriveJSON (deriveJSONOptions "req")  ''ChangeSecretRequest2)
 $(deriveJSON (deriveJSONOptions "_res") ''SignupResponse2)
+
+$(deriveJSON (deriveJSONOptions "req") ''CreateObjectRequest2)
+$(deriveJSON (deriveJSONOptions "_res") ''CreateObjectResponse2)
+

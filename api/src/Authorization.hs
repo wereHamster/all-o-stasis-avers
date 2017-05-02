@@ -11,12 +11,16 @@ import           Data.List.Split
 import           Data.Text (Text)
 import qualified Data.Text as T
 import           Data.Maybe
-
-import           System.Environment
+import qualified Data.Vector as V
 
 import           Avers as Avers
 
 import           Prelude
+
+import           Queries
+import           Storage.Objects.Account
+
+import qualified Database.RethinkDB     as R
 
 
 -- | The result of an authorization query. The combinators are modelled losely
@@ -106,44 +110,31 @@ runAuthorization def authz = do
         _      -> def
 
 
-
-adminObjIds :: Avers [ObjId]
-adminObjIds = liftIO $ do
-    adminsString <- fromMaybe "" <$> (lookupEnv "ADMINS")
-    return $ map (ObjId . T.pack) $ splitOn "," adminsString
-
-
-setterObjIds :: Avers [ObjId]
-setterObjIds = liftIO $ do
-    settersString <- fromMaybe "" <$> (lookupEnv "SETTERS")
-    return $ map (ObjId . T.pack) $ splitOn "," settersString
-
-
--- | Anyone can create object encounters, admins can create any objects.
-authorizeObjectCreate :: Session -> Text -> Avers ()
-authorizeObjectCreate session objType = runAuthorization (throwError NotAuthorized) $ do
-    sufficient $ sessionIsAdmin session
-    sufficient $ sessionIsSetter (objType == "bouler")
-    sufficient $ return
+-- | Only setters can create boulders, admins can create any objects.
+authorizeObjectCreate :: ObjId -> Text -> Avers ()
+authorizeObjectCreate sessionId objType = runAuthorization (throwError NotAuthorized) $ do
+    sufficient $ sessionIsAdmin sessionId
+    -- sufficient $ sessionIsSetter sessionId (objType == "boulder")
+    -- sufficient $ return
 
 
 -- | Anyone can create new blobs.
-authorizeBlobCreate :: Session -> Avers ()
+authorizeBlobCreate :: ObjId -> Avers ()
 authorizeBlobCreate _ = return ()
 
 
 -- | Only admins can delete (and undelete) objects.
-authorizeObjectDelete :: Session -> ObjId -> Avers ()
-authorizeObjectDelete session _objId = runAuthorization (throwError NotAuthorized) $ do
-    sufficient $ sessionIsAdmin session
+authorizeObjectDelete :: ObjId -> ObjId -> Avers ()
+authorizeObjectDelete sessionId _objId = runAuthorization (throwError NotAuthorized) $ do
+    sufficient $ sessionIsAdmin sessionId
 
 
 -- | Admins can patch anything. The owner of an object can patch the object.
-authorizePatch :: Session -> ObjId -> Avers ()
-authorizePatch session objId = runAuthorization (throwError NotAuthorized) $ do
-    sufficient $ sessionIsAdmin session
-    sufficient $ sessionIsObject session objId
-    sufficient $ sessionCreatedObject session objId
+authorizePatch :: ObjId -> ObjId -> Avers ()
+authorizePatch sessionId objId = runAuthorization (throwError NotAuthorized) $ do
+    sufficient $ sessionIsAdmin sessionId
+    sufficient $ sessionIsObject sessionId objId
+    sufficient $ sessionCreatedObject sessionId objId
 
 
 
@@ -152,22 +143,33 @@ authorizePatch session objId = runAuthorization (throwError NotAuthorized) $ do
 ------------------------------------------------------------------------------
 
 -- | True if the session is an admin.
-sessionIsAdmin :: Session -> AuthzModule
-sessionIsAdmin session = elem (sessionObjId session) <$> adminObjIds
+sessionIsAdmin :: ObjId -> AuthzModule
+sessionIsAdmin sessionId = do
+    admins <- runQueryCollect $
+            R.Map mapId $
+            R.Filter Queries.hasAdminAccessRights $
+            viewTable accountsView
 
+    elem sessionId <$> (pure $ map ObjId $ V.toList admins)
 
--- | True if the session is a setter.
-sessionIsSetter :: Session -> AuthzModule
-sessionIsSetter session = elem (sessionObjId session) <$> setterObjIds
+-- | True if the session is an setter.
+sessionIsSetter :: ObjId -> AuthzModule
+sessionIsSetter sessionId = do
+    setter <- runQueryCollect $
+            R.Map mapId $
+            R.Filter Queries.hasSetterAccessRights $
+            viewTable accountsView
 
+    elem sessionId <$> (pure $ map ObjId $ V.toList setter)
 
 -- | True if the session created the given object.
-sessionCreatedObject :: Session -> ObjId -> AuthzModule
-sessionCreatedObject session objId = do
+sessionCreatedObject :: ObjId -> ObjId -> AuthzModule
+sessionCreatedObject sessionId objId = do
     obj <- Avers.lookupObject objId
-    return $ objectCreatedBy obj == sessionObjId session
+    return $ objectCreatedBy obj == sessionId
 
 -- | True if the session is the given object.
-sessionIsObject :: Session -> ObjId -> AuthzModule
-sessionIsObject session objId = do
-    return $ sessionObjId session == objId
+sessionIsObject :: ObjId -> ObjId -> AuthzModule
+sessionIsObject sessionId objId = do
+    return $ sessionId == objId
+
