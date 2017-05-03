@@ -27,7 +27,6 @@ import Avers.Server
 import Servant.API hiding (Patch)
 import Servant.Server
 
-import Authorization
 import Queries
 import Revision
 import Types
@@ -85,11 +84,6 @@ type LocalAPI
       :> ReqBody '[JSON] ChangeSecretRequest
       :> Post '[JSON] SignupResponse
 
-    :<|> "objects"
-      :> Credentials
-      :> ReqBody '[JSON] Avers.API.CreateObjectBody
-      :> Post '[JSON] Avers.API.CreateObjectResponse
-
 serveLocalAPI :: Avers.Handle -> Server LocalAPI
 serveLocalAPI aversH =
          serveRevision
@@ -99,7 +93,6 @@ serveLocalAPI aversH =
     :<|> serveAdminAccounts
     :<|> serveSignup
     :<|> serveUpdateSecret
-    :<|> objects
   where
     serveRevision =
         pure $ T.pack $ fromMaybe "HEAD" $(revision)
@@ -173,22 +166,6 @@ serveLocalAPI aversH =
             pure ownerId
 
         pure $ SignupResponse accId
-
-    objects cred body = do
-        sessionId <- credentialsObjId aversH cred
-        objId <- reqAvers2 aversH $ do
-            authorizeObjectCreate sessionId (cobType body)
-
-            (SomeObjectType objType) <- Avers.lookupObjectType (cobType body)
-            content <- case parseValueAs objType (cobContent body) of
-                Left e -> throwError e
-                Right x -> pure x
-
-            objId <- Avers.createObject objType sessionId content
-            pure objId
-
-        pure $ Avers.API.CreateObjectResponse objId (cobType body) (cobContent body)
-
 
 
 $(deriveJSON (deriveJSONOptions "req")  ''SignupRequest)

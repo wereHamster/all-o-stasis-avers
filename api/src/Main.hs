@@ -27,6 +27,7 @@ import           Avers.Server
 import           Servant.API
 import           Servant.Server
 
+import           Authorization
 import           Routes
 
 import           Storage.ObjectTypes
@@ -86,7 +87,7 @@ api = Proxy
 
 server :: Avers.Handle -> Server API
 server aversH =
-         serveAversAPI aversH defaultAuthorizations
+         serveAversAPI aversH Authorization.aosAuthorization
     :<|> serveLocalAPI aversH
 
 

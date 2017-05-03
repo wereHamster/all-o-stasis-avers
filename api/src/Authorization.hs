@@ -1,175 +1,69 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Authorization where
+module Authorization (aosAuthorization) where
 
+import           Avers                  as Avers
+import           Avers.API
+import           Avers.Server
 
-import           Control.Applicative
-import           Control.Monad.State
-import           Control.Monad.Except
-
-import           Data.List.Split
-import           Data.Text (Text)
-import qualified Data.Text as T
-import           Data.Maybe
-import qualified Data.Vector as V
-
-import           Avers as Avers
+import qualified Data.Vector            as V
+import qualified Database.RethinkDB     as R
 
 import           Prelude
 
 import           Queries
 import           Storage.Objects.Account
 
-import qualified Database.RethinkDB     as R
 
-
--- | The result of an authorization query. The combinators are modelled losely
--- after PAM (with control flags)
-data AuthzResult a
-    = Continue a
-      -- ^ The result is undecided. We con continue executing the following
-      -- instructions.
-
-    | Fail a
-      -- ^ The result will be ultimately be Reject, but we continue executing
-      -- following instructions.
-
-    | Allow
-      -- ^ The authorization query definitely succeeded. Any following
-      -- instructions are skipped.
-
-    | Reject
-      -- ^ The authorization query definitely failed. Any following
-      -- instructions are skipped.
-
-
-data Authz a = Authz { runAuthz :: Avers (AuthzResult a) }
-
-instance Functor Authz where
-    fmap f m = Authz $ do
-        res <- runAuthz m
-        case res of
-            Continue a -> return $ Continue $ f a
-            Fail     a -> return $ Fail $ f a
-            Allow      -> return Allow
-            Reject     -> return Reject
-
-instance Applicative Authz where
-    pure = Authz . pure . Continue
-    mf <*> m = Authz $ do
-        fres <- runAuthz mf
-        mres <- runAuthz m
-        case (fres, mres) of
-            (Continue f, Continue res) -> return $ Continue $ f res
-            _                          -> return Reject
-
-instance Monad Authz where
-    return = Authz . return . Continue
-
-    (Authz m) >>= f = Authz $ do
-        res <- m
-        case res of
-            Continue a -> runAuthz $ f a
-            Fail     a -> runAuthz $ f a
-            Allow      -> return Allow
-            Reject     -> return Reject
-
-
--- | An authorization module is an Avers action which returns a boolean
--- indicating whether it has succeeded or failed. Exceptions are treated
--- as failure.
-type AuthzModule = Avers Bool
-
-
-sufficient :: AuthzModule -> Authz ()
-sufficient m = Authz $ do
-    res <- m
-    return $ if res then Allow else Continue ()
-
-
-requisite :: AuthzModule -> Authz ()
-requisite m = Authz $ do
-    res <- m
-    return $ if not res then Reject else Continue ()
-
-
-required :: AuthzModule -> Authz ()
-required m = Authz $ do
-    res <- m
-    return $ if not res then Fail () else Continue ()
-
-
-
-runAuthorization :: Avers () -> Authz a -> Avers ()
-runAuthorization def authz = do
-    res <- runAuthz authz
-    case res of
-        Allow  -> return ()
-        Reject -> throwError NotAuthorized
-        Fail _ -> throwError NotAuthorized
-        _      -> def
-
-
--- | Only setters can create boulders, admins can create any objects.
-authorizeObjectCreate :: ObjId -> Text -> Avers ()
-authorizeObjectCreate sessionId objType = runAuthorization (throwError NotAuthorized) $ do
-    sufficient $ sessionIsAdmin sessionId
-    -- sufficient $ sessionIsSetter sessionId (objType == "boulder")
-    -- sufficient $ return
-
-
--- | Anyone can create new blobs.
-authorizeBlobCreate :: ObjId -> Avers ()
-authorizeBlobCreate _ = return ()
-
-
--- | Only admins can delete (and undelete) objects.
-authorizeObjectDelete :: ObjId -> ObjId -> Avers ()
-authorizeObjectDelete sessionId _objId = runAuthorization (throwError NotAuthorized) $ do
-    sufficient $ sessionIsAdmin sessionId
-
-
--- | Admins can patch anything. The owner of an object can patch the object.
-authorizePatch :: ObjId -> ObjId -> Avers ()
-authorizePatch sessionId objId = runAuthorization (throwError NotAuthorized) $ do
-    sufficient $ sessionIsAdmin sessionId
-    sufficient $ sessionIsObject sessionId objId
-    sufficient $ sessionCreatedObject sessionId objId
-
-
-
-------------------------------------------------------------------------------
--- Authorization modules
-------------------------------------------------------------------------------
+aosAuthorization :: Avers.Server.Authorizations
+aosAuthorization = Avers.Server.Authorizations
+    { createObjectAuthz = \cred objId ->
+        [ sufficient $ return (objId == "account")
+        , sufficient $ do
+            session <- case cred of
+                SessionIdCredential sId -> lookupSession sId
+            -- we dont need to check (objId == "boulder") for setters for now
+            sessionIsAdmin session >> sessionIsSetter session
+        , pure RejectR
+        ]
+    , lookupObjectAuthz = \cred objId ->
+        [ sufficient $ do
+            session <- case cred of
+                SessionIdCredential sId -> lookupSession sId
+            sessionIsAdmin session >> sessionCreatedObject session objId
+        ]
+    -- FIXME: depends on [operation]
+    , patchObjectAuthz = \cred objId _ ->
+        [ sufficient $ do
+            session <- case cred of
+                SessionIdCredential sId -> lookupSession sId
+            sessionIsAdmin session >> sessionIsObject session objId >> sessionCreatedObject session objId
+        ]
+    , deleteObjectAuthz = \_ _ -> [pure RejectR]
+    , uploadBlobAuthz = \_ _ -> [pure AllowR]
+    , lookupBlobAuthz = \_ _ -> [pure AllowR]
+    , lookupBlobContentAuthz = \_ _ -> [pure AllowR]
+    }
 
 -- | True if the session is an admin.
-sessionIsAdmin :: ObjId -> AuthzModule
-sessionIsAdmin sessionId = do
+sessionIsAdmin :: Session -> Avers Bool
+sessionIsAdmin session = do
+    let sessionId = sessionObjId session
     admins <- runQueryCollect $
             R.Map mapId $
-            R.Filter Queries.hasAdminAccessRights $
+            R.Filter (hasAccess "admin") $
             viewTable accountsView
 
     elem sessionId <$> (pure $ map ObjId $ V.toList admins)
 
--- | True if the session is an setter.
-sessionIsSetter :: ObjId -> AuthzModule
-sessionIsSetter sessionId = do
-    setter <- runQueryCollect $
+-- | True if the session is a setter.
+sessionIsSetter :: Session -> Avers Bool
+sessionIsSetter session = do
+    let sessionId = sessionObjId session
+    setters <- runQueryCollect $
             R.Map mapId $
-            R.Filter Queries.hasSetterAccessRights $
+            R.Filter (hasAccess "setter") $
             viewTable accountsView
 
-    elem sessionId <$> (pure $ map ObjId $ V.toList setter)
-
--- | True if the session created the given object.
-sessionCreatedObject :: ObjId -> ObjId -> AuthzModule
-sessionCreatedObject sessionId objId = do
-    obj <- Avers.lookupObject objId
-    return $ objectCreatedBy obj == sessionId
-
--- | True if the session is the given object.
-sessionIsObject :: ObjId -> ObjId -> AuthzModule
-sessionIsObject sessionId objId = do
-    return $ sessionId == objId
+    elem sessionId <$> (pure $ map ObjId $ V.toList setters)
 
