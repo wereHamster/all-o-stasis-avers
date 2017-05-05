@@ -1,6 +1,17 @@
 resolver: nightly-2017-02-02
+
 packages:
-- '.'
+- location: .
+- location:
+    git: git@github.com:wereHamster/avers.git
+    commit: ac1240e8498ada5c10646055e88857e1278139a7
+  subdirs:
+  - pkg/hs/avers
+  - pkg/hs/avers-api
+  - pkg/hs/avers-server
+
 extra-deps:
+- avers-0.0.17.1
 - avers-api-0.0.18.0
-- avers-server-0.0.18.0
+- avers-api-server-0.0.18.0
+
