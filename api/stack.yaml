@@ -5,6 +5,7 @@ packages:
 - location:
     git: git@github.com:wereHamster/avers.git
     commit: ac1240e8498ada5c10646055e88857e1278139a7
+  extra-dep: true
   subdirs:
   - pkg/hs/avers
   - pkg/hs/avers-api
