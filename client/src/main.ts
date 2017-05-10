@@ -11,12 +11,14 @@ import {loginView}   from './Views/Login';
 import {teamView}    from './Views/Team';
 import {signupView}  from './Views/Signup';
 import {catalogView} from './Views/Catalog';
+import {updateSecretView}   from './Views/UpdateSecret';
 
 
 function mkApp(): App {
     let aversH = new Avers.Handle
         ( config.apiHost
         , (<any>window).fetch.bind(window)
+        , path => new WebSocket('ws:' + config.apiHost + path)
         , window.performance.now.bind(window.performance)
         , infoTable
         );
@@ -94,6 +96,12 @@ function setupRoutes(app: App) {
     page('/account/:accountId', function(ctx) {
         loadView(app, app => {
             return accountView(app, ctx.params.accountId);
+         });
+    });
+
+    page('/account/:accountId/updateSecret', function(ctx) {
+        loadView(app, app => {
+            return updateSecretView(app, ctx.params.accountId);
          });
     });
 

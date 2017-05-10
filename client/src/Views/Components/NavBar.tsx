@@ -63,13 +63,38 @@ function signInItem() {
 }
 
 // FIXME: that should show a dropdown with signout and account preferences
+function changeSecretItem(app: App) {
+    const accountId = app.data.session.objId;
+
+    let accountC = Avers.lookupContent<Account>(app.data.aversH, accountId);
+    let accountE = accountC.get(null);
+
+    let accountDisplayName = "Account";
+    if (accountE != null)
+        accountDisplayName = accountE.login;
+
+    return (
+      <div className='navbar-item' onClick={navigateToFn('/account/' + accountId + '/updateSecret')}>
+          <i className='key icon'></i>
+          change
+      </div>
+    );
+}
+
 function accountSettingsItem(app: App) {
-    var accountId = app.data.session.objId;
+    const accountId = app.data.session.objId;
+
+    let accountC = Avers.lookupContent<Account>(app.data.aversH, accountId);
+    let accountE = accountC.get(null);
+
+    let accountDisplayName = "Account";
+    if (accountE != null)
+        accountDisplayName = accountE.login;
 
     return (
       <div className='navbar-item' onClick={navigateToFn('/account/' + accountId)}>
-        <i className='user icon'></i>
-        Account
+          <i className='user icon'></i>
+          {accountDisplayName}
       </div>
     );
 }
@@ -92,6 +117,7 @@ navBar(app: App) {
                 {homeItem()}
                 {teamItem()}
                 {flexItem()}
+                {changeSecretItem(app)}
                 {accountSettingsItem(app)}
               </div>
             );
@@ -102,6 +128,7 @@ navBar(app: App) {
                 {teamItem()}
                 {flexItem()}
                 {Boulder.createBoulderItem(app)}
+                {changeSecretItem(app)}
                 {accountSettingsItem(app)}
               </div>
             );

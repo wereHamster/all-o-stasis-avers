@@ -106,7 +106,7 @@ class AccountSpec extends React.Component<AccountViewProps, {}> {
           <div className="account-detail-editor">
             <div className="form">
               <div className="form-row">
-                <div className="label">User name</div>
+                <div className="label">Name</div>
                 <div className="content">
                   <input className='wide' type='text' value={account.name}
                          onChange={this.changeAccountName} onClick={onClick}></input>
@@ -119,7 +119,7 @@ class AccountSpec extends React.Component<AccountViewProps, {}> {
                          onChange={this.changeAccountEmail} onClick={onClick}></input>
                 </div>
               </div>
-               <div className="form-row">
+              <div className="form-row">
                 <div className="label">Login</div>
                 <div className="content">
                   <input className='wide' type='text' value={account.login}

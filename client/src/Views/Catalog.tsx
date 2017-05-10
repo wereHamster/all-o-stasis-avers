@@ -15,7 +15,7 @@ import {BoulderCard} from './Components/BoulderCard';
 const fetch = (url) =>
     Promise.reject(new Error("Failed request to " + url));
 
-const aversH = new Avers.Handle('localhost', fetch, () => window.performance.now(), infoTable);
+const aversH = new Avers.Handle('localhost', fetch, path => new WebSocket('ws:localhost' + path), () => window.performance.now(), infoTable);
 const data = new Data(aversH);
 const app = new App(null, data, () => { throw new Error('mkViewFn'); });
 

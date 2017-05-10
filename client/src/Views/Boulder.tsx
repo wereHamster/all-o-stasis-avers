@@ -51,7 +51,7 @@ createBoulderItem(app: App) {
         return (
           <div className='navbar-item' onClick={createNewBoulder}>
             <i className='plus square outlined icon'></i>
-            Create boulder
+            boulder
           </div>
         );
     }

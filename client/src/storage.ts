@@ -31,12 +31,12 @@ export class Boulder
       name       : string;
     }
 
-Avers.definePrimitive(Boulder, 'setter');
+Avers.definePrimitive(Boulder, 'setter',   undefined);
 Avers.definePrimitive(Boulder, 'sector',   'spektrumone');
 Avers.definePrimitive(Boulder, 'grade',    'yellow');
 Avers.definePrimitive(Boulder, 'gradeNr',  0);
 Avers.definePrimitive(Boulder, 'setDate',  0);
-Avers.definePrimitive(Boulder, 'removed');
+Avers.definePrimitive(Boulder, 'removed',  undefined);
 Avers.definePrimitive(Boulder, 'name',     '');
 
 export function

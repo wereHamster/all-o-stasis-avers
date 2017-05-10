@@ -39,16 +39,12 @@ import Prelude
 
 
 data SignupRequest = SignupRequest
-    { reqLogin :: Text
+    { reqLogin     :: Text
+    , reqNewSecret :: Text
     }
 
 data SignupResponse = SignupResponse
     { _resObjId :: ObjId
-    }
-
-data ChangeSecretRequest = ChangeSecretRequest
-    { reqId     :: ObjId
-    , reqSecret :: Text
     }
 
 
@@ -79,10 +75,6 @@ type LocalAPI
       :> ReqBody '[JSON] SignupRequest
       :> Post '[JSON] SignupResponse
 
-    :<|> "updateSecret"
-      :> Credentials
-      :> ReqBody '[JSON] ChangeSecretRequest
-      :> Post '[JSON] SignupResponse
 
 serveLocalAPI :: Avers.Handle -> Server LocalAPI
 serveLocalAPI aversH =
@@ -90,9 +82,7 @@ serveLocalAPI aversH =
     :<|> serveActiveBouldersCollection
     :<|> serveOwnBouldersCollection
     :<|> serveAccounts
-    :<|> serveAdminAccounts
-    :<|> serveSignup
-    :<|> serveUpdateSecret
+    :<|> serveAdminAccounts :<|> serveSignup
   where
     serveRevision =
         pure $ T.pack $ fromMaybe "HEAD" $(revision)
@@ -154,21 +144,12 @@ serveLocalAPI aversH =
 
         accId <- reqAvers2 aversH $ do
             accId <- Avers.createObject accountObjectType rootObjId content
-            updateSecret (SecretId (unObjId accId)) ""
+            updateSecret (SecretId (unObjId accId)) (reqNewSecret body)
             pure accId
-
-        pure $ SignupResponse accId
-
-    serveUpdateSecret cred body = do
-        ownerId <- credentialsObjId aversH cred
-        accId <- reqAvers2 aversH $ do
-            updateSecret (SecretId (unObjId ownerId)) (reqSecret body)
-            pure ownerId
 
         pure $ SignupResponse accId
 
 
 $(deriveJSON (deriveJSONOptions "req")  ''SignupRequest)
 $(deriveJSON (deriveJSONOptions "_res") ''SignupResponse)
-$(deriveJSON (deriveJSONOptions "req")  ''ChangeSecretRequest)
 

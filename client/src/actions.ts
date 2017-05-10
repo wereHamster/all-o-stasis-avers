@@ -1,7 +1,6 @@
 /*
 module Actions
 ( createBoulder
-, createCustomBoulder
 , role
 ) where
 */
@@ -37,22 +36,7 @@ createBoulder(app: App) {
 }
 
 export function
-createCustomBoulder(app: App, boulderId: string) {
-    let promise = Avers.createObjectId(app.data.aversH, boulderId, 'boulder', mkBoulder(app)).then(() => {
-        app.createBoulderPromise = undefined;
-        Avers.resetObjectCollection(app.data.ownedBoulderCollection);
-        navigateTo('/');
-        return boulderId;
-    });
-
-    app.createBoulderPromise = promise;
-    refresh(app);
-
-    return promise;
-}
-
-export function
-role(app: App) {
+role(app: App) : string {
     let accountC = Avers.lookupContent<Account>(app.data.aversH, app.data.session.objId);
     let accountE = accountC.get(null);
 
@@ -61,3 +45,4 @@ role(app: App) {
     else
         return accountE.role;
 }
+
