@@ -38,12 +38,11 @@ import Storage.Objects.Boulder
 import Prelude
 
 
-data SignupRequest = SignupRequest
+data SignupRequest2 = SignupRequest2
     { reqLogin     :: Text
-    , reqNewSecret :: Text
     }
 
-data SignupResponse = SignupResponse
+data SignupResponse2 = SignupResponse2
     { _resObjId :: ObjId
     }
 
@@ -72,8 +71,8 @@ type LocalAPI
       :> Get '[JSON] [ObjId]
 
     :<|> "signup"
-      :> ReqBody '[JSON] SignupRequest
-      :> Post '[JSON] SignupResponse
+      :> ReqBody '[JSON] SignupRequest2
+      :> Post '[JSON] SignupResponse2
 
 
 serveLocalAPI :: Avers.Handle -> Server LocalAPI
@@ -144,12 +143,12 @@ serveLocalAPI aversH =
 
         accId <- reqAvers2 aversH $ do
             accId <- Avers.createObject accountObjectType rootObjId content
-            updateSecret (SecretId (unObjId accId)) (reqNewSecret body)
+            updateSecret (SecretId (unObjId accId)) ""
             pure accId
 
-        pure $ SignupResponse accId
+        pure $ SignupResponse2 accId
 
 
-$(deriveJSON (deriveJSONOptions "req")  ''SignupRequest)
-$(deriveJSON (deriveJSONOptions "_res") ''SignupResponse)
+$(deriveJSON (deriveJSONOptions "req")  ''SignupRequest2)
+$(deriveJSON (deriveJSONOptions "_res") ''SignupResponse2)
 
