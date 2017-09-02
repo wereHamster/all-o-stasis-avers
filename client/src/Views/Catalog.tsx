@@ -36,7 +36,7 @@ const boulderCardPage = () => {
             , sector: 'spektrumone'
             , grade: 'yellow'
             , gradeNr: 1
-            , removed: null
+            , removed: -1
             , name: 'name'
             }
         }
