@@ -32,12 +32,14 @@ aosAuthorization = Avers.Server.Authorizations
                 SessionIdCredential sId -> lookupSession sId
             sessionIsAdmin session >> sessionCreatedObject session objId
         ]
-    -- FIXME: depends on [operation]
-    , patchObjectAuthz = \cred objId _ ->
+    , patchObjectAuthz = \cred objId ops ->
         [ sufficient $ do
             session <- case cred of
                 SessionIdCredential sId -> lookupSession sId
             sessionIsAdmin session >> sessionIsObject session objId >> sessionCreatedObject session objId
+            -- TODO (depends on [operation]):
+            --   - only admins can patch the 'role' field
+            --   -
         ]
     , deleteObjectAuthz = \_ _ -> [pure RejectR]
     , uploadBlobAuthz = \_ _ -> [pure AllowR]
@@ -59,6 +61,17 @@ sessionIsAdmin session = do
 -- | True if the session is a setter.
 sessionIsSetter :: Session -> Avers Bool
 sessionIsSetter session = do
+    let sessionId = sessionObjId session
+    setters <- runQueryCollect $
+            R.Map mapId $
+            R.Filter (hasAccess "setter") $
+            viewTable accountsView
+
+    elem sessionId <$> (pure $ map ObjId $ V.toList setters)
+
+-- | True if the session is in setter list of boulder.
+sessionIsBoulderSetter :: Session -> ObjId -> Avers Bool
+sessionIsBoulderSetter session objId = do
     let sessionId = sessionObjId session
     setters <- runQueryCollect $
             R.Map mapId $
