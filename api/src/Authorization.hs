@@ -1,4 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE RecordWildCards   #-}
 
 module Authorization (aosAuthorization) where
 
@@ -13,6 +14,7 @@ import           Prelude
 
 import           Queries
 import           Storage.Objects.Account
+import           Storage.Objects.Boulder
 
 
 aosAuthorization :: Avers.Server.Authorizations
@@ -22,30 +24,48 @@ aosAuthorization = Avers.Server.Authorizations
         , sufficient $ do
             session <- case cred of
                 SessionIdCredential sId -> lookupSession sId
-            -- we dont need to check (objId == "boulder") for setters for now
-            sessionIsAdmin session >> sessionIsSetter session
+            isSet <- sessionIsSetter session
+            isAdm <- sessionIsAdmin session
+            return $ isSet || isAdm
         , pure RejectR
         ]
     , lookupObjectAuthz = \cred objId ->
         [ sufficient $ do
+            objectIsBoulder objId
+        , sufficient $ do
             session <- case cred of
                 SessionIdCredential sId -> lookupSession sId
-            sessionIsAdmin session >> sessionCreatedObject session objId
+            hasCreated <- sessionCreatedObject session objId 
+            isAdm <- sessionIsAdmin session
+            return $ hasCreated || isAdm
+        --, pure RejectR
         ]
     , patchObjectAuthz = \cred objId ops ->
         [ sufficient $ do
             session <- case cred of
                 SessionIdCredential sId -> lookupSession sId
-            sessionIsAdmin session >> sessionIsObject session objId >> sessionCreatedObject session objId
-            -- TODO (depends on [operation]):
-            --   - only admins can patch the 'role' field
-            --   -
+            isObj <- sessionIsObject session objId
+            hasCreated <- sessionCreatedObject session objId 
+            isAdm <- sessionIsAdmin session
+            return $ isObj || hasCreated || isAdm
+        --, sufficient $ do
+        --    oper <- case ops of
+        --        Set{..} -> opPath /= "role"         -- only admins can patch the 'role' field
+        --        _       -> False
+        --    return oper
+        -- setters can patch objects they own or are setters
         ]
     , deleteObjectAuthz = \_ _ -> [pure RejectR]
     , uploadBlobAuthz = \_ _ -> [pure AllowR]
     , lookupBlobAuthz = \_ _ -> [pure AllowR]
     , lookupBlobContentAuthz = \_ _ -> [pure AllowR]
     }
+
+-- | True if the object is a boulder
+objectIsBoulder :: ObjId -> Avers Bool
+objectIsBoulder objId = do
+    obj <- lookupObject objId
+    return ((objectType obj) == "boulder")
 
 -- | True if the session is an admin.
 sessionIsAdmin :: Session -> Avers Bool
