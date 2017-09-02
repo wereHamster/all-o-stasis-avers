@@ -21,7 +21,7 @@ isNotRemoved x = R.Any
     [ R.Not $ R.HasFields ["removed"] x
     , R.Ne
         (R.GetField "removed" x :: R.Exp Text)
-        ("" :: R.Exp Text)
+        ("-1" :: R.Exp Text)
     ]
 
 hasAccess :: R.Exp Text -> R.Exp R.Object -> R.Exp Bool
