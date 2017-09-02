@@ -52,49 +52,11 @@ function flexItem() {
     );
 }
 
-// Account options
 function signInItem() {
     return (
       <div className='navbar-item' onClick={navigateToFn('/login')}>
         <i className='sign in icon'></i>
         Login
-      </div>
-    );
-}
-
-// FIXME: that should show a dropdown with signout and account preferences
-function changeSecretItem(app: App) {
-    const accountId = app.data.session.objId;
-
-    let accountC = Avers.lookupContent<Account>(app.data.aversH, accountId);
-    let accountE = accountC.get(null);
-
-    let accountDisplayName = "Account";
-    if (accountE != null)
-        accountDisplayName = accountE.login;
-
-    return (
-      <div className='navbar-item' onClick={navigateToFn('/account/' + accountId + '/updateSecret')}>
-          <i className='key icon'></i>
-          change
-      </div>
-    );
-}
-
-function accountSettingsItem(app: App) {
-    const accountId = app.data.session.objId;
-
-    let accountC = Avers.lookupContent<Account>(app.data.aversH, accountId);
-    let accountE = accountC.get(null);
-
-    let accountDisplayName = "Account";
-    if (accountE != null)
-        accountDisplayName = accountE.login;
-
-    return (
-      <div className='navbar-item' onClick={navigateToFn('/account/' + accountId)}>
-          <i className='user icon'></i>
-          {accountDisplayName}
       </div>
     );
 }
@@ -108,31 +70,47 @@ function doSignOutF(app: App) {
     };
 }
 
+function accountSettingsDropDownItem(app: App) {
+    const accountId = app.data.session.objId;
+
+    let accountC = Avers.lookupContent<Account>(app.data.aversH, accountId);
+    let accountE = accountC.get(null);
+
+    let accountDisplayName = "Account";
+    if (accountE != null)
+        accountDisplayName = accountE.login;
+
+    return (
+      <div className='navbar-item'>
+          <i className='user icon'></i>
+          {accountDisplayName}
+        <ul>
+          <li>{Boulder.createBoulderItem(app)}</li>
+          <li><div onClick={navigateToFn('/account/' + accountId)}>
+            <i className='settings icon'></i>Account Settings
+          </div></li>
+          <li><div onClick={navigateToFn('/account/' + accountId + '/updateSecret')}>
+            <i className='key icon'></i>Change Secret
+          </div></li>
+          <li><div onClick={doSignOutF(app)}>
+            <i className='sign out icon'></i>Logout
+          </div></li>
+        </ul>
+      </div>
+    );
+}
+
 export function
 navBar(app: App) {
     if (app.data.session.objId) {
-        if (role(app) == "user") {
-            return (
-              <div className='navbar'>
-                {homeItem()}
-                {teamItem()}
-                {flexItem()}
-                {changeSecretItem(app)}
-                {accountSettingsItem(app)}
-              </div>
-            );
-        } else {
-            return (
-              <div className='navbar'>
-                {homeItem()}
-                {teamItem()}
-                {flexItem()}
-                {Boulder.createBoulderItem(app)}
-                {changeSecretItem(app)}
-                {accountSettingsItem(app)}
-              </div>
-            );
-        }
+        return (
+            <div className='navbar'>
+              {homeItem()}
+              {teamItem()}
+              {flexItem()}
+              {accountSettingsDropDownItem(app)}
+            </div>
+        );
     } else {
         return (
           <div className='navbar'>
