@@ -4,6 +4,7 @@ import * as Avers from 'avers';
 import {App, refresh, navigateTo, navigateToFn} from '../../app';
 
 import {Account} from '../../storage';
+import {accountGravatarUrl} from '../Account';
 
 export interface CardProps {
     account: Account;
@@ -20,7 +21,7 @@ function setterInfo(app: App, accountId: string) {
 
         return (
           <div>
-            <img src="http://ba.iff.im/avatars/W.jpg"/>
+            <img src={accountGravatarUrl(account.email)}/>
             <h3>{name}</h3>
           </div>
         );

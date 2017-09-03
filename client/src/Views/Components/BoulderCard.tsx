@@ -3,6 +3,7 @@ import * as Avers from 'avers';
 
 import {App, navigateTo} from '../../app';
 import {Account, Boulder, prettyPrintSector} from '../../storage';
+import {accountGravatarUrl} from '../Account';
 
 export interface BoulderCardProps {
     app: App;
@@ -20,7 +21,7 @@ export class BoulderCard extends React.Component<BoulderCardProps, {}> {
 
         const setters = content.setter.map(setterId => {
             return Avers.lookupContent<Account>(app.data.aversH, setterId).fmap(account => (
-                <img className="boulder-card-setter" src="http://ba.iff.im/avatars/W.jpg" />
+                <img className="boulder-card-setter" src={accountGravatarUrl(account.email)} />
             )).get(undefined);
         }).filter(x => x !== undefined);
 

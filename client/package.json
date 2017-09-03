@@ -23,6 +23,7 @@
     "gulp-util": "^3.0.6",
     "merge-stream": "^1.0.0",
     "moment": "*",
+    "ts-md5": "*",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-datepicker": "*",

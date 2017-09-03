@@ -6,6 +6,8 @@ module Account
 
 import * as React from 'react';
 
+import {Md5} from 'ts-md5/dist/md5'
+
 import * as Avers from 'avers';
 import {App, refresh, navigateTo, navigateToFn} from '../app';
 
@@ -14,6 +16,11 @@ import {Site} from './Components/Site';
 import {DropDownInput} from './Components/DropdownInput';
 
 import {Account, roles} from '../storage';
+
+export function
+accountGravatarUrl(email: string) {
+    return 'http://www.gravatar.com/avatar/' + Md5.hashStr(email);
+}
 
 export interface AccountViewProps {
     app: App;
@@ -75,10 +82,13 @@ class AccountSpec extends React.Component<AccountViewProps, {}> {
         if(accountE.content.name != '')
             title = accountE.content.name;
 
+        var imgHash = Md5.hashStr(accountE.content.email);
+
         return (
           <div className="boulder-header">
             <div className="login">
               <div className="logo">
+                <img src={accountGravatarUrl(accountE.content.email)}/><br/>
                 {title}
               </div>
               <p className="about">
