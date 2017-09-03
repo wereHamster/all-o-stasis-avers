@@ -88,7 +88,7 @@ class AccountSpec extends React.Component<AccountViewProps, {}> {
           <div className="boulder-header">
             <div className="login">
               <div className="logo">
-                <img src={accountGravatarUrl(accountE.content.email)}/><br/>
+                <img className="round-avatar" src={accountGravatarUrl(accountE.content.email)}/><br/>
                 {title}
               </div>
               <p className="about">
