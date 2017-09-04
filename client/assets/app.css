@@ -632,43 +632,39 @@ input.invalid {
     text-align: right;
 }
 
-.in-progress {
-    display: flex;
-    flex-direction: row;
-}
-
-.in-progress-spinner {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-}
-
-.in-progress .timer {
-    font-weight: bold;
-    font-size: 2.4rem;
-    text-align: right;
-}
-
-.duration-s {
-    font-family: "sax-mono", monospace;
-}
-
-.duration-s-subtle {
-    color: rgb(182, 182, 185);
-}
-
 .team {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.team img {}
+.team .logo {
+    text-align: center;
+    font-size: 4rem;
+    font-family: "trajan-sans-pro";
+    margin-top: 4rem;
+}
+
+.team .members {
+    padding-top: 80px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
 
 .setter-card {
     display: flex;
     flex-direction: row;
     align-items: center;
+    text-align: center;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.setter-card img {
+    height: 50px;
+    border: 1px solid #999;
+    border-radius: 50%;
 }
 
 .login {

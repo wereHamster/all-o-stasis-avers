@@ -38,8 +38,10 @@ teamView(app: App) {
     return (
       <Site app={app}>
         <div className='team'>
-          <h1>Team</h1>
-          <div>
+          <div className="logo">
+            Team
+          </div>
+          <div className="members">
             {setters}
           </div>
         </div>

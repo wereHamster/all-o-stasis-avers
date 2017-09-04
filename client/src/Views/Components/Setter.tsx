@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import * as Avers from 'avers';
-import {App, refresh, navigateTo, navigateToFn} from '../../app';
+import {App, navigateToFn} from '../../app';
 
 import {Account} from '../../storage';
 import {accountGravatarUrl} from '../Account';
@@ -20,9 +20,9 @@ function setterInfo(app: App, accountId: string) {
             name = account.name;
 
         return (
-          <div>
-            <img src={accountGravatarUrl(account.email)}/>
-            <h3>{name}</h3>
+          <div onClick={navigateToFn('/account/' + accountId)}>
+            <img className="avatar" src={accountGravatarUrl(account.email)}/> 
+            <div>{name}</div>
           </div>
         );
     }).get(undefined);
