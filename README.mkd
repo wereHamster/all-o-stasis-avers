@@ -65,6 +65,10 @@ If you need further assistance feel free to email me.
 
 Send me pull requests or email me patches.
 
+## Contributors ##
+
+- Tomas Carnecky (wereHamster)
+
 
 ## License ##
 
