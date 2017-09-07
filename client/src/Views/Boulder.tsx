@@ -5,29 +5,21 @@ module Boulder
 ) where
 */
 
-
+import * as Avers from 'avers';
+import DatePicker from 'react-datepicker';
+import * as moment from 'moment';
 import * as React from 'react';
 
-import * as Avers from 'avers';
+import {createBoulder, role} from '../actions';
 import {App, refresh} from '../app';
-import {role} from '../actions';
-
-import {Site} from './Components/Site';
+import {Boulder, grades, sectors} from '../storage';
 
 import {DropDownInput} from './Components/DropdownInput';
 import {NumberInput} from './Components/NumberInput';
-
-import DatePicker from 'react-datepicker';
-import * as moment from 'moment';
-
-import {Boulder, grades, sectors} from '../storage';
-
-import {createBoulder} from '../actions';
-
+import {Site} from './Components/Site';
 
 export function
-createBoulderItem(app: App) {
-
+createBoulderItem(app: App) : JSX.Element {
     function createNewBoulder(e) {
         e.stopPropagation();
         createBoulder(app);
@@ -57,24 +49,39 @@ createBoulderItem(app: App) {
     }
 }
 
-function boulderHeader(boulder : Avers.Editable<Boulder>) : any {
+function boulderHeader(boulder : Boulder, objectId: string) : JSX.Element {
+    var name = boulder.name;
+    if (name == "") {
+      name = objectId.substr(0, 10);
+    }
+
     return (
       <div>
         <div className="boulder-header">
           <div className="login">
-            <div className="logo">
-              {boulder.objectId.substr(0, 10)}
-            </div>
-            <p className="about">
-              Customize the boulder
-            </p>
+            <div className="logo">{name}</div>
           </div>
         </div>
       </div>
     );
 }
 
-function boulderDetailsEditor(boulderE: Avers.Editable<Boulder>, app: App) {
+function boulderDetails(boulder: Boulder) : JSX.Element {
+    var setDate = moment.unix(boulder.setDate / 1000.).toISOString();
+
+    return (
+      <div className='details'>
+        <ul>
+          <li>{boulder.name}</li>
+          <li>{boulder.sector}</li>
+          <li>{boulder.gradeNr} {boulder.grade}</li>
+          <li>{setDate}</li>
+        </ul>
+      </div>
+    );
+}
+
+function boulderDetailsEditor(boulderE: Avers.Editable<Boulder>, app: App) : JSX.Element {
     var boulder = boulderE.content;
 
     function onClick(e) {
@@ -136,21 +143,27 @@ function boulderDetailsEditor(boulderE: Avers.Editable<Boulder>, app: App) {
     );
 }
 
-
 export function
-boulderView(app: App, boulderId: string) {
+boulderView(app: App, boulderId: string) : JSX.Element {
 
     var boulderC = Avers.lookupEditable<Boulder>(
         app.data.aversH, boulderId);
     var boulderE = boulderC.get(undefined);
 
+    // for now we just render the boulder differently for users
+    var boulderRep : JSX.Element;
+    if (role(app) == "user") {
+        boulderRep = boulderDetails(boulderE.content);
+    } else {
+        boulderRep = boulderDetailsEditor(boulderE, app);
+    }
+
     return (
       <Site app={app}>
         <div className="boulder">
-          {boulderHeader(boulderE)}
-          {boulderDetailsEditor(boulderE, app)}
+          {boulderHeader(boulderE.content, boulderE.objectId)}
+          {boulderRep}
         </div>
       </Site>
     );
 }
-

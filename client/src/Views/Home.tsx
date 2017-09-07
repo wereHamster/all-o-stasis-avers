@@ -8,7 +8,6 @@ import * as React from 'react';
 import timeago from 'timeago.js';
 
 import * as Avers from 'avers';
-import Computation from 'computation';
 import {App} from '../app';
 
 import {BoulderCard} from './Components/BoulderCard';
