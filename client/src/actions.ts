@@ -5,11 +5,10 @@ module Actions
 ) where
 */
 
-
 import * as Avers from 'avers';
 import * as Storage from './Storage';
 import {App, navigateTo, refresh} from './app';
-import {Account, roles} from './storage';
+import {Account} from './storage';
 
 function mkBoulder(app: App) : Storage.Boulder {
     const now = Date.now();
@@ -45,4 +44,3 @@ role(app: App) : string {
     else
         return accountE.role;
 }
-

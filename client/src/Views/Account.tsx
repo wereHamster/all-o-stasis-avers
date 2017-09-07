@@ -9,17 +9,33 @@ import * as React from 'react';
 import {Md5} from 'ts-md5/dist/md5'
 
 import * as Avers from 'avers';
-import {App, refresh, navigateTo, navigateToFn} from '../app';
 
-import {Site} from './Components/Site';
+import {role} from '../actions';
+import {App} from '../app';
+import {Account, roles} from '../storage';
 
 import {DropDownInput} from './Components/DropdownInput';
-
-import {Account, roles} from '../storage';
+import {Site} from './Components/Site';
 
 export function
 accountGravatarUrl(email: string) {
     return 'http://www.gravatar.com/avatar/' + Md5.hashStr(email);
+}
+
+function accountRep(account: Account) : JSX.Element {
+    return (
+      <div className="boulder-header">
+        <div className="login">
+          <div className="logo">
+            <img className="round-avatar" src={accountGravatarUrl(account.email)}/><br/>
+            {account.name}
+          </div>
+          <p className="about">
+            {account.role}
+          </p>
+        </div>
+      </div>
+    );
 }
 
 export interface AccountViewProps {
@@ -82,8 +98,6 @@ class AccountSpec extends React.Component<AccountViewProps, {}> {
         if(accountE.content.name != '')
             title = accountE.content.name;
 
-        var imgHash = Md5.hashStr(accountE.content.email);
-
         return (
           <div className="boulder-header">
             <div className="login">
@@ -129,9 +143,7 @@ class AccountSpec extends React.Component<AccountViewProps, {}> {
                          onChange={this.changeAccountEmail} onClick={onClick}></input>
                 </div>
               </div>
-              <div className="form-row">
-                <div className="label">Login</div>
-                <div className="content">
+              <div className="form-row"> <div className="label">Login</div> <div className="content">
                   <input className='wide' type='text' value={account.login}
                          onChange={this.changeAccountLogin} onClick={onClick}></input>
                 </div>
@@ -150,11 +162,23 @@ accountView(app: App, accountId: string) {
     let accountC = Avers.lookupEditable<Account>(app.data.aversH, accountId);
     let accountE = accountC.get(undefined);
 
-    return (
-        <Site app={app}>
+    // only admins can edit all accounts with the exception of users
+    // changing their own accounts
+    if (role(app) == "admin" || accountId == app.data.session.objId) {
+        return (
+          <Site app={app}>
             <div className="account">
                 {AccountView({ app: app, accountE: accountE })}
             </div>
-        </Site>
-    );
+          </Site>
+        );
+    } else {
+        return (
+          <Site app={app}>
+            <div className="account">
+                {accountRep(accountE.content)}
+            </div>
+          </Site>
+        );
+    }
 }
