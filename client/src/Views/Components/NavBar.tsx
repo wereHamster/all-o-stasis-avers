@@ -4,13 +4,11 @@ module NavBar
 ) where
 */
 
+import * as Avers from 'avers';
 import * as React from 'react';
 
-import * as Avers from 'avers';
 import {App, navigateTo, navigateToFn} from '../../app';
-import {role} from '../../actions';
 import * as Boulder from '../Boulder';
-
 import {Account} from '../../storage';
 
 function sideBarItem() {
@@ -122,4 +120,3 @@ navBar(app: App) {
         );
     }
 }
-

@@ -1,10 +1,9 @@
+import * as Avers from 'avers';
 import * as React from 'react';
 
-import * as Avers from 'avers';
-import {App, navigateToFn} from '../../app';
-
-import {Account} from '../../storage';
 import {accountGravatarUrl} from '../Account';
+import {App, navigateToFn} from '../../app';
+import {Account} from '../../storage';
 
 export interface CardProps {
     account: Account;
@@ -12,7 +11,8 @@ export interface CardProps {
     app: App;
 }
 
-function setterInfo(app: App, accountId: string) {
+function 
+setterInfo(app: App, accountId: string) {
     return Avers.lookupContent<Account>(app.data.aversH, accountId).fmap(account => {
 
         var name = accountId;

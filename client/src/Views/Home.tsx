@@ -4,17 +4,15 @@ module Home
 ) where
 */
 
+import * as Avers from 'avers';
 import * as React from 'react';
 import timeago from 'timeago.js';
 
-import * as Avers from 'avers';
 import {App} from '../app';
+import {Boulder} from '../storage';
 
 import {BoulderCard} from './Components/BoulderCard';
 import {Site} from './Components/Site';
-
-import {Boulder} from '../storage';
-
 
 const ThreeBounceSpinner = () => (
     <div className='sk-spinner sk-spinner-three-bounce'>
@@ -36,7 +34,6 @@ const BoulderCardLoading = ({ app, boulderId }: { app: App, boulderId: string })
         <LoadingTileBody />
     </div>
 );
-
 
 export function
 homeView(app: App) {

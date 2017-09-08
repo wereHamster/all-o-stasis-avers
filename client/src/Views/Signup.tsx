@@ -4,10 +4,11 @@ module Signup
 ) where
 */
 
+import * as Avers from 'avers';
 import * as React from 'react';
 
-import * as Avers from 'avers';
-import {App, refresh, navigateToFn} from '../app';
+import {App, navigateToFn} from '../app';
+
 import {Site} from './Components/Site';
 
 var signupInProgress = false;

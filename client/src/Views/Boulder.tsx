@@ -49,7 +49,8 @@ createBoulderItem(app: App) : JSX.Element {
     }
 }
 
-function boulderHeader(boulder : Boulder, objectId: string) : JSX.Element {
+function 
+boulderHeader(boulder : Boulder, objectId: string) : JSX.Element {
     var name = boulder.name;
     if (name == "") {
       name = objectId.substr(0, 10);
@@ -66,7 +67,8 @@ function boulderHeader(boulder : Boulder, objectId: string) : JSX.Element {
     );
 }
 
-function boulderDetails(boulder: Boulder) : JSX.Element {
+function 
+boulderDetails(boulder: Boulder) : JSX.Element {
     var setDate = moment.unix(boulder.setDate / 1000.).toISOString();
 
     return (
@@ -81,7 +83,8 @@ function boulderDetails(boulder: Boulder) : JSX.Element {
     );
 }
 
-function boulderDetailsEditor(boulderE: Avers.Editable<Boulder>, app: App) : JSX.Element {
+function 
+boulderDetailsEditor(boulderE: Avers.Editable<Boulder>, app: App) : JSX.Element {
     var boulder = boulderE.content;
 
     function onClick(e) {

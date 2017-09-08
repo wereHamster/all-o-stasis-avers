@@ -1,9 +1,9 @@
-import * as React from 'react';
 import * as Avers from 'avers';
+import * as React from 'react';
 
+import {accountGravatarUrl} from '../Account';
 import {App, navigateTo} from '../../app';
 import {Account, Boulder, prettyPrintSector} from '../../storage';
-import {accountGravatarUrl} from '../Account';
 
 export interface BoulderCardProps {
     app: App;

@@ -25,7 +25,6 @@ function asString(value) {
     }
 }
 
-
 class DropdownInputSpec extends React.Component<DropdownInputProps, DropdownInputState> {
 
     initialState(props) {

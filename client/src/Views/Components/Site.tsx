@@ -1,11 +1,12 @@
+import * as Avers from 'avers';
 import * as React from 'react';
 
-import * as Avers from 'avers';
 import {App} from '../../app';
+
 import {navBar} from './NavBar';
 
-export function site(app: App, ...content) {
-
+export function 
+site(app: App, ...content) {
     function onClick() {
         Avers.startNextGeneration(app.data.aversH);
     }
@@ -40,4 +41,3 @@ export function site(app: App, ...content) {
 export function Site({ app, children } : any) {
     return site(app, React.Children.toArray(children));
 }
-

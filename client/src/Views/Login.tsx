@@ -4,9 +4,9 @@ module Login
 ) where
 */
 
+import * as Avers from 'avers';
 import * as React from 'react';
 
-import * as Avers from 'avers';
 import {App, navigateTo, navigateToFn} from '../app';
 import {Site} from './Components/Site';
 

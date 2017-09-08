@@ -1,13 +1,12 @@
-import * as React from 'react';
 import * as Avers from 'avers';
+import * as React from 'react';
+
 import {Catalog, Page, ReactSpecimen} from 'catalog';
 
 import {App, Data, infoTable} from '../app';
 import {Boulder} from '../storage';
 
 import {BoulderCard} from './Components/BoulderCard';
-
-
 
 // ----------------------------------------------------------------------------
 // Setup of a fake Avers Handle, Data, and App instance.
@@ -18,8 +17,6 @@ const fetch = (url) =>
 const aversH = new Avers.Handle('localhost', fetch, path => new WebSocket('ws:localhost' + path), () => window.performance.now(), infoTable);
 const data = new Data(aversH);
 const app = new App(null, data, () => { throw new Error('mkViewFn'); });
-
-
 
 // ----------------------------------------------------------------------------
 // Page: /boulder-card
@@ -99,4 +96,3 @@ catalogView() {
         />
     );
 }
-

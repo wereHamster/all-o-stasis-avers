@@ -4,26 +4,23 @@ module Team
 ) where
 */
 
+import * as Avers from 'avers';
 import * as React from 'react';
 
-import * as Avers from 'avers';
-import Computation from 'computation';
 import {App} from '../app';
+import {Account} from '../storage';
 
 import {Site} from './Components/Site';
 import {SetterCard} from './Components/Setter';
 
-import {Account} from '../storage';
-
-
-function setterLoadingView(app: App, accountId: string) {
+function 
+setterLoadingView(app: App, accountId: string) {
     return (
       <div key={accountId} className='setter-card'>
         {accountId}
       </div>
     );
 }
-
 
 export function
 teamView(app: App) {

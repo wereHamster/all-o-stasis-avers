@@ -1,14 +1,13 @@
 /*
 module Account
-( accountView
+( accountGravatarUrl
+, accountView
 ) where
 */
 
-import * as React from 'react';
-
-import {Md5} from 'ts-md5/dist/md5'
-
 import * as Avers from 'avers';
+import * as React from 'react';
+import {Md5} from 'ts-md5/dist/md5'
 
 import {role} from '../actions';
 import {App} from '../app';
@@ -22,7 +21,8 @@ accountGravatarUrl(email: string) {
     return 'http://www.gravatar.com/avatar/' + Md5.hashStr(email);
 }
 
-function accountRep(account: Account) : JSX.Element {
+function 
+accountRep(account: Account) : JSX.Element {
     return (
       <div className="boulder-header">
         <div className="login">
