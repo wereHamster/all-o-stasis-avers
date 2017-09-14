@@ -89,7 +89,7 @@ input.invalid {
     display: block;
 }
 
-.boulder-details-editor .form {
+.form {
     flex: 1;
     display: block;
 }
@@ -941,4 +941,48 @@ input.invalid {
 .boulder-tile-header-meta>div {
     height: 1.5rem;
     line-height: 1.5rem;
+}
+
+
+/** SECTOR **/
+
+.sector .header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 80px;
+    text-align: center;
+    font-size: 4rem;
+    font-family: "trajan-sans-pro";
+    margin-top: 4rem;
+    text-transform: uppercase;
+}
+
+.sector .button {
+    width: 8rem;
+    font-size: 1.0rem;
+    padding: .7rem 1.1rem;
+    font-weight: bold;
+    background-color: rgb(55, 119, 110);
+    color: rgb(245, 238, 249);
+    margin-top: 1rem;
+}
+
+.sector .button:hover {
+    cursor: pointer;
+    background-color: rgb(58, 144, 132);
+}
+
+.sector .details {
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sector .boulders {
+    padding-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

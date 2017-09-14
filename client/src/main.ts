@@ -8,6 +8,7 @@ import {accountView} from './Views/Account';
 import {boulderView} from './Views/Boulder';
 import {homeView}    from './Views/Home';
 import {loginView}   from './Views/Login';
+import {sectorView}  from './Views/Sector';
 import {teamView}    from './Views/Team';
 import {signupView}  from './Views/Signup';
 import {catalogView} from './Views/Catalog';
@@ -85,6 +86,12 @@ function setupRoutes(app: App) {
         loadView(app, () => {
             return loginView(app);
         });
+    });
+
+    page('/sector', function(ctx) {
+        loadView(app, app => {
+            return sectorView(app);
+         });
     });
 
     page('/boulder/:boulderId', function(ctx) {

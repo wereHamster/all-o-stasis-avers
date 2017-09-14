@@ -44,3 +44,12 @@ role(app: App) : string {
     else
         return accountE.role;
 }
+
+// filter on the client
+export function
+sectorBoulders(app: App, sectorName: String) : Avers.Editable<Storage.Boulder>[] {
+    return app.data.activeBouldersCollection.ids.get([])
+        .map(boulderId => Avers.lookupEditable<Storage.Boulder>(app.data.aversH, boulderId).get(null))
+        .filter(x => x !== null)
+        .filter(x => x.content.sector == sectorName);
+}
