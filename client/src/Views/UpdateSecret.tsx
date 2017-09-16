@@ -16,6 +16,15 @@ function stopPropagation(e) {
     e.stopPropagation();
 }
 
+const changeSecret = (h: Avers.Handle, secret: string): Promise<void> => {
+    let url = Avers.endpointUrl(h, '/secret')
+    const body = JSON.stringify({secret})
+
+    return h.fetch(url, { credentials: 'include', method: 'POST', headers: {'content-type': 'application/json'}, body })
+        .then(() => {})
+}
+
+
 class UpdateSecretView extends React.Component<{ app: App, accountE: Avers.Editable<Account> }, { newSecret: string, newSecretConfirm: string }> {
 
     state = { accountId: '', newSecret: '', newSecretConfirm: '' };
@@ -31,7 +40,7 @@ class UpdateSecretView extends React.Component<{ app: App, accountE: Avers.Edita
     doUpdateSecret = (e) => {
         e.stopPropagation();
         if (this.state.newSecret == this.state.newSecretConfirm) {
-            Avers.changeSecret(this.props.app.data.session,
+            changeSecret(this.props.app.data.aversH,
                                this.state.newSecret).then(() => {
                 navigateTo('/');
             });
