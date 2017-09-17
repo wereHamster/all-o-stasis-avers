@@ -2,5 +2,12 @@
 , "rules":
     { "semicolon": [true, "never"]
     , "quotemark": [true, "single", "avoid-escape"]
+
+    , "no-consecutive-blank-lines": false
+    , "max-line-length": false
+    , "arrow-parens": false
+    , "member-access": false
+    , "ordered-imports": false
+    , "interface-name": false
     }
 }
