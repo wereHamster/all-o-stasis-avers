@@ -6,7 +6,7 @@ module Actions
 */
 
 import * as Avers from 'avers';
-import * as Storage from './Storage';
+import * as Storage from './storage';
 import {App, navigateTo, refresh} from './app';
 import {Account} from './storage';
 
