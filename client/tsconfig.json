@@ -1,5 +1,4 @@
 {
-    "version": "1.8.0",
     "compilerOptions": {
         "target": "es6",
         "moduleResolution": "node",
@@ -13,22 +12,7 @@
         "outDir": "dist/js/",
         "jsx": "react"
     },
-    "filesGlob": [
-        "./src/**/*.ts",
-        "!./node_modules/**/*"
-    ],
-    "files": [
-        "./src/actions.ts",
-        "./src/app.ts",
-        "./src/config.ts",
-        "./src/main.ts",
-        "./src/storage.ts",
-        "./src/Views/Boulder.ts",
-        "./src/Views/Components/NavBar.ts",
-        "./src/Views/Components/Setter.ts",
-        "./src/Views/Team.ts"
-    ],
-    "atom": {
-        "rewriteTsconfig": true
-    }
+    "include": [
+        "src/**/*"
+    ]
 }
