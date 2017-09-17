@@ -13,41 +13,39 @@ import {Boulder, grades, sectors, prettyPrintSector} from '../storage';
 
 import {Site} from './Components/Site';
 
-export interface SectorViewProps {
+
+export function
+sectorView(app: App) {
+    if (role(app) === "user") {
+        return (
+            <Site app={app} />
+        )
+    } else {
+        return (
+            <Site app={app}>
+                <Sector app={app} />
+            </Site>
+        )
+    }
+}
+
+
+
+// ----------------------------------------------------------------------------
+// Sector
+
+export interface SectorProps {
     app: App;
 }
 
-interface SectorViewState {
+interface SectorState {
     sectorName: string;
-    boulders: Avers.Editable<Boulder>[];
 }
 
-class SectorSpec extends React.Component<SectorViewProps, SectorViewState> {
-    initialState(props) {
-        const defaultSector = sectors()[0];
-        return { sectorName : defaultSector, 
-            boulders: sectorBoulders(this.props.app, defaultSector)};
-    }
-
+class Sector extends React.Component<SectorProps, SectorState> {
     constructor(props) {
-        super(props);
-        this.state = this.initialState(props);
-    }
-
-    renderSectorBoulders() {
-        const {boulders} = this.state.boulders.reduce(({boulders}, boulder) => {
-            return {
-                boulders: boulders.concat([
-                    <div className={`boulder-card-id ${boulder.content.grade}`} key={boulder.objectId}>
-                        {boulder.content.gradeNr}
-                    </div>
-                ])
-            };
-        }, { boulders: [] });
-
-        return (
-            <div className="boulders">{boulders}</div>
-        );
+        super(props)
+        this.state = {sectorName: sectors()[0]}
     }
 
     renderGradeDistribution() {
@@ -55,70 +53,86 @@ class SectorSpec extends React.Component<SectorViewProps, SectorViewState> {
         // https://hackernoon.com/how-and-why-to-use-d3-with-react-d239eb1ea274
     }
 
-    removeAllBoulders() {
+    removeAllBoulders = () => {
         // remove all boulders on the currently active sector
         const now = Date.now();
-        this.state.boulders.map(boulder => boulder.content.removed = now.valueOf());
+        sectorBoulders(this.props.app, this.state.sectorName).forEach(boulder => {
+            boulder.content.removed = now.valueOf()
+        });
         Avers.resetObjectCollection(this.props.app.data.activeBouldersCollection);
         refresh(this.props.app);
     }
 
     onChange = (e: React.FormEvent<any>) => {
-        let value = (e.target as HTMLSelectElement).value;
-        this.setState({ sectorName: value, boulders: sectorBoulders(this.props.app, value) });
+        const sectorName = (e.target as HTMLSelectElement).value;
+        this.setState({sectorName});
     };
 
-    render() : JSX.Element {
+    render() {
+        const boulders = sectorBoulders(this.props.app, this.state.sectorName)
         return (
-          <div>
-              {this.sectorHeader()}
-              {this.renderSectorBoulders()}
-          </div>
-        );
-    }
-
-    sectorHeader() : JSX.Element {
-        let options = sectors().map( (entry, index) => {
-            return (<option value={entry} key={index}>{prettyPrintSector(entry)}</option>);
-        });
-
-        return (
-        <div>
-          <div className="header">
-            <div className="logo">{prettyPrintSector(this.state.sectorName)}</div>
-          </div>
-          <div className='details'>
-            <div className='form'>
-              <div className='form-row'>
-                  <div className="label">
-                    <select defaultValue={this.state.sectorName}
-                        onChange={this.onChange}>{options}}</select>
-                  </div>
-              </div>
-              <div className='form-row'>
-                  <div className="label">
-                    <div className="button" onClick={this.removeAllBoulders}>remove all</div>
-                  </div>
-              </div>
+            <div className="sector">
+                <SectorHeader sectors={sectors()} sectorName={this.state.sectorName} onChange={this.onChange} removeAllBoulders={this.removeAllBoulders} />
+                <SectorBoulders boulders={boulders} />
             </div>
-          </div>
-        </div>
         );
     }
 }
 
-var SectorView = React.createFactory(SectorSpec);
 
-export function
-sectorView(app: App) : JSX.Element {
-    if (role(app) == "user")
-        return (<Site app={app}></Site>);
 
-    return (
-      <Site app={app}>
-        <div className="sector">
-          {SectorView({ app: app } )}
-        </div>
-      </Site>
-    );
+// ----------------------------------------------------------------------------
+// SectorHeader
+
+interface SectorHeaderProps {
+    sectors: string[]
+    sectorName: string
+
+    onChange(e: React.FormEvent<any>): void
+    removeAllBoulders(): void
 }
+
+const SectorHeader = ({sectors, sectorName, onChange, removeAllBoulders}: SectorHeaderProps) => (
+    <div>
+        <div className="header">
+            <div className="logo">{prettyPrintSector(sectorName)}</div>
+        </div>
+        <div className='details'>
+            <div className='form'>
+            <div className='form-row'>
+                <div className="label">
+                    <select defaultValue={sectorName} onChange={onChange}>
+                        {sectors.map((entry, index) => (
+                            <option value={entry} key={index}>{prettyPrintSector(entry)}</option>
+                        ))}
+                    </select>
+                </div>
+            </div>
+            <div className='form-row'>
+                <div className="label">
+                    <div className="button" onClick={removeAllBoulders}>remove all</div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+)
+
+
+
+// ----------------------------------------------------------------------------
+// SectorBoulders
+
+interface SectorBouldersProps {
+    boulders: Avers.Editable<Boulder>[]
+}
+
+const SectorBoulders = ({boulders}: SectorBouldersProps) => (
+    <div className="boulders">
+        {boulders.map(boulder => (
+            <div className={`boulder-card-id ${boulder.content.grade}`} key={boulder.objectId}>
+                {boulder.content.gradeNr}
+            </div>
+        ))}
+    </div>
+)
