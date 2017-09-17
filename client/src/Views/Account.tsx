@@ -21,7 +21,7 @@ accountGravatarUrl(email: string) {
     return 'http://www.gravatar.com/avatar/' + Md5.hashStr(email);
 }
 
-function 
+function
 accountRep(account: Account) : JSX.Element {
     return (
       <div className="boulder-header">
@@ -157,8 +157,7 @@ class AccountSpec extends React.Component<AccountViewProps, {}> {
 
 var AccountView = React.createFactory(AccountSpec);
 
-export function
-accountView(app: App, accountId: string) {
+export const accountView = (accountId: string) => (app: App) => {
     let accountC = Avers.lookupEditable<Account>(app.data.aversH, accountId);
     let accountE = accountC.get(undefined);
 

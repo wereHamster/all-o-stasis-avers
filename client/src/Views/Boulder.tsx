@@ -49,7 +49,7 @@ createBoulderItem(app: App) : JSX.Element {
     }
 }
 
-function 
+function
 boulderHeader(boulder : Boulder, objectId: string) : JSX.Element {
     var name = boulder.name;
     if (name == "") {
@@ -67,7 +67,7 @@ boulderHeader(boulder : Boulder, objectId: string) : JSX.Element {
     );
 }
 
-function 
+function
 boulderDetails(boulder: Boulder) : JSX.Element {
     var setDate = moment.unix(boulder.setDate / 1000.).toISOString();
 
@@ -83,7 +83,7 @@ boulderDetails(boulder: Boulder) : JSX.Element {
     );
 }
 
-function 
+function
 boulderDetailsEditor(boulderE: Avers.Editable<Boulder>, app: App) : JSX.Element {
     var boulder = boulderE.content;
 
@@ -146,9 +146,7 @@ boulderDetailsEditor(boulderE: Avers.Editable<Boulder>, app: App) : JSX.Element 
     );
 }
 
-export function
-boulderView(app: App, boulderId: string) : JSX.Element {
-
+export const boulderView = (boulderId: string) => (app: App) => {
     var boulderC = Avers.lookupEditable<Boulder>(
         app.data.aversH, boulderId);
     var boulderE = boulderC.get(undefined);

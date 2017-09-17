@@ -71,63 +71,43 @@ export default function() {
 declare var page;
 function setupRoutes(app: App) {
     page('/', () => {
-        loadView(app, app => {
-            return homeView(app);
-        });
+        loadView(app, homeView)
     });
 
     page('/signup', function() {
-        loadView(app, app => {
-            return signupView(app);
-        });
+        loadView(app, signupView)
     });
 
     page('/login', function() {
-        loadView(app, () => {
-            return loginView(app);
-        });
+        loadView(app, loginView)
     });
 
     page('/sector', function(ctx) {
-        loadView(app, app => {
-            return sectorView(app);
-         });
+        loadView(app, sectorView);
     });
 
     page('/boulder/:boulderId', function(ctx) {
-        loadView(app, app => {
-            return boulderView(app, ctx.params.boulderId);
-         });
+        loadView(app, boulderView(ctx.params.boulderId))
     });
 
     page('/account/:accountId', function(ctx) {
-        loadView(app, app => {
-            return accountView(app, ctx.params.accountId);
-         });
+        loadView(app, accountView(ctx.params.accountId))
     });
 
     page('/account/:accountId/updateSecret', function(ctx) {
-        loadView(app, app => {
-            return updateSecretView(app, ctx.params.accountId);
-         });
+        loadView(app, updateSecretView(ctx.params.accountId))
     });
 
     page('/team', function() {
-        loadView(app, app => {
-            return teamView(app);
-        });
+        loadView(app, teamView)
     });
 
     page('/_catalog', function() {
-        loadView(app, app => {
-            return catalogView();
-        });
+        loadView(app, catalogView)
     });
 
     page('*', () => {
-        loadView(app, app => {
-            return notFoundView(app);
-        });
+        loadView(app, notFoundView)
     });
 
     page();
