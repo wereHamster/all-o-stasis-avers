@@ -13,7 +13,7 @@
     "babel": "^6.3.13",
     "babel-preset-es2015": "^6.3.13",
     "catalog": "^2.5.2",
-    "computation": "0.0.2",
+    "computation": "^1.0.0",
     "html-webpack-plugin": "^2.30.1",
     "moment": "*",
     "page": "^1.7.1",
