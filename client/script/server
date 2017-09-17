@@ -4,5 +4,4 @@ cd "$(dirname "$0")/.."
 
 script/update
 
-./node_modules/.bin/gulp
-
+npm run dev

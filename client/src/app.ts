@@ -15,9 +15,9 @@ import * as ReactDOM from 'react-dom';
 import * as Avers from 'avers';
 import {Account, Boulder} from './storage';
 
-import configObject from './config';
+import * as page from 'page'
 
-declare var page;
+import configObject from './config';
 
 export class Config {
     apiHost : string;
@@ -94,12 +94,12 @@ loadView(app: App, mkViewFn: (app: App) => React.ReactElement<any>): void {
 }
 
 export function
-navigateTo(p : String) {
+navigateTo(p : string) {
     page(p);
 }
 
 export function
-navigateToFn(p: String) {
+navigateToFn(p: string) {
     return () => { navigateTo(p); }
 }
 

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as page from 'page'
 
 import * as Avers from 'avers';
 import {Data, App, config, infoTable, refresh, loadView} from './app';
@@ -33,7 +34,7 @@ function mkApp(): App {
         );
 }
 
-export default function() {
+const main = function() {
     console.info('Starting app...');
 
     // Create the application instance. Pass all required configuration to the
@@ -68,7 +69,6 @@ export default function() {
 }
 
 
-declare var page;
 function setupRoutes(app: App) {
     page('/', () => {
         loadView(app, homeView)
@@ -112,3 +112,5 @@ function setupRoutes(app: App) {
 
     page();
 }
+
+main()
