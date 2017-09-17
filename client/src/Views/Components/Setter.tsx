@@ -5,57 +5,19 @@ import {accountGravatarUrl} from '../Account';
 import {App, navigateToFn} from '../../app';
 import {Account} from '../../storage';
 
-export interface CardProps {
-    account: Account;
-    accountId: string;
+export interface SetterCardProps {
     app: App;
+    accountId: string;
+    account: void | Account;
 }
 
-function 
-setterInfo(app: App, accountId: string) {
-    return Avers.lookupContent<Account>(app.data.aversH, accountId).fmap(account => {
+export const SetterCard = ({app, accountId, account}: SetterCardProps) => (
+    <div className='setter-card'>
+        <div onClick={navigateToFn('/account/' + accountId)}>
+            <img className="avatar" src={account ? accountGravatarUrl(account.email) : placeholderImageSrc}/>
+            <div>{(account && account.name !== '') ? account.name : accountId.slice(0, 2)}</div>
+        </div>
+    </div>
+)
 
-        var name = accountId;
-        if (account.name != "")
-            name = account.name;
-
-        return (
-          <div onClick={navigateToFn('/account/' + accountId)}>
-            <img className="avatar" src={accountGravatarUrl(account.email)}/> 
-            <div>{name}</div>
-          </div>
-        );
-    }).get(undefined);
-}
-
-enum CardBody
-    { Team
-    }
-
-interface CardState {
-    cardBody: CardBody;
-}
-
-class CardSpec extends React.Component<CardProps, CardState> {
-
-    private app : App;
-
-    initialState(props: CardProps): CardState {
-        return { cardBody: CardBody.Team };
-    }
-
-    constructor(props) {
-        super(props);
-        this.state = this.initialState(props);
-    }
-
-    render() {
-        return (
-          <div className='setter-card'>
-            {setterInfo(this.props.app, this.props.accountId)}
-          </div>
-        );
-    }
-}
-
-export var SetterCard = React.createFactory(CardSpec);
+const placeholderImageSrc = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAAAAACoWZBhAAAAF0lEQVQI12P4BAI/QICBFCaYBPNJYQIAkUZftTbC4sIAAAAASUVORK5CYII="
