@@ -10,6 +10,8 @@ import           Avers.Server
 import qualified Data.Vector            as V
 import qualified Database.RethinkDB     as R
 
+import           Control.Monad.Except
+
 import           Prelude
 
 import           Queries
@@ -23,7 +25,8 @@ aosAuthorization = Avers.Server.Authorizations
         [ sufficient $ return (objId == "account")
         , sufficient $ do
             session <- case cred of
-                SessionIdCredential sId -> lookupSession sId
+                CredAnonymous -> throwError NotAuthorized
+                CredSessionId sId -> lookupSession sId
             isSet <- sessionIsSetter session
             isAdm <- sessionIsAdmin session
             return $ isSet || isAdm
@@ -34,8 +37,9 @@ aosAuthorization = Avers.Server.Authorizations
             objectIsBoulder objId
         , sufficient $ do
             session <- case cred of
-                SessionIdCredential sId -> lookupSession sId
-            hasCreated <- sessionCreatedObject session objId 
+                CredAnonymous -> throwError NotAuthorized
+                CredSessionId sId -> lookupSession sId
+            hasCreated <- sessionCreatedObject session objId
             isAdm <- sessionIsAdmin session
             return $ hasCreated || isAdm
         --, pure RejectR
@@ -43,9 +47,10 @@ aosAuthorization = Avers.Server.Authorizations
     , patchObjectAuthz = \cred objId ops ->
         [ sufficient $ do
             session <- case cred of
-                SessionIdCredential sId -> lookupSession sId
+                CredAnonymous -> throwError NotAuthorized
+                CredSessionId sId -> lookupSession sId
             isObj <- sessionIsObject session objId
-            hasCreated <- sessionCreatedObject session objId 
+            hasCreated <- sessionCreatedObject session objId
             isAdm <- sessionIsAdmin session
             return $ isObj || hasCreated || isAdm
         --, sufficient $ do
