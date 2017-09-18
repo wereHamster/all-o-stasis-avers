@@ -84,7 +84,9 @@ export class Data {
 
 export function
 refresh(app: App): void {
-    ReactDOM.render(app.mkViewFn(app), app.containerElement);
+    requestAnimationFrame(() => {
+        ReactDOM.render(app.mkViewFn(app), app.containerElement)
+    })
 }
 
 export function

@@ -3,6 +3,11 @@ import {Catalog, pageLoader} from 'catalog'
 
 const pages = [
     {
+        path: '/',
+        title: 'Welcome',
+        component: pageLoader(() => import('../../README.md')),
+    },
+    {
         path: '/components/boulder-card',
         title: 'BoulderCard',
         component: pageLoader(() => import('./Components/BoulderCard.docs').then(x => x.default)),

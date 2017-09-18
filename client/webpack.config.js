@@ -24,6 +24,10 @@ module.exports = {
       {
         test: /\.tsx?$/,
         loader: 'awesome-typescript-loader'
+      },
+      {
+        test: /\.md$/,
+        loaders: [require.resolve('catalog/loader'), require.resolve('raw-loader')]
       }
     ]
   },

@@ -105,6 +105,9 @@ function setupRoutes(app: App) {
     page('/_catalog', function() {
         loadView(app, catalogView)
     });
+    page('/_catalog/*', function() {
+        loadView(app, catalogView)
+    });
 
     page('*', () => {
         loadView(app, notFoundView)
