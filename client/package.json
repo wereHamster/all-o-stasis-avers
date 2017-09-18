@@ -30,6 +30,7 @@
     "url-loader": "^0.5.9",
     "webpack": "^3.6.0",
     "webpack-dev-server": "^2.8.2",
+    "webpack-visualizer-plugin": "^0.1.11",
     "whatwg-fetch": "^2.0.3"
   },
   "scripts": {
