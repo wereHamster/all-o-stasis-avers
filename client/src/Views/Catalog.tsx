@@ -8,9 +8,20 @@ const pages = [
         component: pageLoader(() => import('../../README.md')),
     },
     {
-        path: '/components/boulder-card',
-        title: 'BoulderCard',
-        component: pageLoader(() => import('./Components/BoulderCard.docs').then(x => x.default)),
+        path: '/components',
+        title: 'Components',
+        pages: [
+            {
+                path: '/components/boulder-card',
+                title: 'BoulderCard',
+                component: pageLoader(() => import('./Components/BoulderCard.doc').then(x => x.default)),
+            },
+            {
+                path: '/components/setter-card',
+                title: 'SetterCard',
+                component: pageLoader(() => import('./Components/SetterCard.doc').then(x => x.default)),
+            },
+        ],
     },
 ]
 

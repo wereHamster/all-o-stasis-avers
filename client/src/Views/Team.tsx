@@ -11,7 +11,7 @@ import {App} from '../app';
 import {Account} from '../storage';
 
 import {Site} from './Components/Site';
-import {SetterCard} from './Components/Setter';
+import {SetterCard} from './Components/SetterCard';
 
 export function
 teamView(app: App) {
