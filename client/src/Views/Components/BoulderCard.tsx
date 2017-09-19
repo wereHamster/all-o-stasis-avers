@@ -6,6 +6,8 @@ import {accountGravatarUrl} from '../Account'
 import {App, navigateTo} from '../../app'
 import {Account, Boulder, prettyPrintSector} from '../../storage'
 
+import {gradeBackgroundColor, gradeBorderColor, gradeColor} from '../../Materials/Colors'
+
 export interface BoulderCardProps {
     app: App
     boulderE: Avers.Editable<Boulder>
@@ -35,7 +37,7 @@ export class BoulderCard extends React.Component<BoulderCardProps> {
     }
 }
 
-const placeholderImageSrc = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAAAAACoWZBhAAAAF0lEQVQI12P4BAI/QICBFCaYBPNJYQIAkUZftTbC4sIAAAAASUVORK5CYII="
+const placeholderImageSrc = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAAAAACoWZBhAAAAF0lEQVQI12P4BAI/QICBFCaYBPNJYQIAkUZftTbC4sIAAAAASUVORK5CYII='
 const BoulderCardSetter = ({app, setterId}: {app: App, setterId: string}) => (
     <Setter src={Avers.lookupContent<Account>(app.data.aversH, setterId).fmap(account => accountGravatarUrl(account.email)).get(placeholderImageSrc)} />
 )
@@ -44,52 +46,11 @@ const BoulderCardSetter = ({app, setterId}: {app: App, setterId: string}) => (
 
 // ----------------------------------------------------------------------------
 
-const gradeBackgroundColor = (grade: string) => {
-    switch (grade) {
-    case 'yellow': return '#F3D53F'
-    case 'green': return '#27AE60'
-    case 'orange': return '#E89C2F'
-    case 'blue': return '#1B69D2'
-    case 'red': return '#FF0000'
-    case 'white': return 'transparent'
-    }
-
-    return 'magenta'
-}
-
-const gradeBorderColor = (grade: string) => {
-    switch (grade) {
-    case 'yellow': return '#F3D53F'
-    case 'green': return '#27AE60'
-    case 'orange': return '#E89C2F'
-    case 'blue': return '#1B69D2'
-    case 'red': return '#FF0000'
-    case 'white': return 'transparent'
-    }
-
-    return 'magenta'
-}
-
-const gradeColor = (grade: string) => {
-    switch (grade) {
-    case 'yellow': return 'black'
-    case 'green': return 'white'
-    case 'orange': return 'black'
-    case 'blue': return 'white'
-    case 'red': return 'white'
-    case 'white': return 'black'
-    }
-
-    return 'magenta'
-}
-
 const Id = styled.div`
     width: 40px;
     height: 40px;
     border-radius: 100%;
-    color: #444444;
-    background-color: magenta;
-    border: 2px solid magenta;
+    border: 2px solid transparent;
     display: flex;
     justify-content: center;
     align-items: center;

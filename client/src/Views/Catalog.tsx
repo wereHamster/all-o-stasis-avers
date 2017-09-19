@@ -11,6 +11,17 @@ const LoadableCatalog = Loadable({
                 component: pageLoader(() => import('../../README.md')),
             },
             {
+                path: '/materials',
+                title: 'Materials',
+                pages: [
+                    {
+                        path: '/materials/colors',
+                        title: 'Colors',
+                        component: pageLoader(() => import('../Materials/Colors.doc')),
+                    },
+                ],
+            },
+            {
                 path: '/components',
                 title: 'Components',
                 pages: [
