@@ -236,38 +236,6 @@ input.invalid {
     flex-wrap: wrap;
 }
 
-.boulder-separator {
-    flex: 0 0 100%;
-    width: 100%;
-    padding: 40px 16px 20px;
-    font-size: 24px;
-    line-height: 1;
-}
-
-.boulder-separator:first-of-type {
-    padding-top: 10px;
-}
-
-@media (min-width: 600px) {
-    .boulder-separator {
-        padding: 80px 24px 32px;
-        font-size: 32px;
-    }
-    .boulder-separator:first-of-type {
-        padding: 20px 24px 32px;
-    }
-}
-
-@media (min-width: 1200px) {
-    .boulder-separator {
-        padding: 120px 24px 60px;
-        font-size: 44px;
-    }
-    .boulder-separator:first-of-type {
-        padding: 30px 24px 60px;
-    }
-}
-
 .boulder .details {
     padding-top: 80px;
     display: flex;
