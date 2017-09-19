@@ -66,7 +66,7 @@ boulderDetails(boulder: Boulder) : JSX.Element {
     );
 }
 
-function 
+function
 boulderDetailsEditor(boulderE: Avers.Editable<Boulder>, app: App) : JSX.Element {
     var boulder = boulderE.content;
 
@@ -100,7 +100,7 @@ boulderDetailsEditor(boulderE: Avers.Editable<Boulder>, app: App) : JSX.Element 
     function renderRemoved() : JSX.Element {
         if (boulder.removed >= 0)
             return (<p>{moment.unix(boulder.removed / 1000.).format('DD/MM/YYYY')}</p>);
-        else 
+        else
             return (<div className="button" onClick={setRemoved}>remove</div>);
     }
 
@@ -141,7 +141,7 @@ boulderDetailsEditor(boulderE: Avers.Editable<Boulder>, app: App) : JSX.Element 
             <div className="form-row">
               <div className="label">Remove(d)</div>
               <div className="content">{renderRemoved()}</div>
-          </div> 
+          </div>
         </div>
       </div>
     );
@@ -163,12 +163,10 @@ export const boulderView = (boulderId: string) => (app: App) => {
 
     return (
       <Site app={app}>
-        <div className="boulder">
           <BoulderHeader>
             {boulderE.content.name || boulderE.objectId.substr(0, 10)}
           </BoulderHeader>
           {boulderRep}
-        </div>
       </Site>
     )
 }
