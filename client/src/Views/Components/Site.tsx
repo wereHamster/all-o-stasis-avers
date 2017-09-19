@@ -1,17 +1,17 @@
-import * as Avers from 'avers';
-import * as React from 'react';
+import * as Avers from 'avers'
+import * as React from 'react'
 
-import {App} from '../../app';
+import {App} from '../../app'
 
-import {navBar} from './NavBar';
+import {navBar} from './NavBar'
 
-export const Site = ({app, children} : {app: App, children?: JSX.Element}) => {
+export const Site = ({app, children}: {app: App, children?: JSX.Element}) => {
     function onClick() {
         Avers.startNextGeneration(app.data.aversH)
     }
 
     return (
-        <div className="site" onClick={onClick}>
+        <div className='site' onClick={onClick}>
             {navBar(app)}
             <div>{children}</div>
             <TransientNotification app={app} />
@@ -24,23 +24,23 @@ const TransientNotification = ({app}: {app: App}) => {
 
     if (Avers.networkRequests(app.data.aversH).length > 0) {
         return (
-            <div className="transient-notification">
+            <div className='transient-notification'>
                 Saving...
             </div>
         )
 
     } else if (localChanges.length > 0) {
-        var numLocalChanges = localChanges.reduce((a, x) => a + x.changes.length, 0)
+        const numLocalChanges = localChanges.reduce((a, x) => a + x.changes.length, 0)
 
         return (
-            <div className="transient-notification">
-                {'' + numLocalChanges + ' unsaved changes'}
+            <div className='transient-notification'>
+                {numLocalChanges} unsaved changes
             </div>
         )
 
     } else {
         return (
-            <div className="transient-notification" />
+            <div />
         )
     }
 }
