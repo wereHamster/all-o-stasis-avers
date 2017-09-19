@@ -18,6 +18,7 @@ import {Boulder, grades, sectors} from '../storage';
 import {DropDownInput} from './Components/DropdownInput';
 import {NumberInput} from './Components/NumberInput';
 import {Site} from './Components/Site';
+import {BoulderDetails} from './Components/BoulderDetails'
 
 export function
 createBoulderItem(app: App) : JSX.Element {
@@ -49,17 +50,6 @@ createBoulderItem(app: App) : JSX.Element {
         );
     }
 }
-
-const BoulderDetails = ({boulder}: {boulder: Boulder}) => (
-    <div className='details'>
-        <ul>
-            <li>{boulder.name}</li>
-            <li>{boulder.sector}</li>
-            <li>{boulder.gradeNr} {boulder.grade}</li>
-            <li>{moment.unix(boulder.setDate / 1000.).toISOString()}</li>
-        </ul>
-    </div>
-)
 
 function
 boulderDetailsEditor(boulderE: Avers.Editable<Boulder>, app: App) : JSX.Element {
