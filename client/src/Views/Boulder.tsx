@@ -9,6 +9,7 @@ import * as Avers from 'avers';
 import DatePicker from 'react-datepicker';
 import * as moment from 'moment';
 import * as React from 'react';
+import styled from 'styled-components'
 
 import {createBoulder, role} from '../actions';
 import {App, refresh} from '../app';
@@ -163,20 +164,21 @@ export const boulderView = (boulderId: string) => (app: App) => {
     return (
       <Site app={app}>
         <div className="boulder">
-          <BoulderHeader objectId={boulderE.objectId} boulder={boulderE.content} />
+          <BoulderHeader>
+            {boulderE.content.name || boulderE.objectId.substr(0, 10)}
+          </BoulderHeader>
           {boulderRep}
         </div>
       </Site>
-    );
+    )
 }
 
 
 // ----------------------------------------------------------------------------
 
-const BoulderHeader = ({objectId, boulder}: {objectId: string, boulder: Boulder}) => (
-    <div className='boulder-header'>
-        <div className='login'>
-            <div className='logo'>{boulder.name || objectId.substr(0, 10)}</div>
-        </div>
-    </div>
-)
+const BoulderHeader = styled.div`
+    text-align: center;
+    font-size: 4rem;
+    font-family: "trajan-sans-pro";
+    margin: 4rem 0 2rem;
+`

@@ -24,16 +24,14 @@ accountGravatarUrl(email: string) {
 function
 accountRep(account: Account) : JSX.Element {
     return (
-      <div className="boulder-header">
-        <div className="login">
-          <div className="logo">
-            <img className="round-avatar" src={accountGravatarUrl(account.email)}/><br/>
-            {account.name}
-          </div>
-          <p className="about">
-            {account.role}
-          </p>
+      <div className="login">
+        <div className="logo">
+          <img className="round-avatar" src={accountGravatarUrl(account.email)}/><br/>
+          {account.name}
         </div>
+        <p className="about">
+          {account.role}
+        </p>
       </div>
     );
 }
@@ -99,16 +97,14 @@ class AccountSpec extends React.Component<AccountViewProps, {}> {
             title = accountE.content.name;
 
         return (
-          <div className="boulder-header">
-            <div className="login">
-              <div className="logo">
-                <img className="round-avatar" src={accountGravatarUrl(accountE.content.email)}/><br/>
-                {title}
-              </div>
-              <p className="about">
-                "Customize your account."
-              </p>
+          <div className="login">
+            <div className="logo">
+              <img className="round-avatar" src={accountGravatarUrl(accountE.content.email)}/><br/>
+              {title}
             </div>
+            <p className="about">
+              "Customize your account."
+            </p>
           </div>
         );
     }
