@@ -12,7 +12,7 @@ export const Site = ({app, children}: {app: App, children?: JSX.Element}) => {
     }
 
     return (
-        <div className='site' onClick={onClick}>
+        <div onClick={onClick}>
             {navBar(app)}
             <div>{children}</div>
             <TransientNotification app={app} />
