@@ -49,25 +49,7 @@ createBoulderItem(app: App) : JSX.Element {
     }
 }
 
-function 
-boulderHeader(boulder : Boulder, objectId: string) : JSX.Element {
-    var name = boulder.name;
-    if (name == "") {
-      name = objectId.substr(0, 10);
-    }
-
-    return (
-      <div>
-        <div className="boulder-header">
-          <div className="login">
-            <div className="logo">{name}</div>
-          </div>
-        </div>
-      </div>
-    );
-}
-
-function 
+function
 boulderDetails(boulder: Boulder) : JSX.Element {
     var setDate = moment.unix(boulder.setDate / 1000.).toISOString();
 
@@ -181,9 +163,20 @@ export const boulderView = (boulderId: string) => (app: App) => {
     return (
       <Site app={app}>
         <div className="boulder">
-          {boulderHeader(boulderE.content, boulderE.objectId)}
+          <BoulderHeader objectId={boulderE.objectId} boulder={boulderE.content} />
           {boulderRep}
         </div>
       </Site>
     );
 }
+
+
+// ----------------------------------------------------------------------------
+
+const BoulderHeader = ({objectId, boulder}: {objectId: string, boulder: Boulder}) => (
+    <div className='boulder-header'>
+        <div className='login'>
+            <div className='logo'>{boulder.name || objectId.substr(0, 10)}</div>
+        </div>
+    </div>
+)
