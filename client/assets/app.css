@@ -229,13 +229,6 @@ input.invalid {
     margin-right: 2rem;
 }
 
-.boulders {
-    margin-top: 1rem;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-}
-
 .boulder .details {
     padding-top: 80px;
     display: flex;
