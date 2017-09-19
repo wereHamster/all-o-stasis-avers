@@ -19,6 +19,11 @@ const LoadableCatalog = Loadable({
                         title: 'Colors',
                         component: pageLoader(() => import('../Materials/Colors.doc')),
                     },
+                    {
+                        path: '/materials/typfaces',
+                        title: 'Typefaces',
+                        component: pageLoader(() => import('../Materials/Typefaces.doc')),
+                    },
                 ],
             },
             {
