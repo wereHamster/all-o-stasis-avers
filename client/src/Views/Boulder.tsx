@@ -49,7 +49,7 @@ createBoulderItem(app: App) : JSX.Element {
     }
 }
 
-function
+function 
 boulderHeader(boulder : Boulder, objectId: string) : JSX.Element {
     var name = boulder.name;
     if (name == "") {
@@ -67,7 +67,7 @@ boulderHeader(boulder : Boulder, objectId: string) : JSX.Element {
     );
 }
 
-function
+function 
 boulderDetails(boulder: Boulder) : JSX.Element {
     var setDate = moment.unix(boulder.setDate / 1000.).toISOString();
 
@@ -83,7 +83,7 @@ boulderDetails(boulder: Boulder) : JSX.Element {
     );
 }
 
-function
+function 
 boulderDetailsEditor(boulderE: Avers.Editable<Boulder>, app: App) : JSX.Element {
     var boulder = boulderE.content;
 
@@ -105,6 +105,20 @@ boulderDetailsEditor(boulderE: Avers.Editable<Boulder>, app: App) : JSX.Element 
     function getSetDate() : moment.Moment {
         const initialDate = moment.unix(boulder.setDate / 1000.);
         return initialDate;
+    }
+
+    function setRemoved() {
+        const now = Date.now();
+        boulder.removed = now.valueOf();
+        Avers.resetObjectCollection(app.data.activeBouldersCollection);
+        refresh(app);
+    }
+
+    function renderRemoved() : JSX.Element {
+        if (boulder.removed >= 0)
+            return (<p>{moment.unix(boulder.removed / 1000.).format('DD/MM/YYYY')}</p>);
+        else 
+            return (<div className="button" onClick={setRemoved}>remove</div>);
     }
 
     return (
@@ -141,12 +155,17 @@ boulderDetailsEditor(boulderE: Avers.Editable<Boulder>, app: App) : JSX.Element 
               <DatePicker selected={getSetDate()} onChange={changeSetDate}/>
             </div>
           </div>
+            <div className="form-row">
+              <div className="label">Remove(d)</div>
+              <div className="content">{renderRemoved()}</div>
+          </div> 
         </div>
       </div>
     );
 }
 
 export const boulderView = (boulderId: string) => (app: App) => {
+
     var boulderC = Avers.lookupEditable<Boulder>(
         app.data.aversH, boulderId);
     var boulderE = boulderC.get(undefined);

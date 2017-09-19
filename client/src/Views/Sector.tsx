@@ -66,7 +66,7 @@ class Sector extends React.Component<SectorProps, SectorState> {
     onChange = (e: React.FormEvent<any>) => {
         const sectorName = (e.target as HTMLSelectElement).value;
         this.setState({sectorName});
-    };
+    }
 
     render() {
         const boulders = sectorBoulders(this.props.app, this.state.sectorName)
