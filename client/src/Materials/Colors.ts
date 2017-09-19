@@ -2,10 +2,12 @@
 // ----------------------------------------------------------------------------
 export const white = '#FFFFFF'
 export const text = '#222222'
+export const darkGrey = '#444444'
 export const black = '#000000'
 
 export const monochromeColors = [
     { name: 'white', value: white },
+    { name: 'darkGrey', value: darkGrey },
     { name: 'text', value: text },
     { name: 'black', value: black },
 ]
