@@ -23,6 +23,7 @@
     "react-datepicker": "*",
     "react-dom": "^15.4.2",
     "react-loadable": "^4.0.5",
+    "styled-components": "^2.1.2",
     "timeago.js": "^2.0.0",
     "ts-md5": "*",
     "tslint": "^5.7.0",
