@@ -50,23 +50,18 @@ createBoulderItem(app: App) : JSX.Element {
     }
 }
 
-function
-boulderDetails(boulder: Boulder) : JSX.Element {
-    var setDate = moment.unix(boulder.setDate / 1000.).toISOString();
-
-    return (
-      <div className='details'>
+const BoulderDetails = ({boulder}: {boulder: Boulder}) => (
+    <div className='details'>
         <ul>
-          <li>{boulder.name}</li>
-          <li>{boulder.sector}</li>
-          <li>{boulder.gradeNr} {boulder.grade}</li>
-          <li>{setDate}</li>
+            <li>{boulder.name}</li>
+            <li>{boulder.sector}</li>
+            <li>{boulder.gradeNr} {boulder.grade}</li>
+            <li>{moment.unix(boulder.setDate / 1000.).toISOString()}</li>
         </ul>
-      </div>
-    );
-}
+    </div>
+)
 
-function 
+function
 boulderDetailsEditor(boulderE: Avers.Editable<Boulder>, app: App) : JSX.Element {
     var boulder = boulderE.content;
 
@@ -100,7 +95,7 @@ boulderDetailsEditor(boulderE: Avers.Editable<Boulder>, app: App) : JSX.Element 
     function renderRemoved() : JSX.Element {
         if (boulder.removed >= 0)
             return (<p>{moment.unix(boulder.removed / 1000.).format('DD/MM/YYYY')}</p>);
-        else 
+        else
             return (<div className="button" onClick={setRemoved}>remove</div>);
     }
 
@@ -141,7 +136,7 @@ boulderDetailsEditor(boulderE: Avers.Editable<Boulder>, app: App) : JSX.Element 
             <div className="form-row">
               <div className="label">Remove(d)</div>
               <div className="content">{renderRemoved()}</div>
-          </div> 
+          </div>
         </div>
       </div>
     );
@@ -156,7 +151,7 @@ export const boulderView = (boulderId: string) => (app: App) => {
     // for now we just render the boulder differently for users
     var boulderRep : JSX.Element;
     if (role(app) == "user") {
-        boulderRep = boulderDetails(boulderE.content);
+        boulderRep = <BoulderDetails boulder={boulderE.content} />
     } else {
         boulderRep = boulderDetailsEditor(boulderE, app);
     }
