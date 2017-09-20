@@ -4,8 +4,6 @@ import styled from 'styled-components'
 
 import {createBoulder, role} from '../../actions'
 import {App, navigateTo, navigateToFn} from '../../app'
-import * as Boulder from '../Boulder'
-import {Account} from '../../storage'
 
 import {gradeBackgroundColor, gradeBorderColor, gradeColor} from '../../Materials/Colors'
 
@@ -14,7 +12,7 @@ export const NavBar = ({app}: {app: App}) => (
         <HomeItem/>
         <TeamItem/>
         <FlexItem/>
-        {app.data.session.objId && <CreateBoulder app={app} />}
+        {role(app) !== 'user' && <CreateBoulder app={app} />}
         {app.data.session.objId && <ChangeSecret app={app} />}
         {app.data.session.objId ? <AccountSettings app={app} /> : <SignInItem/>}
     </Root>
