@@ -1,122 +1,115 @@
-/*
-module NavBar
-( navBar
-) where
-*/
+import * as Avers from 'avers'
+import * as React from 'react'
+import styled from 'styled-components'
 
-import * as Avers from 'avers';
-import * as React from 'react';
+import {createBoulder, role} from '../../actions'
+import {App, navigateTo, navigateToFn} from '../../app'
+import * as Boulder from '../Boulder'
+import {Account} from '../../storage'
 
-import {App, navigateTo, navigateToFn} from '../../app';
-import * as Boulder from '../Boulder';
-import {Account} from '../../storage';
+import {gradeBackgroundColor, gradeBorderColor, gradeColor} from '../../Materials/Colors'
 
-function sideBarItem() {
-    return (
-      <div className='navbar-item' onClick={navigateToFn('/')}>
-        <i className='sidebar icon'></i>
-      </div>
-    );
-}
+export const NavBar = ({app}: {app: App}) => (
+    <Root>
+        <HomeItem/>
+        <TeamItem/>
+        <FlexItem/>
+        {app.data.session.objId && <CreateBoulder app={app} />}
+        {app.data.session.objId && <ChangeSecret app={app} />}
+        {app.data.session.objId ? <AccountSettings app={app} /> : <SignInItem/>}
+    </Root>
+)
 
-function homeItem() {
-    return (
-      <div className='navbar-item' onClick={navigateToFn('/')}>
+
+// ----------------------------------------------------------------------------
+
+const HomeItem = () => (
+    <Item onClick={navigateToFn('/')}>
         <i className='home icon'></i>
-      </div>
-    );
-}
+    </Item>
+)
 
-function teamItem() {
-    return (
-      <div className='navbar-item' onClick={navigateToFn('/team')}>
+const TeamItem = () => (
+    <Item onClick={navigateToFn('/team')}>
         <i className='users icon'></i>
-      </div>
-    );
-}
+   </Item>
+)
 
-function statsItem() {
-    return (
-      <div className='navbar-item' onClick={navigateToFn('/stats')}>
+const StatsItem = () => (
+    <Item onClick={navigateToFn('/stats')}>
         <i className='line chart icon'></i>
-      </div>
-    );
-}
+    </Item>
+)
 
-// spacer
-function flexItem() {
-    return (
-      <div className='flex-navbar-item'></div>
-    );
-}
-
-function signInItem() {
-    return (
-      <div className='navbar-item' onClick={navigateToFn('/login')}>
+const SignInItem = () => (
+    <Item onClick={navigateToFn('/login')}>
         <i className='sign in icon'></i>
         Login
-      </div>
-    );
-}
+    </Item>
+)
+
+const CreateBoulder = ({app}: {app: App}) => (
+    <Item onClick={createNewBoulder(app)}>
+        <i className='plus square outlined icon'></i>
+        Boulder
+    </Item>
+)
+
+const AccountSettings = ({app}: {app: App}) => (
+    <Item onClick={navigateToFn('/account/' + app.data.session.objId)}>
+        <i className='settings icon'></i>Account Settings
+    </Item>
+)
+
+const ChangeSecret = ({app}: {app: App}) => (
+    <Item onClick={navigateToFn('/account/' + app.data.session.objId + '/updateSecret')}>
+        <i className='key icon'></i>Change Secret
+    </Item>
+)
+
+const SignOut = ({app}: {app: App}) => (
+    <Item onClick={doSignOutF(app)}>
+        <i className='sign out icon'></i>Logout
+    </Item>
+)
 
 function doSignOutF(app: App) {
     return e => {
-        e.stopPropagation();
+        e.stopPropagation()
         Avers.signout(app.data.session).then(() => {
-            navigateTo('/');
-        });
-    };
-}
-
-function accountSettingsDropDownItem(app: App) {
-    const accountId = app.data.session.objId;
-
-    let accountC = Avers.lookupContent<Account>(app.data.aversH, accountId);
-    let accountE = accountC.get(null);
-
-    let accountDisplayName = "Account";
-    if (accountE != null)
-        accountDisplayName = accountE.login;
-
-    return (
-      <div className='navbar-item'>
-          <i className='user icon'></i>
-          {accountDisplayName}
-        <ul>
-          <li>{Boulder.createBoulderItem(app)}</li>
-          <li><div onClick={navigateToFn('/account/' + accountId)}>
-            <i className='settings icon'></i>Account Settings
-          </div></li>
-          <li><div onClick={navigateToFn('/account/' + accountId + '/updateSecret')}>
-            <i className='key icon'></i>Change Secret
-          </div></li>
-          <li><div onClick={doSignOutF(app)}>
-            <i className='sign out icon'></i>Logout
-          </div></li>
-        </ul>
-      </div>
-    );
-}
-
-export function
-navBar(app: App) {
-    if (app.data.session.objId) {
-        return (
-            <div className='navbar'>
-              {homeItem()}
-              {teamItem()}
-              {flexItem()}
-              {accountSettingsDropDownItem(app)}
-            </div>
-        );
-    } else {
-        return (
-          <div className='navbar'>
-            {homeItem()}
-            {teamItem()}
-            {flexItem()}
-            {signInItem()}
-          </div>
-        );
+            navigateTo('/')
+        })
     }
 }
+
+function createNewBoulder(app: App) {
+    return (e) => {
+        e.stopPropagation()
+        createBoulder(app)
+    }
+}
+
+const Root = styled.div`
+    display: flex;
+    flex-direction: row;
+    height: 2.5rem;
+    font-size: 1.2rem;
+    line-height: 2.5rem;
+    color: rgba(33, 33, 33, 0.7);
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    margin: 0.5rem;
+`
+
+const FlexItem = styled.div`
+   flex: 1
+`
+
+const Item = styled.div`
+    padding: 0 .5rem;
+
+    &:hover {
+        cursor: pointer;
+        background-color: #999;
+    }
+`
