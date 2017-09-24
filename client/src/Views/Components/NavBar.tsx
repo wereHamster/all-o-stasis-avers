@@ -23,13 +23,13 @@ export const NavBar = ({app}: {app: App}) => (
 
 const HomeItem = () => (
     <Item onClick={navigateToFn('/')}>
-        <i className='home icon'></i>
+        <i className='home icon'></i> Boulders
     </Item>
 )
 
 const TeamItem = () => (
     <Item onClick={navigateToFn('/team')}>
-        <i className='users icon'></i>
+        <i className='users icon'></i> Setters
    </Item>
 )
 
