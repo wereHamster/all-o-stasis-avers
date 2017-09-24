@@ -7,13 +7,14 @@ module Home
 import * as Avers from 'avers'
 import * as React from 'react'
 import timeago from 'timeago.js'
+import * as moment from 'moment'
 import styled from 'styled-components'
 
 import {App} from '../app'
 import {Boulder} from '../storage'
 
 import {text} from '../Materials/Colors'
-import {useTypeface, heading28, heading24, heading20, heading18} from '../Materials/Typefaces'
+import {useTypeface, heading28, heading24, heading20, heading18, copy16Bold} from '../Materials/Typefaces'
 
 import {BoulderCard} from './Components/BoulderCard'
 import {Site} from './Components/Site'
@@ -33,7 +34,7 @@ homeView(app: App) {
         if (date === null) {
             return {
                 boulders: boulders.concat([
-                    <BoulderSeparator>{timeago().format(createdAt)}</BoulderSeparator>,
+                    <BoulderSeparator>{moment(createdAt).format('DD. MMMM')}</BoulderSeparator>,
                     <BoulderCard key={objectId} app={app} boulderE={boulder} />,
                 ]),
                 date: createdAt,
@@ -46,7 +47,7 @@ homeView(app: App) {
         } else {
             return {
                 boulders: boulders.concat([
-                    <BoulderSeparator>{timeago().format(createdAt)}</BoulderSeparator>,
+                    <BoulderSeparator>{moment(createdAt).format('DD. MMMM')}</BoulderSeparator>,
                     <BoulderCard key={objectId} app={app} boulderE={boulder} />,
                 ]),
                 date: createdAt,
@@ -75,9 +76,9 @@ const Boulders = styled.div`
 const BoulderSeparator = styled.div`
     flex: 0 0 100%;
     width: 100%;
-    padding: 40px 16px 20px;
+    padding: 40px 16px 12px;
 
-    ${useTypeface(heading18)}
+    ${useTypeface(copy16Bold)}
     color: ${text};
 
     &:first-of-type {
@@ -85,10 +86,9 @@ const BoulderSeparator = styled.div`
     }
 
     @media (min-width: 600px) {
-        padding: 80px 24px 32px;
-        ${useTypeface(heading24)}
+        padding: 80px 24px 12px;
         &:first-of-type {
-            padding: 20px 24px 32px;
+            padding: 20px 24px 12px;
         }
     }
 `

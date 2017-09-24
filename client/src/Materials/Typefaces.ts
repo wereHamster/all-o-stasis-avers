@@ -64,6 +64,13 @@ export const copy16: Typeface = {
     lineHeight: '1.6',
 }
 
+export const copy16Bold: Typeface = {
+    fontFamily: copyFontFamily,
+    fontSize: '16px',
+    fontWeight: 'bold',
+    lineHeight: '1.6',
+}
+
 export const copy14: Typeface = {
     fontFamily: copyFontFamily,
     fontSize: '14px',
