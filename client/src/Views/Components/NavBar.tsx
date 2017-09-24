@@ -17,9 +17,12 @@ export const NavBar = ({app}: {app: App}) => (
         <Logo href='/'>
           <LogoImage src={logo} />
         </Logo>
-        <HomeItem/>
-        <TeamItem/>
-        <FlexItem/>
+
+        <HomeItem />
+        <TeamItem />
+
+        <FlexItem />
+
         {role(app) !== 'user' && <CreateBoulder app={app} />}
         {app.data.session.objId && <ChangeSecret app={app} />}
         {app.data.session.objId ? <AccountSettings app={app} /> : <SignInItem/>}
@@ -30,13 +33,13 @@ export const NavBar = ({app}: {app: App}) => (
 // ----------------------------------------------------------------------------
 
 const HomeItem = () => (
-    <Item onClick={navigateToFn('/')}>
+    <Item isActive={window.location.pathname === '/'} onClick={navigateToFn('/')}>
         Boulders
     </Item>
 )
 
 const TeamItem = () => (
-    <Item onClick={navigateToFn('/team')}>
+    <Item isActive={window.location.pathname === '/team'} onClick={navigateToFn('/team')}>
         Setters
    </Item>
 )
@@ -121,12 +124,14 @@ const FlexItem = styled.div`
    flex: 1
 `
 
-const Item = styled.div`
+const Item: any = styled<{isActive: boolean}>(({isActive: _, ...props}) => <div {...props} />)`
     display: flex;
     align-items: center;
     align-self: stretch;
     padding-right: 32px;
     cursor: pointer;
+
+    color: ${({isActive}) => isActive ? text : 'inherit'};
 
     &:hover {
         color: ${text};
