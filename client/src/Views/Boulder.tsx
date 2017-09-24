@@ -8,10 +8,14 @@ import {role} from '../actions'
 import {App, refresh} from '../app'
 import {Boulder, grades, sectors} from '../storage'
 
+import {text} from '../Materials/Colors'
+import {useTypeface, copy16Bold} from '../Materials/Typefaces'
+
 import {DropDownInput} from './Components/DropdownInput'
 import {NumberInput} from './Components/NumberInput'
 import {Site} from './Components/Site'
 import {BoulderDetails} from './Components/BoulderDetails'
+import {BoulderId} from './Components/BoulderId'
 
 function
 boulderDetailsEditor(boulderE: Avers.Editable<Boulder>, app: App): JSX.Element {
@@ -53,43 +57,30 @@ boulderDetailsEditor(boulderE: Avers.Editable<Boulder>, app: App): JSX.Element {
     }
 
     return (
-      <div className='boulder-details-editor'>
-        <div className='form'>
-          <div className='form-row'>
-            <div className='label'>Name</div>
-            <div className='content'>
-              <input type='text' value={boulder.name} onChange={changeName}
-                     onClick={onClick}></input>
-            </div>
+      <div>
+        <Section>Sector</Section>
+        <div>
+          <DropDownInput object={boulder} field='sector' options={sectors()}></DropDownInput>
+        </div>
+
+        <Section>Grade</Section>
+        <div>
+          <div>
+            <DropDownInput object={boulder} field='grade' options={grades()}></DropDownInput>
           </div>
-          <div className='form-row'>
-            <div className='label'>Sector</div>
-            <div className='content'>
-              <DropDownInput object={boulder} field='sector' options={sectors()}></DropDownInput>
-            </div>
+          <div>
+            <NumberInput object={boulder} field='gradeNr'></NumberInput>
           </div>
-          <div className='form-row'>
-            <div className='label'>Grade</div>
-            <div className='content'>
-              <DropDownInput object={boulder} field='grade' options={grades()}></DropDownInput>
-            </div>
-          </div>
-          <div className='form-row'>
-            <div className='label'>Grade Nr</div>
-            <div className='content'>
-              <NumberInput object={boulder} field='gradeNr'></NumberInput>
-            </div>
-          </div>
-          <div className='form-row'>
-            <div className='label'>Set Date</div>
-            <div className='content'>
-              <DatePicker selected={getSetDate()} onChange={changeSetDate}/>
-            </div>
-          </div>
-            <div className='form-row'>
-              <div className='label'>Remove(d)</div>
-              <div className='content'>{renderRemoved()}</div>
-          </div>
+        </div>
+
+        <Section>Set Date</Section>
+        <div>
+          <DatePicker selected={getSetDate()} onChange={changeSetDate}/>
+        </div>
+
+        <Section>Remove(d)</Section>
+        <div>
+          {renderRemoved()}
         </div>
       </div>
     )
@@ -112,10 +103,12 @@ export const boulderView = (boulderId: string) => (app: App) => {
     return (
       <Site app={app}>
         <div className='boulder'>
-          <BoulderHeader>
-            {boulderE.content.name || boulderE.objectId.substr(0, 10)}
-          </BoulderHeader>
-          {boulderRep}
+          <div style={{display: 'flex', padding: 24}}>
+            <BoulderId grade={boulderE.content.grade}>{boulderE.content.gradeNr}</BoulderId>
+            <div style={{paddingLeft: 24}}>
+              {boulderRep}
+            </div>
+          </div>
         </div>
       </Site>
     )
@@ -129,4 +122,14 @@ const BoulderHeader = styled.div`
     font-size: 4rem;
     font-family: "trajan-sans-pro";
     margin: 4rem 0 2rem;
+`
+
+const Section = styled.div`
+${useTypeface(copy16Bold)}
+color: ${text};
+
+padding: 80px 0 12px;
+&:first-of-type {
+    padding: 0 0 12px;
+}
 `
