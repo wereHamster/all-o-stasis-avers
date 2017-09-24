@@ -2,7 +2,7 @@ import * as Avers from 'avers'
 import * as React from 'react'
 import styled from 'styled-components'
 
-import {useTypeface, copy16} from '../../Materials/Typefaces'
+import {useTypeface, copy14} from '../../Materials/Typefaces'
 import {lightGrey, text} from '../../Materials/Colors'
 
 import {createBoulder, role} from '../../actions'
@@ -104,7 +104,7 @@ const Root = styled.div`
     align-items: center;
     height: 64px;
 
-    ${useTypeface(copy16)}
+    ${useTypeface(copy14)}
     color: ${lightGrey};
 
     text-transform: uppercase;

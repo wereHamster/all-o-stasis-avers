@@ -12,6 +12,9 @@ import styled from 'styled-components'
 import {App} from '../app'
 import {Boulder} from '../storage'
 
+import {text} from '../Materials/Colors'
+import {useTypeface, heading28, heading24, heading20, heading18} from '../Materials/Typefaces'
+
 import {BoulderCard} from './Components/BoulderCard'
 import {Site} from './Components/Site'
 
@@ -73,8 +76,9 @@ const BoulderSeparator = styled.div`
     flex: 0 0 100%;
     width: 100%;
     padding: 40px 16px 20px;
-    font-size: 24px;
-    line-height: 1;
+
+    ${useTypeface(heading18)}
+    color: ${text};
 
     &:first-of-type {
         padding-top: 10px;
@@ -82,17 +86,9 @@ const BoulderSeparator = styled.div`
 
     @media (min-width: 600px) {
         padding: 80px 24px 32px;
-        font-size: 32px;
+        ${useTypeface(heading24)}
         &:first-of-type {
             padding: 20px 24px 32px;
-        }
-    }
-
-    @media (min-width: 1200px) {
-        padding: 120px 24px 60px;
-        font-size: 44px;
-        &:first-of-type {
-            padding: 30px 24px 60px;
         }
     }
 `

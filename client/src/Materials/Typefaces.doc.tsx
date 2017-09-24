@@ -25,4 +25,12 @@ The quick brown fox jumps over the lazy dog
 </div>
 </ReactSpecimen>
 }
+
+${
+<ReactSpecimen noSource>
+<div style={T.copy14 as any}>
+The quick brown fox jumps over the lazy dog
+</div>
+</ReactSpecimen>
+}
 `
