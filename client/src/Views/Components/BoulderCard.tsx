@@ -9,6 +9,8 @@ import {Account, Boulder, prettyPrintSector} from '../../storage'
 import {lightGrey, darkGrey, text, gradeBackgroundColor, gradeBorderColor, gradeColor} from '../../Materials/Colors'
 import {useTypeface, copy16} from '../../Materials/Typefaces'
 
+import {BoulderId} from './BoulderId'
+
 export interface BoulderCardProps {
     app: App
     boulderE: Avers.Editable<Boulder>
@@ -26,7 +28,7 @@ export class BoulderCard extends React.Component<BoulderCardProps> {
 
         return (
             <Card onClick={this.onClick} grade={grade}>
-                <Id>{gradeNr}</Id>
+                <BoulderId grade={grade}>{gradeNr}</BoulderId>
                 <Meta>
                     <Sector>{prettyPrintSector(sector)}</Sector>
                     <Setters>
@@ -47,30 +49,6 @@ const BoulderCardSetter = ({app, setterId}: {app: App, setterId: string}) => (
 
 // ----------------------------------------------------------------------------
 
-const Id = styled.div`
-    width: 32px;
-    height: 32px;
-    border-radius: 100%;
-    border: 2px solid transparent;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 22px;
-    line-height: 1;
-    box-shadow: 0 0 4px rgba(99, 85, 25, .5);
-    margin-right: 12px;
-    font-family: 'Advent Pro';
-    transition: box-shadow .2s;
-    flex: 0 0 32px;
-
-    @media (min-width: 480px) {
-        width: 48px;
-        height: 48px;
-        flex: 0 0 48px;
-        font-size: 36px;
-    }
-`
-
 const Card: any = styled.div`
     display: flex;
     flex-direction: row;
@@ -79,14 +57,11 @@ const Card: any = styled.div`
     width: 100%;
     overflow: hidden;
 
-    & ${Id} {
-        background-color: ${(props: any) => gradeBackgroundColor(props.grade)};
-        border-color: ${(props: any) => gradeBorderColor(props.grade)};
-        color: ${(props: any) => gradeColor(props.grade)};
+    & ${BoulderId} {
         transition: transform .2s;
     }
 
-    &:hover ${Id} {
+    &:hover ${BoulderId} {
         box-shadow: 0 0 8px rgba(99, 85, 25, .5);
         transform: scale(1.08);
     }
