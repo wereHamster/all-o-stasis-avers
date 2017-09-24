@@ -10,7 +10,7 @@ export default () => markdown`
 
 ${
 <ReactSpecimen noSource>
-<div style={T.h1Style}>
+<div style={T.h1 as any}>
 The quick brown fox jumps over the lazy dog
 </div>
 </ReactSpecimen>
@@ -20,7 +20,7 @@ The quick brown fox jumps over the lazy dog
 
 ${
 <ReactSpecimen noSource>
-<div style={T.copyStyle}>
+<div style={T.copy16 as any}>
 The quick brown fox jumps over the lazy dog
 </div>
 </ReactSpecimen>

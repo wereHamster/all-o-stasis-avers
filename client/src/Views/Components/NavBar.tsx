@@ -2,13 +2,21 @@ import * as Avers from 'avers'
 import * as React from 'react'
 import styled from 'styled-components'
 
+import {useTypeface, copy16} from '../../Materials/Typefaces'
+import {lightGrey, text} from '../../Materials/Colors'
+
 import {createBoulder, role} from '../../actions'
 import {App, navigateTo, navigateToFn} from '../../app'
 
 import {gradeBackgroundColor, gradeBorderColor, gradeColor} from '../../Materials/Colors'
 
+import logo from 'url-loader!!../../../assets/logo.svg'
+
 export const NavBar = ({app}: {app: App}) => (
     <Root>
+        <Logo href='/'>
+          <LogoImage src={logo} />
+        </Logo>
         <HomeItem/>
         <TeamItem/>
         <FlexItem/>
@@ -23,13 +31,13 @@ export const NavBar = ({app}: {app: App}) => (
 
 const HomeItem = () => (
     <Item onClick={navigateToFn('/')}>
-        <i className='home icon'></i> Boulders
+        Boulders
     </Item>
 )
 
 const TeamItem = () => (
     <Item onClick={navigateToFn('/team')}>
-        <i className='users icon'></i> Setters
+        Setters
    </Item>
 )
 
@@ -90,13 +98,23 @@ function createNewBoulder(app: App) {
 const Root = styled.div`
     display: flex;
     flex-direction: row;
-    height: 2.5rem;
-    font-size: 1.2rem;
-    line-height: 2.5rem;
-    color: rgba(33, 33, 33, 0.7);
-    border-top: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
-    margin: 0.5rem;
+    align-items: center;
+    height: 64px;
+
+    ${useTypeface(copy16)}
+    color: ${lightGrey};
+
+    text-transform: uppercase;
+`
+
+const Logo = styled.a`
+display: block;
+text-decoration: none;
+padding: 0 48px 0 24px;
+`
+const LogoImage = styled.img`
+display: block;
+height: 32px;
 `
 
 const FlexItem = styled.div`
@@ -104,10 +122,13 @@ const FlexItem = styled.div`
 `
 
 const Item = styled.div`
-    padding: 0 .5rem;
+    display: flex;
+    align-items: center;
+    align-self: stretch;
+    padding-right: 32px;
+    cursor: pointer;
 
     &:hover {
-        cursor: pointer;
-        background-color: #999;
+        color: ${text};
     }
 `
