@@ -23,6 +23,7 @@
     "react-datepicker": "*",
     "react-dom": "^15.4.2",
     "react-loadable": "^4.0.5",
+    "react-vega-lite": "^1.1.2",
     "styled-components": "^2.1.2",
     "timeago.js": "^2.0.0",
     "ts-md5": "*",
@@ -38,5 +39,10 @@
     "lint": "tslint src/**/*.ts src/**/*.tsx",
     "dev": "webpack-dev-server",
     "build": "webpack"
+  },
+  "devDependencies": {
+    "react-vega": "^3.1.1",
+    "vega": "^3.0.5",
+    "vega-lite": "^2.0.0-rc3"
   }
 }

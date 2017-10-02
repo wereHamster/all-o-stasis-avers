@@ -1,22 +1,17 @@
-/*
-module Sector
-( sectorView
-) where
-*/
+import * as Avers from 'avers'
+import * as React from 'react'
 
-import * as Avers from 'avers';
-import * as React from 'react';
+import {role, sectorBoulders} from '../actions'
+import {App, refresh} from '../app'
+import {Boulder, grades, sectors, prettyPrintSector} from '../storage'
 
-import {role, sectorBoulders} from '../actions';
-import {App, refresh} from '../app';
-import {Boulder, grades, sectors, prettyPrintSector} from '../storage';
-
-import {Site} from './Components/Site';
+import {GradeBalance} from './Components/GradeBalance'
+import {Site} from './Components/Site'
 
 
 export function
 sectorView(app: App) {
-    if (role(app) === "user") {
+    if (role(app) === 'user') {
         return (
             <Site app={app} />
         )
@@ -30,16 +25,15 @@ sectorView(app: App) {
 }
 
 
-
 // ----------------------------------------------------------------------------
 // Sector
 
 export interface SectorProps {
-    app: App;
+    app: App
 }
 
 interface SectorState {
-    sectorName: string;
+    sectorName: string
 }
 
 class Sector extends React.Component<SectorProps, SectorState> {
@@ -48,34 +42,30 @@ class Sector extends React.Component<SectorProps, SectorState> {
         this.state = {sectorName: sectors()[0]}
     }
 
-    renderGradeDistribution() {
-        // TODO: render grade distribution for this sector
-        // https://hackernoon.com/how-and-why-to-use-d3-with-react-d239eb1ea274
-    }
-
     removeAllBoulders = () => {
         // remove all boulders on the currently active sector
-        const now = Date.now();
+        const now = Date.now()
         sectorBoulders(this.props.app, this.state.sectorName).forEach(boulder => {
             boulder.content.removed = now.valueOf()
-        });
-        Avers.resetObjectCollection(this.props.app.data.activeBouldersCollection);
-        refresh(this.props.app);
+        })
+        Avers.resetObjectCollection(this.props.app.data.activeBouldersCollection)
+        refresh(this.props.app)
     }
 
     onChange = (e: React.FormEvent<any>) => {
-        const sectorName = (e.target as HTMLSelectElement).value;
-        this.setState({sectorName});
+        const sectorName = (e.target as HTMLSelectElement).value
+        this.setState({sectorName})
     }
 
     render() {
         const boulders = sectorBoulders(this.props.app, this.state.sectorName)
         return (
-            <div className="sector">
+            <div className='sector'>
                 <SectorHeader sectors={sectors()} sectorName={this.state.sectorName} onChange={this.onChange} removeAllBoulders={this.removeAllBoulders} />
+                <GradeBalance boulders={boulders} height={400} width={300} />
                 <SectorBoulders boulders={boulders} />
             </div>
-        );
+        )
     }
 }
 
@@ -94,13 +84,13 @@ interface SectorHeaderProps {
 
 const SectorHeader = ({sectors, sectorName, onChange, removeAllBoulders}: SectorHeaderProps) => (
     <div>
-        <div className="header">
-            <div className="logo">{prettyPrintSector(sectorName)}</div>
+        <div className='header'>
+            <div className='logo'>{prettyPrintSector(sectorName)}</div>
         </div>
         <div className='details'>
             <div className='form'>
             <div className='form-row'>
-                <div className="label">
+                <div className='label'>
                     <select defaultValue={sectorName} onChange={onChange}>
                         {sectors.map((entry, index) => (
                             <option value={entry} key={index}>{prettyPrintSector(entry)}</option>
@@ -109,8 +99,8 @@ const SectorHeader = ({sectors, sectorName, onChange, removeAllBoulders}: Sector
                 </div>
             </div>
             <div className='form-row'>
-                <div className="label">
-                    <div className="button" onClick={removeAllBoulders}>remove all</div>
+                <div className='label'>
+                    <div className='button' onClick={removeAllBoulders}>remove all</div>
                 </div>
             </div>
             </div>
@@ -124,11 +114,11 @@ const SectorHeader = ({sectors, sectorName, onChange, removeAllBoulders}: Sector
 // SectorBoulders
 
 interface SectorBouldersProps {
-    boulders: Avers.Editable<Boulder>[]
+    boulders: Array<Avers.Editable<Boulder>>
 }
 
 const SectorBoulders = ({boulders}: SectorBouldersProps) => (
-    <div className="boulders">
+    <div className='boulders'>
         {boulders.map(boulder => (
             <div className={`boulder-card-id ${boulder.content.grade}`} key={boulder.objectId}>
                 {boulder.content.gradeNr}
