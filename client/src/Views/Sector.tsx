@@ -1,13 +1,15 @@
 import * as Avers from 'avers'
 import * as React from 'react'
+import styled from 'styled-components'
 
 import {role, sectorBoulders} from '../actions'
-import {App, refresh} from '../app'
+import {App, navigateTo, refresh} from '../app'
 import {Boulder, grades, sectors, prettyPrintSector} from '../storage'
 
 import {GradeBalance} from './Components/GradeBalance'
 import {Site} from './Components/Site'
 
+import {BoulderId} from './Components/BoulderId'
 
 export function
 sectorView(app: App) {
@@ -62,8 +64,10 @@ class Sector extends React.Component<SectorProps, SectorState> {
         return (
             <div className='sector'>
                 <SectorHeader sectors={sectors()} sectorName={this.state.sectorName} onChange={this.onChange} removeAllBoulders={this.removeAllBoulders} />
-                <GradeBalance boulders={boulders} height={400} width={300} />
-                <SectorBoulders boulders={boulders} />
+                <Stats>
+                    <GradeBalance boulders={boulders} height={400} width={300} />
+                    <SectorBoulders boulders={boulders} />
+                </Stats>
             </div>
         )
     }
@@ -83,29 +87,27 @@ interface SectorHeaderProps {
 }
 
 const SectorHeader = ({sectors, sectorName, onChange, removeAllBoulders}: SectorHeaderProps) => (
-    <div>
-        <div className='header'>
-            <div className='logo'>{prettyPrintSector(sectorName)}</div>
-        </div>
-        <div className='details'>
+    <Header>
+        <Name>{prettyPrintSector(sectorName)}</Name>
+        <Actions>
             <div className='form'>
-            <div className='form-row'>
-                <div className='label'>
-                    <select defaultValue={sectorName} onChange={onChange}>
-                        {sectors.map((entry, index) => (
-                            <option value={entry} key={index}>{prettyPrintSector(entry)}</option>
-                        ))}
-                    </select>
+                <div className='form-row'>
+                    <div className='label'>
+                        <select defaultValue={sectorName} onChange={onChange}>
+                            {sectors.map((entry, index) => (
+                                <option value={entry} key={index}>{prettyPrintSector(entry)}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+                <div className='form-row'>
+                    <div className='label'>
+                        <div className='button' onClick={removeAllBoulders}>remove all</div>
+                    </div>
                 </div>
             </div>
-            <div className='form-row'>
-                <div className='label'>
-                    <div className='button' onClick={removeAllBoulders}>remove all</div>
-                </div>
-            </div>
-            </div>
-        </div>
-    </div>
+        </Actions>
+    </Header>
 )
 
 
@@ -117,12 +119,59 @@ interface SectorBouldersProps {
     boulders: Array<Avers.Editable<Boulder>>
 }
 
+// TODO: onClick={navigateTo('/boulder/' + boulder.objectId)}
 const SectorBoulders = ({boulders}: SectorBouldersProps) => (
-    <div className='boulders'>
+    <Boulders>
         {boulders.map(boulder => (
-            <div className={`boulder-card-id ${boulder.content.grade}`} key={boulder.objectId}>
+            <BoulderId grade={boulder.content.grade}>
                 {boulder.content.gradeNr}
-            </div>
+            </BoulderId>
         ))}
-    </div>
+    </Boulders>
 )
+
+
+
+// ----------------------------------------------------------------------------
+const Header = styled.div`
+`
+
+const Name = styled.div`
+    text-align: center;
+    font-size: 3rem;
+    font-family: "trajan-sans-pro";
+    margin: 4rem 0 2rem;
+    text-transform: uppercase;
+`
+
+const Actions = styled.div`
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .button {
+        width: 8rem;
+        font-size: 1.0rem;
+        padding: .7rem 1.1rem;
+        font-weight: bold;
+        background-color: rgb(55, 119, 110);
+        color: rgb(245, 238, 249);
+        margin-top: 1rem;
+    }
+`
+
+const Stats = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 6rem;
+`
+
+const Boulders = styled.div`
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    max-width: 500px;
+`
