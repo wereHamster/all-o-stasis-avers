@@ -4,6 +4,7 @@ import VegaLite from 'react-vega-lite'
 
 import {Boulder, grades} from '../../storage'
 
+import {yellow100, green100, orange100, blue100, red100} from '../../Materials/Colors'
 
 export interface GradeBalanceProps {
     boulders: Array<Avers.Editable<Boulder>>
@@ -21,7 +22,7 @@ export class GradeBalance extends React.Component<GradeBalanceProps, {}> {
             x: {field: 'grade', type: 'nominal', sort: null},
             y: {field: 'count', type: 'quantitative'},
             color: {field: 'grade', type: 'nominal',
-                    scale: {range: ['#1B69D2', '#27AE60', '#E89C2F', '#FF0000', '#FFFFFF', '#F3D53F']},
+                    scale: {range: [blue100, green100, orange100, red100, '#FFFFFF', yellow100]},
                    },
         },
     }
