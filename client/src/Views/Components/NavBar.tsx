@@ -20,6 +20,7 @@ export const NavBar = ({app}: {app: App}) => (
 
         <HomeItem />
         <TeamItem />
+        {role(app) === 'admin' && <SectorItem />}
 
         <FlexItem />
 
@@ -41,6 +42,12 @@ const HomeItem = () => (
 const TeamItem = () => (
     <Item isActive={window.location.pathname === '/team'} onClick={navigateToFn('/team')}>
         Setters
+   </Item>
+)
+
+const SectorItem = () => (
+    <Item isActive={window.location.pathname === '/sector'} onClick={navigateToFn('/sector')}>
+        Sectors
    </Item>
 )
 
