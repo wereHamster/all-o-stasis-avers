@@ -20,6 +20,9 @@ export class GradeBalance extends React.Component<GradeBalanceProps, {}> {
         encoding: {
             x: {field: 'grade', type: 'nominal', sort: null},
             y: {field: 'count', type: 'quantitative'},
+            color: {field: 'grade', type: 'nominal',
+                    scale: {range: ['#1B69D2', '#27AE60', '#E89C2F', '#FF0000', '#FFFFFF', '#F3D53F']},
+                   },
         },
     }
 
