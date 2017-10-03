@@ -19,14 +19,19 @@ export const accountView = (accountId: string) => (app: App) => {
     const accountC = Avers.lookupEditable<Account>(app.data.aversH, accountId)
     const accountE = accountC.get(undefined)
 
+    // FIXME: best to capture here?
+    if (accountE === undefined || accountE.objectId === undefined) {
+        return (
+            <Site app={app}/>
+        )
+    }
+
     // only admins can edit all accounts with the exception of users
     // changing their own accounts
     const canEdit = (role(app) === 'admin' || accountId === app.data.session.objId)
     return (
       <Site app={app}>
-          <Root>
-              { canEdit ? AccountView({ app, accountE }) : accountRep(accountE) }
-          </Root>
+          { canEdit ? AccountView({ app, accountE }) : accountRep(accountE) }
       </Site>
     )
 }
@@ -49,6 +54,7 @@ accountRep(account: Avers.Editable<Account>): JSX.Element {
 }
 
 
+// Render all fields as editables.
 export interface AccountViewProps {
     app: App
     accountE: Avers.Editable<Account>
@@ -74,20 +80,29 @@ class AccountSpec extends React.Component<AccountViewProps, {}> {
         const {app, accountE} = this.props
 
         return (
-          <div>
+          <Root>
             {this.accountHeader(accountE)}
             {this.accountDetailsEditor(accountE)}
-          </div>
+          </Root>
+        )
+    }
+
+    accountHeader(accountE: Avers.Editable<Account>): JSX.Element {
+        let title = accountE.objectId
+        if (accountE.content.name !== '') {
+            title = accountE.content.name
+        }
+
+        return (
+          <Avatar>
+            <img src={accountGravatarUrl(accountE.content.email)}/>
+            <Name>{accountE.content.name}</Name>
+          </Avatar>
         )
     }
 
     accountAdminFields(accountE: Avers.Editable<Account>): JSX.Element {
-
         const account = accountE.content
-        // if (account.role != 'admin') {
-            // return;
-        // }
-
         return (
           <div className='form-row'>
             <div className='label'>Role</div>
@@ -98,36 +113,7 @@ class AccountSpec extends React.Component<AccountViewProps, {}> {
         )
     }
 
-    accountHeader(accountE: Avers.Editable<Account>): JSX.Element {
-        if (accountE === undefined ||
-           accountE.objectId === undefined) {
-            // console.log('Undefined account objectId.. Should not happen!')
-            return
-        }
-
-        let title = accountE.objectId
-        if (accountE.content.name !== '') {
-            title = accountE.content.name
-        }
-
-        return (
-          <Avatar>
-            <img src={accountGravatarUrl(accountE.content.email)}/>
-            <Name>{accountE.content.name}</Name>
-            <p className='about'>
-              "Customize your account."
-            </p>
-          </Avatar>
-        )
-    }
-
     accountDetailsEditor(accountE: Avers.Editable<Account>): JSX.Element {
-
-        if (accountE === undefined || accountE.objectId === undefined) {
-            // console.log('Undefined account objectId.. Should not happen!')
-            return
-        }
-
         const account = accountE.content
 
         function onClick(e) {
@@ -156,7 +142,7 @@ class AccountSpec extends React.Component<AccountViewProps, {}> {
                          onChange={this.changeAccountLogin} onClick={onClick}></input>
                 </div>
               </div>
-              {this.accountAdminFields(accountE)}
+              {accountE.content.role === 'admin' && this.accountAdminFields(accountE)}
             </div>
           </div>
         )
@@ -165,6 +151,9 @@ class AccountSpec extends React.Component<AccountViewProps, {}> {
 
 const AccountView = React.createFactory(AccountSpec)
 
+
+
+// ----------------------------------------------------------------------------
 
 const Root = styled.div`
 `
