@@ -1,145 +1,157 @@
-/*
-module Account
-( accountGravatarUrl
-, accountView
-) where
-*/
-
-import * as Avers from 'avers';
-import * as React from 'react';
+import * as Avers from 'avers'
+import * as React from 'react'
+import styled from 'styled-components'
 import {Md5} from 'ts-md5/dist/md5'
 
-import {role} from '../actions';
-import {App} from '../app';
-import {Account, roles} from '../storage';
+import {role} from '../actions'
+import {App} from '../app'
+import {Account, roles} from '../storage'
 
-import {DropDownInput} from './Components/DropdownInput';
-import {Site} from './Components/Site';
+import {DropDownInput} from './Components/DropdownInput'
+import {Site} from './Components/Site'
 
 export function
 accountGravatarUrl(email: string) {
-    return 'http://www.gravatar.com/avatar/' + Md5.hashStr(email);
+    return 'http://www.gravatar.com/avatar/' + Md5.hashStr(email)
 }
 
-function
-accountRep(account: Account) : JSX.Element {
+export const accountView = (accountId: string) => (app: App) => {
+    const accountC = Avers.lookupEditable<Account>(app.data.aversH, accountId)
+    const accountE = accountC.get(undefined)
+
+    // only admins can edit all accounts with the exception of users
+    // changing their own accounts
+    const canEdit = (role(app) === 'admin' || accountId === app.data.session.objId)
     return (
-      <div className="login">
-        <div className="logo">
-          <img className="round-avatar" src={accountGravatarUrl(account.email)}/><br/>
-          {account.name}
-        </div>
-        <p className="about">
-          {account.role}
-        </p>
-      </div>
-    );
+      <Site app={app}>
+          <Root>
+              { canEdit ? AccountView({ app, accountE }) : accountRep(accountE) }
+          </Root>
+      </Site>
+    )
 }
+
+
+// ----------------------------------------------------------------------------
+
+// A simple account representation for non-owned and non-admin views.
+function
+accountRep(account: Avers.Editable<Account>): JSX.Element {
+    return (
+      <Avatar>
+        <img src={accountGravatarUrl(account.content.email)}/>
+        <Name>{account.content.name}</Name>
+        <p className='about'>
+          {account.content.role}
+        </p>
+      </Avatar>
+    )
+}
+
 
 export interface AccountViewProps {
-    app: App;
-    accountE: Avers.Editable<Account>;
+    app: App
+    accountE: Avers.Editable<Account>
 }
 
 class AccountSpec extends React.Component<AccountViewProps, {}> {
     changeAccountName = (e: React.FormEvent<any>) => {
-        let value = (e.target as HTMLInputElement).value;
-        this.props.accountE.content.name = value;
+        const value = (e.target as HTMLInputElement).value
+        this.props.accountE.content.name = value
     }
 
     changeAccountEmail = (e: React.FormEvent<any>) => {
-        let value = (e.target as HTMLInputElement).value;
-        this.props.accountE.content.email = value;
+        const value = (e.target as HTMLInputElement).value
+        this.props.accountE.content.email = value
     }
 
      changeAccountLogin = (e: React.FormEvent<any>) => {
-        let value = (e.target as HTMLInputElement).value;
-        this.props.accountE.content.login = value;
+        const value = (e.target as HTMLInputElement).value
+        this.props.accountE.content.login = value
     }
 
     render() {
-        const {app, accountE} = this.props;
+        const {app, accountE} = this.props
 
         return (
           <div>
             {this.accountHeader(accountE)}
             {this.accountDetailsEditor(accountE)}
           </div>
-        );
+        )
     }
 
-    accountAdminFields(accountE: Avers.Editable<Account>) : JSX.Element {
+    accountAdminFields(accountE: Avers.Editable<Account>): JSX.Element {
 
-        var account = accountE.content;
-        if (account.role != 'admin') {
-            return;
-        }
+        const account = accountE.content
+        // if (account.role != 'admin') {
+            // return;
+        // }
 
         return (
-          <div className="form-row">
-            <div className="label">Role</div>
-            <div className="content">
+          <div className='form-row'>
+            <div className='label'>Role</div>
+            <div className='content'>
               <DropDownInput object={account} field='role' options={roles()}></DropDownInput>
             </div>
           </div>
-        );
+        )
     }
 
-    accountHeader(accountE: Avers.Editable<Account>) : JSX.Element {
-        if(accountE === undefined ||
+    accountHeader(accountE: Avers.Editable<Account>): JSX.Element {
+        if (accountE === undefined ||
            accountE.objectId === undefined) {
-            console.log("Undefined account objectId.. Should not happen!");
-            return;
+            // console.log('Undefined account objectId.. Should not happen!')
+            return
         }
 
-        var title = accountE.objectId;
-        if(accountE.content.name != '')
-            title = accountE.content.name;
+        let title = accountE.objectId
+        if (accountE.content.name !== '') {
+            title = accountE.content.name
+        }
 
         return (
-          <div className="login">
-            <div className="logo">
-              <img className="round-avatar" src={accountGravatarUrl(accountE.content.email)}/><br/>
-              {title}
-            </div>
-            <p className="about">
+          <Avatar>
+            <img src={accountGravatarUrl(accountE.content.email)}/>
+            <Name>{accountE.content.name}</Name>
+            <p className='about'>
               "Customize your account."
             </p>
-          </div>
-        );
+          </Avatar>
+        )
     }
 
-    accountDetailsEditor(accountE: Avers.Editable<Account>) : JSX.Element {
+    accountDetailsEditor(accountE: Avers.Editable<Account>): JSX.Element {
 
-        if(accountE === undefined || accountE.objectId === undefined) {
-            console.log("Undefined account objectId.. Should not happen!");
-            return;
+        if (accountE === undefined || accountE.objectId === undefined) {
+            // console.log('Undefined account objectId.. Should not happen!')
+            return
         }
 
-        var account = accountE.content;
+        const account = accountE.content
 
         function onClick(e) {
-            e.stopPropagation();
+            e.stopPropagation()
         }
 
         return (
-          <div className="account-detail-editor">
-            <div className="form">
-              <div className="form-row">
-                <div className="label">Name</div>
-                <div className="content">
+          <div className='account-detail-editor'>
+            <div className='form'>
+              <div className='form-row'>
+                <div className='label'>Name</div>
+                <div className='content'>
                   <input className='wide' type='text' value={account.name}
                          onChange={this.changeAccountName} onClick={onClick}></input>
                 </div>
               </div>
-              <div className="form-row">
-                <div className="label">Email</div>
-                <div className="content">
+              <div className='form-row'>
+                <div className='label'>Email</div>
+                <div className='content'>
                   <input className='wide' type='text' value={account.email}
                          onChange={this.changeAccountEmail} onClick={onClick}></input>
                 </div>
               </div>
-              <div className="form-row"> <div className="label">Login</div> <div className="content">
+              <div className='form-row'> <div className='label'>Login</div> <div className='content'>
                   <input className='wide' type='text' value={account.login}
                          onChange={this.changeAccountLogin} onClick={onClick}></input>
                 </div>
@@ -151,29 +163,33 @@ class AccountSpec extends React.Component<AccountViewProps, {}> {
     }
 }
 
-var AccountView = React.createFactory(AccountSpec);
+const AccountView = React.createFactory(AccountSpec)
 
-export const accountView = (accountId: string) => (app: App) => {
-    let accountC = Avers.lookupEditable<Account>(app.data.aversH, accountId);
-    let accountE = accountC.get(undefined);
 
-    // only admins can edit all accounts with the exception of users
-    // changing their own accounts
-    if (role(app) == "admin" || accountId == app.data.session.objId) {
-        return (
-          <Site app={app}>
-            <div className="account">
-                {AccountView({ app: app, accountE: accountE })}
-            </div>
-          </Site>
-        );
-    } else {
-        return (
-          <Site app={app}>
-            <div className="account">
-                {accountRep(accountE.content)}
-            </div>
-          </Site>
-        );
+const Root = styled.div`
+`
+
+const Name = styled.div`
+    text-align: center;
+    font-size: 4rem;
+    font-family: "trajan-sans-pro";
+    margin-top: 0.7rem;
+
+`
+
+const Avatar = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 4rem;
+
+    .about {
+        max-width: 30rem;
+        font-size: 1.2rem;
     }
-}
+
+    img {
+        border: 1px solid #999;
+        border-radius: 50%;
+    }
+`
