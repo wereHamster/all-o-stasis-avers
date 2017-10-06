@@ -15,7 +15,7 @@ export interface SetterCardProps {
 export const SetterCard = ({app, accountId, account}: SetterCardProps) => (
     <Setter>
         <div onClick={navigateToFn('/account/' + accountId)}>
-            <img className='avatar' src={account ? accountGravatarUrl(account.email) : placeholderImageSrc}/>
+            <img src={account ? accountGravatarUrl(account.email) : placeholderImageSrc}/>
             <div>{(account && account.name !== '') ? account.name : accountId.slice(0, 2)}</div>
         </div>
     </Setter>
