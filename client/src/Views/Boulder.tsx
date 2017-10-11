@@ -1,10 +1,3 @@
-/*
-module Boulder
-( createBoulder
-, boulderView
-) where
-*/
-
 import * as Avers from 'avers'
 import DatePicker from 'react-datepicker'
 import * as moment from 'moment'
@@ -39,7 +32,7 @@ boulderDetailsEditor(boulderE: Avers.Editable<Boulder>, app: App): JSX.Element {
         refresh(app)
     }
 
-    function getSetDate() : moment.Moment {
+    function getSetDate(): moment.Moment {
         const initialDate = moment.unix(boulder.setDate / 1000.)
         return initialDate
     }
