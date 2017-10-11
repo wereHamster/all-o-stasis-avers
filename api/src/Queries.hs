@@ -2,27 +2,19 @@
 
 module Queries
     ( mapId
-    , isNotRemoved
+    , isActive
     , isOwnBoulder
     , isSetter
     , hasAccess
     ) where
 
 import           Avers
-import           Data.Text   (Text)
-import qualified Database.RethinkDB     as R
+import           Data.Text          (Text)
+import qualified Database.RethinkDB as R
 
 
 mapId:: R.Exp R.Object -> R.Exp Text
 mapId = R.GetField "id"
-
-isNotRemoved :: R.Exp R.Object -> R.Exp Bool
-isNotRemoved x = R.Any
-    [ R.Not $ R.HasFields ["removed"] x
-    , R.Ne
-        (R.GetField "removed" x :: R.Exp Text)
-        ("-1" :: R.Exp Text)
-    ]
 
 hasAccess :: R.Exp Text -> R.Exp R.Object -> R.Exp Bool
 hasAccess role = \x -> R.All
@@ -38,10 +30,15 @@ isSetter = \x -> R.Ne
     (R.GetField "role" x :: R.Exp Text)
     ("user" :: R.Exp Text)
 
+-- all still active boulders (without a removed date)
+isActive :: R.Exp R.Object -> R.Exp Bool
+isActive = \x -> R.Eq
+    (R.GetField "removed" x :: R.Exp Double)
+    (0 :: R.Exp Double)
+
 -- FIXME: we should check if the setter is in the list of setters
 --        setter is a list of setterIds
 isOwnBoulder :: Session -> R.Exp R.Object -> R.Exp Bool
 isOwnBoulder session = \x -> R.Eq
     (R.GetField "setter" x :: R.Exp Text)
     (R.lift $ unObjId $ sessionObjId session :: R.Exp Text)
-

@@ -52,7 +52,7 @@ boulderDetailsEditor(boulderE: Avers.Editable<Boulder>, app: App): JSX.Element {
     }
 
     function renderRemoved(): JSX.Element {
-        if (boulder.removed >= 0) {
+        if (boulder.removed > 0) {
             return (<p>{moment.unix(boulder.removed / 1000.).format('DD/MM/YYYY')}</p>)
         } else {
             return (<div className='button' onClick={setRemoved}>remove</div>)

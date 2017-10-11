@@ -91,7 +91,7 @@ serveLocalAPI aversH =
             runQueryCollect $
                 R.Map mapId $
                 R.OrderBy [R.Descending "setDate"] $
-                R.Filter isNotRemoved $
+                R.Filter isActive $
                 viewTable bouldersView
 
         pure $ map ObjId $ V.toList boulders
@@ -100,15 +100,15 @@ serveLocalAPI aversH =
         ownerId <- credentialsObjId aversH cred
         objIds <- reqAvers2 aversH $ do
             -- FIXME: we should check if the setter is in the list of setters
-            let isOwnBoulder :: R.Exp R.Object -> R.Exp Bool
-                isOwnBoulder = \x -> R.Eq
+            let isOwnBoulderA :: R.Exp R.Object -> R.Exp Bool
+                isOwnBoulderA = \x -> R.Eq
                     (R.GetField "setter" x :: R.Exp Text)
                     (R.lift $ unObjId ownerId)
 
             runQueryCollect $
                 R.Map mapId $
                 R.OrderBy [R.Descending "setDate"] $
-                R.Filter isOwnBoulder $
+                R.Filter isOwnBoulderA $
                 viewTable bouldersView
 
         pure $ map ObjId $ V.toList objIds
@@ -125,11 +125,6 @@ serveLocalAPI aversH =
     serveAdminAccounts cred = do
         ownerId <- credentialsObjId aversH cred
         objIds <- reqAvers2 aversH $ do
-            let isSetter :: R.Exp R.Object -> R.Exp Bool
-                isSetter = \x -> R.Ne
-                    (R.GetField "role" x :: R.Exp Text)
-                    ("user" :: R.Exp Text)
-
             runQueryCollect $
                 R.Map mapId $
                 R.OrderBy [R.Descending "name"] $
@@ -151,4 +146,3 @@ serveLocalAPI aversH =
 
 $(deriveJSON (deriveJSONOptions "req")  ''SignupRequest2)
 $(deriveJSON (deriveJSONOptions "_res") ''SignupResponse2)
-
