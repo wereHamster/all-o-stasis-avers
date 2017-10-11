@@ -1,7 +1,6 @@
 import * as Avers from 'avers'
-import * as Storage from './storage'
 import {App, navigateTo, refresh} from './app'
-import {Account} from './storage'
+import * as Storage from './storage'
 
 function mkBoulder(app: App): Storage.Boulder {
     const now = Date.now()
@@ -17,6 +16,7 @@ createBoulder(app: App) {
     const promise = Avers.createObject(app.data.aversH, 'boulder', mkBoulder(app)).then(id => {
         app.createBoulderPromise = undefined
         Avers.resetObjectCollection(app.data.ownedBoulderCollection)
+        Avers.resetObjectCollection(app.data.activeBouldersCollection)
         refresh(app)
         navigateTo('/boulder/' + id)
         return id
@@ -30,7 +30,7 @@ createBoulder(app: App) {
 
 export function
 role(app: App): string {
-    const accountC = Avers.lookupContent<Account>(app.data.aversH, app.data.session.objId)
+    const accountC = Avers.lookupContent<Storage.Account>(app.data.aversH, app.data.session.objId)
     const accountE = accountC.get(null)
 
     if (accountE === null) {
