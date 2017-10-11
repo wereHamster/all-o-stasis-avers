@@ -81,7 +81,8 @@ serveLocalAPI aversH =
     :<|> serveActiveBouldersCollection
     :<|> serveOwnBouldersCollection
     :<|> serveAccounts
-    :<|> serveAdminAccounts :<|> serveSignup
+    :<|> serveAdminAccounts
+    :<|> serveSignup
   where
     serveRevision =
         pure $ T.pack $ fromMaybe "HEAD" $(revision)
