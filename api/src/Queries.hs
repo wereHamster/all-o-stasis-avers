@@ -2,7 +2,6 @@
 
 module Queries
     ( mapId
-    , isActive
     , isOwnBoulder
     , isSetter
     , hasAccess
@@ -29,12 +28,6 @@ isSetter :: R.Exp R.Object -> R.Exp Bool
 isSetter = \x -> R.Ne
     (R.GetField "role" x :: R.Exp Text)
     ("user" :: R.Exp Text)
-
--- all still active boulders (without a removed date)
-isActive :: R.Exp R.Object -> R.Exp Bool
-isActive = \x -> R.Eq
-    (R.GetField "removed" x :: R.Exp Double)
-    (0 :: R.Exp Double)
 
 -- FIXME: we should check if the setter is in the list of setters
 --        setter is a list of setterIds
