@@ -10,8 +10,8 @@ the following functionality:
 * retaining a history of removed boulders
 * statistics for grade distribution for each sector and setter
 
-The project is uses [Avers](https://github.com/wereHamster/avers) for the
-backend and [RethinkDB](https://rethinkdb.com/).
+The project uses [Avers](https://github.com/wereHamster/avers) for the backend
+and [RethinkDB](https://rethinkdb.com/) as storage.
 
 
 ## Quick start
