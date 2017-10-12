@@ -73,7 +73,7 @@ RethinkDB explorer:
 ## Using all-o-stasis in your gym?
 
 Currently the code probably needs quite some tweaking to work for your gym. If
-you need further assistance feel free to email me.
+you need further assistance feel free to contact me.
 
 
 ## Contribute
