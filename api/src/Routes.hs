@@ -92,8 +92,7 @@ serveLocalAPI aversH =
             runQueryCollect $
                 R.Map mapId $
                 R.OrderBy [R.Descending "setDate"] $
-                R.Filter isActive $
-                viewTable bouldersView
+                viewTable activeBouldersView
 
         pure $ map ObjId $ V.toList boulders
 
