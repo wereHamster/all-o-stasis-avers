@@ -37,7 +37,7 @@ To start the client
 
     cd client
     nix-shell
-    script/server
+    ./script/serve
     open localhost:8081 in browser
 
 
@@ -48,11 +48,15 @@ server. The required tables are:
 
 - objects
 - snapshots
+    ```
     r.db('allostasis').table('snapshots').indexCreate('objectSnapshotSequence',
         [r.row('objectId'), r.row('revisionId')]);
+    ```
 - patches
+    ```
     r.db('allostasis').table('patches').indexCreate('objectPatchSequence',
             [r.row('objectId'), r.row('revisionId')]);
+    ```
 - secrets
 - sessions
 - blobs
