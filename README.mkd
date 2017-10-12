@@ -3,41 +3,48 @@
 ["Allostasis is essential in order to maintain internal viability amid
 changing conditions"](http://en.wikipedia.org/wiki/Allostasis)
 
-All-o-stasis is a very simple web interface for route setters and visitors of the
-Minimum boulder gym. The framework provides the following functionality:
+All-o-stasis is a very app to track boulders in a gym. The framework provides
+the following functionality:
 
-* tracking all currently available (and history of removed) boulders
-* admins can survey the performance of their setters.
-* visitors can rate boulders (1 - 3 stars).
+* tracking of currently available boulders
+* retaining a history of removed boulders
+* statistics for grade distribution for each sector and setter
 
-The project is based on nodejs, express, jade and uses mongodb.
+The project is uses [Avers](https://github.com/wereHamster/avers) for the
+backend and [RethinkDB](https://rethinkdb.com/).
 
 
-
-## Quick start ##
+## Quick start
 
 In order to run the boulder admin install the following dependencies:
 
-* [nodejs](http://nodejs.org/) v0.6.6 or higher
-* [npm](http://npmjs.org/) v1.1.0 or higher
-* [mongodb](http://www.mongodb.org/) v2.0 or higher
-
-Using npm the rest of the dependencies can be installed:
-
-    npm install
-
-To start the server
-
-    mkdir db (only do that once)
-    mongod --dbpath db &
-    node_modules/coffee-script/bin/coffee server.coffee
-    open localhost:3000 in browser
+* [stack](https://docs.haskellstack.org/en/stable/README/)
+* [NixOs](https://nixos.org/)
+* [RethinkDB](https://rethinkdb.com/)
 
 
-### Populating the DB ###
+### Api Server
+
+Make sure RethinkDB is running, then start the server with
+
+    cd api
+    ./script/serve
 
 
-Required:
+### Client
+
+To start the client
+
+    cd client
+    nix-shell
+    script/server
+    open localhost:8081 in browser
+
+
+### Populating the DB
+
+The Database should be populated with tables the first time you start the API
+server. The required tables are:
 
 - objects
 - snapshots
@@ -51,26 +58,32 @@ Required:
 - blobs
 
 
+#### Creating an ADMIN user
+
+In order to have a user with admin rights, execute the following in the
+RethinkDB explorer:
+
+    TODO
+
+
 ## Using all-o-stasis in your gym?
 
-Currently the code probably needs quite some tweaking to work for your gym. In
-the (not so near) future I plan to implement a more modular approach abstracting
-common features of climbing gyms. Until then you most probably have to change
-the database layout and code concerning grades.
-
-If you need further assistance feel free to email me.
+Currently the code probably needs quite some tweaking to work for your gym. If
+you need further assistance feel free to email me.
 
 
-## Contribute ##
+## Contribute
 
 Send me pull requests or email me patches.
 
-## Contributors ##
 
-- Tomas Carnecky (wereHamster)
+## Contributors
+
+Many thanks [wereHamster](https://github.com/wereHamster) for the numerous help
+with the code and design.
 
 
-## License ##
+## License
 
 The Minimum Logo and sector images are under copyright by the Minimum Boulder
 Gym.
