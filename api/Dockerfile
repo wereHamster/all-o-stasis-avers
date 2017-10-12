@@ -1,11 +1,14 @@
-FROM b.gcr.io/ewa/haskell:v5-gbcd2905-t20160117172806
+FROM ubuntu:16.04
 
 RUN apt-get update && \
-    apt-get install -y libffi6 zlib1g-dev curl
+    apt-get install -y software-properties-common libffi6 zlib1g-dev curl
+
+RUN curl -sSL https://get.haskellstack.org/ | sh
 
 ADD . /src
 RUN cd src && \
-    stack setup && \
+    stack --no-system-ghc setup && \
+    stack build && \
     stack install && \
     cp $(stack path --local-bin-path)/all-o-stasis-api /usr/bin/ && \
     cd / && \
