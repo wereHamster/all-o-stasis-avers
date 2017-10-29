@@ -92,7 +92,7 @@ class UpdateSecretView extends React.Component<{ app: App, accountE: Avers.Edita
 
 export const updateSecretView = (accountId: string) => (app: App) => {
     let accountC = Avers.lookupEditable<Account>(app.data.aversH, accountId);
-    let accountE = accountC.get(undefined);
+    let accountE = accountC.get(undefined as any);
 
     return <UpdateSecretView app={app} accountE={accountE} />;
 }

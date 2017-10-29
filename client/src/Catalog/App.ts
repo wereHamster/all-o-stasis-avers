@@ -12,7 +12,7 @@ const fetch = (url) =>
 
 export const aversH = new Avers.Handle('localhost', fetch, path => new WebSocket('ws:localhost' + path), () => window.performance.now(), infoTable)
 const data = new Data(aversH)
-export const app = new App(null, data, () => { throw new Error('mkViewFn') })
+export const app = new App(null as any, data, () => { throw new Error('mkViewFn') })
 
 
 

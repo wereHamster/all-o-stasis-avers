@@ -14,7 +14,7 @@ A yellow BoulderCard.
 
 ${
 <ReactSpecimen noSource>
-    <BoulderCard app={app} boulderE={Avers.lookupEditable<Boulder>(aversH, boulder1Id).get(undefined)} />
+    <BoulderCard app={app} boulderE={Avers.lookupEditable<Boulder>(aversH, boulder1Id).get(undefined as any)} />
 </ReactSpecimen>
 }
 `

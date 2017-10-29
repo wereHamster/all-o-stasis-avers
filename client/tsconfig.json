@@ -11,7 +11,8 @@
         "suppressImplicitAnyIndexErrors": true,
         "rootDir": "src/",
         "outDir": "dist/js/",
-        "jsx": "react"
+        "jsx": "react",
+        "strict": true
     },
     "include": [
         "src/**/*"

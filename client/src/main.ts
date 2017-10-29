@@ -27,8 +27,13 @@ const mkApp = (): App => {
 
     const data = new Data(aversH)
 
+    const containerElement = document.getElementById('root')
+    if (!containerElement) {
+        throw new Error('mkApp: #root not found')
+    }
+
     return new App(
-        document.getElementById('root'),
+        containerElement,
         data,
         loadingView,
     )

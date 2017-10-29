@@ -30,21 +30,21 @@ createBoulder(app: App) {
 
 export function
 role(app: App): string {
-    const accountC = Avers.lookupContent<Storage.Account>(app.data.aversH, app.data.session.objId)
-    const accountE = accountC.get(null)
-
-    if (accountE === null) {
+    const objId = app.data.session.objId
+    if (!objId) {
         return 'user'
-    } else {
-        return accountE.role
     }
+
+    return Avers.lookupContent<Storage.Account>(app.data.aversH, objId)
+        .fmap(accountE => accountE.role)
+        .get('user')
 }
 
 // filter on the client
 export function
 sectorBoulders(app: App, sectorName: string): Array<Avers.Editable<Storage.Boulder>> {
     return app.data.activeBouldersCollection.ids.get([])
-        .map(boulderId => Avers.lookupEditable<Storage.Boulder>(app.data.aversH, boulderId).get(null))
+        .map(boulderId => Avers.lookupEditable<Storage.Boulder>(app.data.aversH, boulderId).get(null as any))
         .filter(x => x !== null)
         .filter(x => x.content.sector === sectorName)
 }

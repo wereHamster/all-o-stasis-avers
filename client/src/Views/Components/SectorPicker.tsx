@@ -26,7 +26,9 @@ export class SectorPicker extends React.Component<SectorPickerProps> {
         if (this.ref) {
             this.ref.addEventListener('click', ev => {
                 const target: HTMLElement = ev.target as any
-                this.props.onChange(target.parentElement.id)
+                if (target.parentElement) {
+                    this.props.onChange(target.parentElement.id)
+                }
             })
         }
     }

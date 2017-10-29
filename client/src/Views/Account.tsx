@@ -15,25 +15,17 @@ accountGravatarUrl(email: string) {
     return 'http://www.gravatar.com/avatar/' + Md5.hashStr(email)
 }
 
+// only admins can edit all accounts with the exception of users
+// changing their own accounts
 export const accountView = (accountId: string) => (app: App) => {
-    const accountC = Avers.lookupEditable<Account>(app.data.aversH, accountId)
-    const accountE = accountC.get(undefined)
-
-    // FIXME: best to capture here?
-    if (accountE === undefined || accountE.objectId === undefined) {
+    return Avers.lookupEditable<Account>(app.data.aversH, accountId).fmap(accountE => {
+        const canEdit = (role(app) === 'admin' || accountId === app.data.session.objId)
         return (
-            <Site app={app}/>
+          <Site app={app}>
+              { canEdit ? AccountView({ app, accountE }) : accountRep(accountE) }
+          </Site>
         )
-    }
-
-    // only admins can edit all accounts with the exception of users
-    // changing their own accounts
-    const canEdit = (role(app) === 'admin' || accountId === app.data.session.objId)
-    return (
-      <Site app={app}>
-          { canEdit ? AccountView({ app, accountE }) : accountRep(accountE) }
-      </Site>
-    )
+    }).get(<Site app={app} />)
 }
 
 

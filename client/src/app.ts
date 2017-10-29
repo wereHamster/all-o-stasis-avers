@@ -29,7 +29,7 @@ export const config = Avers.mk<Config>(Config, configObject)
 
 export class App {
 
-    createBoulderPromise: Promise<string> = undefined
+    createBoulderPromise: void | Promise<string> = undefined
 
     constructor(
         public containerElement: Element,

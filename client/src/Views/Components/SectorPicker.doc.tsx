@@ -5,6 +5,6 @@ import {SectorPicker} from './SectorPicker'
 
 export default () => markdown`
 ${<ReactSpecimen noSource>
-    <SectorPicker />
+    <SectorPicker sector='' onChange={() => {}} />
 </ReactSpecimen>}
 `

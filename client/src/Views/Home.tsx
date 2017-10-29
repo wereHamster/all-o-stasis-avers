@@ -22,7 +22,7 @@ import {Site} from './Components/Site'
 export function
 homeView(app: App) {
     const editableBoulders = app.data.activeBouldersCollection.ids.get([])
-        .map(boulderId => Avers.lookupEditable<Boulder>(app.data.aversH, boulderId).get(null))
+        .map(boulderId => Avers.lookupEditable<Boulder>(app.data.aversH, boulderId).get(null as any))
         .filter(x => x !== null)
 
     // Go through the list, render each boulder with <BoulderCard> and insert
@@ -53,7 +53,7 @@ homeView(app: App) {
                 date: createdAt,
             }
         }
-    }, { boulders: [], date: null })
+    }, { boulders: [] as JSX.Element[], date: null as (null | Date) })
 
     return (
         <Site app={app}>
