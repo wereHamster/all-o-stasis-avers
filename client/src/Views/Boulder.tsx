@@ -10,7 +10,7 @@ import {Account, Boulder, grades, sectors} from '../storage'
 import {accountGravatarUrl} from './Account'
 
 import {text, darkGrey, lightGrey} from '../Materials/Colors'
-import {useTypeface, copy16, copy16Bold, copy14} from '../Materials/Typefaces'
+import {useTypeface, heading18, copy16, copy16Bold, copy14} from '../Materials/Typefaces'
 
 import {DropDownInput} from './Components/DropdownInput'
 import {NumberInput} from './Components/NumberInput'
@@ -132,12 +132,23 @@ BoulderDetailsEditor({app, boulderE}: {app: App, boulderE: Avers.Editable<Boulde
 export const boulderView = (boulderId: string) => (app: App) => {
     return Avers.lookupEditable<Boulder>(app.data.aversH, boulderId).fmap(boulderE => {
       const boulderRep = role(app) === 'user'
-        ? <BoulderDetails boulder={boulderE.content} />
+        ? <BoulderDetails app={app} boulder={boulderE.content} />
         : <BoulderDetailsEditor app={app} boulderE={boulderE} />
 
       return (
         <Site app={app}>
           <div className='boulder'>
+            <div style={{padding: '40px 20px 20px'}}>
+              <Back onClick={navigateToFn('/')} style={{display: 'flex', alignItems: 'center'}}>
+                <BackIcon viewBox='0 0 50 40' height='14'>
+                  <path d='M20 4L4 20L20 36M4 20L46 20' fill='transparent' stroke='currentColor' strokeWidth='5' strokeLinecap='round' strokeLinejoin='round' />
+                </BackIcon>
+
+                <BackText>
+                  Back to all boulders
+                </BackText>
+              </Back>
+            </div>
             <div style={{display: 'flex', padding: 24}}>
               <BoulderId grade={boulderE.content.grade}>{boulderE.content.gradeNr}</BoulderId>
               <div style={{paddingLeft: 24}}>
@@ -359,4 +370,30 @@ transition: all .2s;
   background-color: #b2d0e6;
   color: #a00c0c;
 }
+`
+
+
+// ----------------------------------------------------------------------------
+
+const Back = styled.div`
+display: flex;
+align-items: center;
+cursor: pointer;
+
+color: ${darkGrey};
+transition: color .12s;
+
+&:hover {
+  color: ${text};
+}
+`
+
+const BackIcon = styled.svg`
+display: block;
+margin-right: 8px;
+`
+
+const BackText = styled.div`
+${useTypeface(copy16)}
+line-height: 1;
 `

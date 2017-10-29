@@ -14,7 +14,7 @@ This is used on the Boulder page when the user is *not* logged in.
 
 ${
 <ReactSpecimen noSource>
-    <BoulderDetails boulder={Avers.lookupContent<Boulder>(aversH, boulder1Id).get(undefined)} />
+    <BoulderDetails app={app} boulder={Avers.lookupContent<Boulder>(aversH, boulder1Id).get(undefined)} />
 </ReactSpecimen>
 }
 `

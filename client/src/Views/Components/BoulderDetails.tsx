@@ -1,15 +1,28 @@
+import * as Avers from 'avers'
 import * as React from 'react'
 import * as moment from 'moment'
 import styled from 'styled-components'
 
-import {Boulder} from '../../storage'
+import {App} from '../../app'
+import {Account, Boulder} from '../../storage'
+import {accountGravatarUrl} from '../Account'
 
-export const BoulderDetails = ({boulder}: {boulder: Boulder}) => (
+import {text, darkGrey, lightGrey} from '../../Materials/Colors'
+import {useTypeface, copy16, copy16Bold, copy14} from '../../Materials/Typefaces'
+
+import {SectorPicker} from './SectorPicker'
+
+export const BoulderDetails = ({app, boulder}: {app: App, boulder: Boulder}) => (
     <Root>
-        <div><strong>Name:</strong> {boulder.name}</div>
-        <div><strong>Sector:</strong> {boulder.sector}</div>
-        <div><strong>Grade:</strong> {boulder.gradeNr} {boulder.grade}</div>
-        <div><strong>Date:</strong> {moment.unix(boulder.setDate / 1000).toISOString()}</div>
+        <Section>Sector</Section>
+        <SectorPicker sector={boulder.sector} onChange={() => {}} />
+
+        <Section>Setters</Section>
+        <div style={{display: 'flex'}}>
+        {boulder.setter.map(setterId => (
+            <Setter key={setterId} app={app} setterId={setterId} />
+        ))}
+      </div>
     </Root>
 )
 
@@ -17,7 +30,44 @@ export const BoulderDetails = ({boulder}: {boulder: Boulder}) => (
 // ----------------------------------------------------------------------------
 
 const Root = styled.div`
-    padding-top: 80px;
-    display: flex;
-    flex-direction: column;
+max-width: 400px;
+`
+
+const Section = styled.div`
+${useTypeface(copy16Bold)}
+color: ${text};
+
+padding: 80px 0 12px;
+&:first-of-type {
+    padding: 0 0 12px;
+}
+`
+
+
+// ----------------------------------------------------------------------------
+
+const Setter = ({app, setterId}) => {
+    return Avers.lookupContent<Account>(app.data.aversH, setterId).fmap(account => (
+        <SetterContainer>
+            <SetterImage src={accountGravatarUrl(account.email)} />
+            <SetterName>{(account.name !== '') ? account.name : setterId.slice(0, 2)}</SetterName>
+        </SetterContainer>
+    )).get(<div>{setterId}</div>)
+}
+
+const SetterContainer = styled.div`
+margin-right: 8px;
+cursor: pointer;
+`
+
+const SetterImage = styled.img`
+display: block;
+width: 60px;
+height: 60px;
+`
+
+const SetterName = styled.div`
+${useTypeface(copy16)}
+color: ${text};
+text-align: center;
 `
