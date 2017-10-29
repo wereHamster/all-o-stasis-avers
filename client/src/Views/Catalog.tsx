@@ -50,6 +50,11 @@ const LoadableCatalog = Loadable({
                         title: 'SetterCard',
                         component: pageLoader(() => import('./Components/SetterCard.doc').then(x => x.default)),
                     },
+                    {
+                        path: '/components/sector-picker',
+                        title: 'SectorPicker',
+                        component: pageLoader(() => import('./Components/SectorPicker.doc').then(x => x.default)),
+                    },
                 ],
             },
         ]

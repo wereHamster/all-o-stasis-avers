@@ -10,7 +10,7 @@ import {App, navigateTo, navigateToFn} from '../../app'
 
 import {gradeBackgroundColor, gradeBorderColor, gradeColor} from '../../Materials/Colors'
 
-import logo from 'url-loader!!../../../assets/logo.svg'
+import logo from '!!url-loader!../../../assets/logo.svg'
 
 export const NavBar = ({app}: {app: App}) => (
     <Root>

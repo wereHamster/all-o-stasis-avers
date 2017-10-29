@@ -83,7 +83,6 @@ const Card: any = styled.div`
     @media (min-width: 1200px) {
         width: calc(100% / 5);
     }
-
 `
 
 const Meta = styled.div`
@@ -92,6 +91,7 @@ const Meta = styled.div`
     justify-content: space-between;
     align-items: center;
     flex: 1;
+    margin-left: 12px;
 
     @media (min-width: 480px) {
         flex-direction: column;

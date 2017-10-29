@@ -11,13 +11,13 @@ interface NumberInputState {
 }
 
 // The value is only valid if it can be fully parsed into a number.
-function 
+function
 isValidNumber(value: string): boolean {
     var num = parseFloat(value);
     return !isNaN(num) && value == '' + num;
 }
 
-function 
+function
 asString(value) {
     if (value === null || value === undefined) {
         return '';
@@ -48,9 +48,9 @@ class NumberInputSpec extends React.Component<NumberInputProps, NumberInputState
     };
 
     render() {
-        let className = '';
+        let className = 'number-input';
         if (!isValidNumber(this.state.rawValue)) {
-            className = 'invalid';
+            className = 'number-input invalid';
         }
 
         function onClick(e) {

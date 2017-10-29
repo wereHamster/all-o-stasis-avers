@@ -32,7 +32,11 @@ module.exports = {
       {
         test: /\.md$/,
         loaders: [require.resolve('catalog/loader'), require.resolve('raw-loader')]
-      }
+      },
+      {
+        test: /\.svg$/,
+        loader: 'svg-react-loader',
+      },
     ]
   },
 

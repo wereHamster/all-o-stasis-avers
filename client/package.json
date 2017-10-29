@@ -25,6 +25,7 @@
     "react-loadable": "^4.0.5",
     "react-vega-lite": "^1.1.2",
     "styled-components": "^2.1.2",
+    "svg-react-loader": "^0.4.5",
     "timeago.js": "^2.0.0",
     "ts-md5": "*",
     "tslint": "^5.7.0",

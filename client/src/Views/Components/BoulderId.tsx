@@ -12,7 +12,6 @@ export const BoulderId: any = styled.div`
     font-size: 22px;
     line-height: 1;
     box-shadow: 0 0 4px rgba(99, 85, 25, .5);
-    margin-right: 12px;
     font-family: 'Advent Pro';
     transition: box-shadow .2s;
     flex: 0 0 32px;
