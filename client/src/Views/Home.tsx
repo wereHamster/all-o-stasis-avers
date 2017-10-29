@@ -34,7 +34,7 @@ homeView(app: App) {
         if (date === null) {
             return {
                 boulders: boulders.concat([
-                    <BoulderSeparator>{moment(createdAt).format('DD. MMMM')}</BoulderSeparator>,
+                    <BoulderSeparator key={`separator-${createdAt}`}>{moment(createdAt).format('DD. MMMM')}</BoulderSeparator>,
                     <BoulderCard key={objectId} app={app} boulderE={boulder} />,
                 ]),
                 date: createdAt,
@@ -47,7 +47,7 @@ homeView(app: App) {
         } else {
             return {
                 boulders: boulders.concat([
-                    <BoulderSeparator>{moment(createdAt).format('DD. MMMM')}</BoulderSeparator>,
+                    <BoulderSeparator key={`separator-${createdAt}`}>{moment(createdAt).format('DD. MMMM')}</BoulderSeparator>,
                     <BoulderCard key={objectId} app={app} boulderE={boulder} />,
                 ]),
                 date: createdAt,
