@@ -9,9 +9,23 @@ export default () => markdown`
 # Heading
 
 ${
-<ReactSpecimen noSource>
+<ReactSpecimen noSource plain>
+<div>
 <div style={T.h1 as any}>
-The quick brown fox jumps over the lazy dog
+h1. The quick brown fox jumps over the lazy dog
+</div>
+<div style={T.heading28 as any}>
+heading28. The quick brown fox jumps over the lazy dog
+</div>
+<div style={T.heading24 as any}>
+heading24. The quick brown fox jumps over the lazy dog
+</div>
+<div style={T.heading20 as any}>
+heading20. The quick brown fox jumps over the lazy dog
+</div>
+<div style={T.heading18 as any}>
+heading18. The quick brown fox jumps over the lazy dog
+</div>
 </div>
 </ReactSpecimen>
 }
@@ -19,17 +33,17 @@ The quick brown fox jumps over the lazy dog
 # Copy
 
 ${
-<ReactSpecimen noSource>
+<ReactSpecimen noSource plain>
+<div>
 <div style={T.copy16 as any}>
-The quick brown fox jumps over the lazy dog
+copy16. The quick brown fox jumps over the lazy dog
 </div>
-</ReactSpecimen>
-}
-
-${
-<ReactSpecimen noSource>
+<div style={T.copy16Bold as any}>
+copy16Bold. The quick brown fox jumps over the lazy dog
+</div>
 <div style={T.copy14 as any}>
-The quick brown fox jumps over the lazy dog
+copy14. The quick brown fox jumps over the lazy dog
+</div>
 </div>
 </ReactSpecimen>
 }
