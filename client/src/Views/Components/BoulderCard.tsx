@@ -32,7 +32,7 @@ export class BoulderCard extends React.Component<BoulderCardProps> {
                 <Meta>
                     <Sector>{prettyPrintSector(sector)}</Sector>
                     <Setters>
-                        {setter.map(setterId => <BoulderCardSetter app={app} setterId={setterId} />)}
+                        {setter.map(setterId => <BoulderCardSetter key={setterId} app={app} setterId={setterId} />)}
                     </Setters>
                 </Meta>
             </Card>
