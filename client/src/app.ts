@@ -34,7 +34,7 @@ export class App {
     constructor(
         public containerElement: Element,
         public data: Data,
-        public mkViewFn: (app: App) => any,
+        public mkViewFn: (app: App) => React.ReactElement<{}>,
     ) {}
 }
 
@@ -90,7 +90,7 @@ refresh(app: App): void {
 }
 
 export function
-loadView(app: App, mkViewFn: (app: App) => React.ReactElement<any>): void {
+loadView(app: App, mkViewFn: (app: App) => React.ReactElement<{}>): void {
     app.mkViewFn = mkViewFn
     refresh(app)
 }
