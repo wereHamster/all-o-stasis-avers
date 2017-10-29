@@ -106,42 +106,55 @@ function createNewBoulder(app: App) {
 }
 
 const Root = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    height: 64px;
+display: flex;
+flex-direction: row;
+align-items: center;
+height: 64px;
 
-    ${useTypeface(copy14)}
-    color: ${lightGrey};
+${useTypeface(copy14)}
+color: ${lightGrey};
 
-    text-transform: uppercase;
+text-transform: uppercase;
 `
 
 const Logo = styled.a`
 display: block;
 text-decoration: none;
-padding: 0 48px 0 24px;
+padding: 0 16px 0 16px;
+
+@media (min-width: 480px) {
+    padding: 0 48px 0 24px;
+}
 `
 const LogoImage = styled.img`
 display: block;
+max-width: 40px;
 height: 32px;
+
+@media (min-width: 480px) {
+    max-width: initial;
+}
 `
 
 const FlexItem = styled.div`
-   flex: 1
+flex: 1
 `
 
 const Item: any = styled<{isActive: boolean}>(({isActive: _, ...props}) => <div {...props} />)`
-    display: flex;
-    align-items: center;
-    align-self: stretch;
+display: flex;
+align-items: center;
+align-self: stretch;
+padding-right: 16px;
+cursor: pointer;
+white-space: nowrap;
+
+color: ${({isActive}) => isActive ? text : 'inherit'};
+
+&:hover {
+    color: ${text};
+}
+
+@media (min-width: 480px) {
     padding-right: 32px;
-    cursor: pointer;
-    white-space: nowrap;
-
-    color: ${({isActive}) => isActive ? text : 'inherit'};
-
-    &:hover {
-        color: ${text};
-    }
+}
 `
