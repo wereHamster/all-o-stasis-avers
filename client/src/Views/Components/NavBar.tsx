@@ -137,6 +137,7 @@ const Item: any = styled<{isActive: boolean}>(({isActive: _, ...props}) => <div 
     align-self: stretch;
     padding-right: 32px;
     cursor: pointer;
+    white-space: nowrap;
 
     color: ${({isActive}) => isActive ? text : 'inherit'};
 

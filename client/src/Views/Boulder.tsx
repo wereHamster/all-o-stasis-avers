@@ -5,10 +5,11 @@ import * as React from 'react'
 import styled from 'styled-components'
 
 import {role} from '../actions'
-import {App, refresh} from '../app'
-import {Boulder, grades, sectors} from '../storage'
+import {App, navigateToFn, refresh} from '../app'
+import {Account, Boulder, grades, sectors} from '../storage'
+import {accountGravatarUrl} from './Account'
 
-import {text, darkGrey} from '../Materials/Colors'
+import {text, darkGrey, lightGrey} from '../Materials/Colors'
 import {useTypeface, copy16, copy16Bold, copy14} from '../Materials/Typefaces'
 
 import {DropDownInput} from './Components/DropdownInput'
@@ -56,6 +57,14 @@ BoulderDetailsEditor({app, boulderE}: {app: App, boulderE: Avers.Editable<Boulde
       changeRemovedDate(0)
     }
 
+    function addSetter(accountId) {
+      boulder.setter = [...boulder.setter, accountId]
+    }
+
+    function removeSetter(accountId) {
+      boulder.setter = boulder.setter.filter(x => x !== accountId)
+    }
+
     return (
       <div>
         <Section>Sector</Section>
@@ -78,6 +87,14 @@ BoulderDetailsEditor({app, boulderE}: {app: App, boulderE: Avers.Editable<Boulde
           <div style={{marginTop: 12}}>
             <NumberInput object={boulder} field='gradeNr'></NumberInput>
           </div>
+        </div>
+
+        <Section>Setters</Section>
+        <div style={{display: 'flex'}}>
+          {boulder.setter.map(setterId => (
+            <Setter key={setterId} app={app} setterId={setterId} onClick={removeSetter} />
+          ))}
+          <AddSetter app={app} addSetter={addSetter} />
         </div>
 
         <Section>Set Date</Section>
@@ -130,7 +147,7 @@ export const boulderView = (boulderId: string) => (app: App) => {
           </div>
         </Site>
       )
-    }).get(<Site app={app}>Loading…</Site>)
+    }).get(<Site app={app}><div>Loading…</div></Site>)
 }
 
 
@@ -162,6 +179,137 @@ const Cross = () => (
       <path stroke='currentColor' strokeWidth='2' d='M 22 2 L 2 22' />
     </svg>
 )
+
+
+// ----------------------------------------------------------------------------
+
+const Setter = ({app, setterId, onClick}) => {
+  return Avers.lookupContent<Account>(app.data.aversH, setterId).fmap(account => (
+    <SetterContainer onClick={() => { onClick(setterId) }}>
+      <SetterImage src={accountGravatarUrl(account.email)} />
+      <SetterName>{(account.name !== '') ? account.name : setterId.slice(0, 2)}</SetterName>
+    </SetterContainer>
+  )).get(<div>{setterId}</div>)
+}
+
+const SetterContainer = styled.div`
+margin-right: 8px;
+cursor: pointer;
+`
+
+const SetterImage = styled.img`
+display: block;
+width: 60px;
+height: 60px;
+`
+
+const SetterName = styled.div`
+${useTypeface(copy16)}
+color: ${text};
+text-align: center;
+`
+
+
+// ----------------------------------------------------------------------------
+
+class AddSetter extends React.Component<any, any> {
+  state = {
+    isOpen: false,
+  }
+
+  open = () => {
+    this.setState({isOpen: true})
+  }
+  close = () => {
+    this.setState({isOpen: false})
+  }
+  addSetter = (accountId) => {
+    this.props.addSetter(accountId)
+    this.close()
+  }
+
+  render() {
+    return (
+      <AddSetterContainer>
+        <svg width='60' height='60' onClick={this.open}>
+          <path d='M10 30 h40 M30 10 v40' />
+        </svg>
+        {this.state.isOpen && (
+          <SetterPicker
+            app={this.props.app}
+            dismiss={this.close}
+            addSetter={this.addSetter}
+          />
+        )}
+      </AddSetterContainer>
+    )
+  }
+}
+
+const AddSetterContainer = styled.div`
+width: 60px;
+height: 60px;
+cursor: pointer;
+
+& svg path {
+  stroke: ${lightGrey};
+  stroke-width: 6;
+  stroke-linecap: round;
+  transition: fill .12s;
+}
+&:hover svg path {
+  stroke: ${text};
+}
+`
+
+
+// ----------------------------------------------------------------------------
+
+class SetterPicker extends React.Component<any> {
+  onKeyPress = (ev) => {
+    if (ev.key === 'Escape') {
+      this.props.dismiss()
+    }
+  }
+
+  componentDidMount() {
+    window.addEventListener('keyup', this.onKeyPress)
+  }
+  componentWillUnmount() {
+    window.removeEventListener('keyup', this.onKeyPress)
+  }
+
+  render() {
+    const {app, dismiss, addSetter} = this.props
+    const setters = app.data.adminAccountCollection.ids.get([]).map(accountId => {
+      const accountC = Avers.lookupContent<Account>(app.data.aversH, accountId)
+      return accountC.fmap(account => (
+        <Setter
+          key={accountId}
+          app={app}
+          setterId={accountId}
+          onClick={() => { addSetter(accountId) }}
+        />
+      )).get(<div />)
+    })
+
+    return (
+      <div style={{position: 'fixed', zIndex: 10, top: 0, right: 0, bottom: 0, left: 0, padding: 60, background: '#f1f1f1'}}>
+        <div style={{position: 'fixed', top: 20, right: 20}} onClick={dismiss}>
+          <svg width='40' height='40'>
+            <path d='M10 10 L30 30 M30 10 L10 30' stroke='black' strokeWidth='7' strokeLinecap='round' />
+          </svg>
+        </div>
+
+        <div style={{textAlign: 'center', marginBottom: 60, fontSize: 32}}>Pick a setter</div>
+
+        <div style={{display: 'flex', flexWrap: 'wrap'}}>
+          {setters}
+        </div>
+      </div>
+    )
+  }
+}
 
 
 // ----------------------------------------------------------------------------
