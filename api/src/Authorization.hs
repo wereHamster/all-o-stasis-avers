@@ -33,7 +33,8 @@ aosAuthorization = Avers.Server.Authorizations
         , pure RejectR
         ]
     , lookupObjectAuthz = \cred objId ->
-        [ sufficient $ do
+        [ pure AllowR
+        , sufficient $ do
             objectIsBoulder objId
         , sufficient $ do
             session <- case cred of
