@@ -1,24 +1,16 @@
-/*
-module Views
-( loadingView
-, notFoundView
-) where
-*/
+import * as React from 'react'
 
-import * as React from 'react';
+import {App} from './app'
+import logo from '!!url-loader!../assets/logo.svg'
 
-import {App} from './app';
-
-import {Site} from './Views/Components/Site';
+import {Site} from './Views/Components/Site'
 
 export function loadingView(app: App) {
     return (
-      <div className="login">
-        <div className="logo">
-          Loading...
-        </div>
+      <div style={{minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+        <img src={logo} style={{display: 'block', maxWidth: '50vw'}} />
       </div>
-    );
+    )
 }
 
 export function notFoundView(app: App) {

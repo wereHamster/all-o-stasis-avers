@@ -115,6 +115,10 @@ function setupRoutes(app: App) {
         loadView(app, catalogView)
     })
 
+    page('/loading', () => {
+        loadView(app, loadingView)
+    })
+
     page('*', () => {
         loadView(app, notFoundView)
     })
