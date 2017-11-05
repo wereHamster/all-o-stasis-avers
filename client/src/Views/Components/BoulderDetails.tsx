@@ -19,8 +19,8 @@ export const BoulderDetails = ({app, boulder}: {app: App, boulder: Boulder}) => 
 
         <Section>Setters</Section>
         <div style={{display: 'flex'}}>
-        {boulder.setter.map(setterId => (
-            <Setter key={setterId} app={app} setterId={setterId} />
+        {boulder.setter.map((setterId, index) => (
+            <Setter key={index} app={app} setterId={setterId} />
         ))}
       </div>
     </Root>

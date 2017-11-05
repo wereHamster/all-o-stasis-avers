@@ -91,8 +91,8 @@ BoulderDetailsEditor({app, boulderE}: {app: App, boulderE: Avers.Editable<Boulde
 
         <Section>Setters</Section>
         <div style={{display: 'flex'}}>
-          {boulder.setter.map(setterId => (
-            <Setter key={setterId} app={app} setterId={setterId} onClick={removeSetter} />
+          {boulder.setter.map((setterId, index) => (
+            <Setter key={index} app={app} setterId={setterId} onClick={removeSetter} />
           ))}
           <AddSetter app={app} addSetter={addSetter} />
         </div>
@@ -292,11 +292,11 @@ class SetterPicker extends React.Component<any> {
 
   render() {
     const {app, dismiss, addSetter} = this.props
-    const setters = app.data.adminAccountCollection.ids.get([]).map(accountId => {
+    const setters = app.data.adminAccountCollection.ids.get([]).map((accountId, index) => {
       const accountC = Avers.lookupContent<Account>(app.data.aversH, accountId)
       return accountC.fmap(account => (
         <Setter
-          key={accountId}
+          key={index}
           app={app}
           setterId={accountId}
           onClick={() => { addSetter(accountId) }}
