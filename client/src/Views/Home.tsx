@@ -18,54 +18,129 @@ import {useTypeface, heading28, heading24, heading20, heading18, copy16Bold} fro
 
 import {BoulderCard} from './Components/BoulderCard'
 import {Site} from './Components/Site'
+import {BoulderId24} from './Components/BoulderId'
 
 export function
 homeView(app: App) {
-    const editableBoulders = app.data.activeBouldersCollection.ids.get([])
-        .map(boulderId => Avers.lookupEditable<Boulder>(app.data.aversH, boulderId).get(null as any))
-        .filter(x => x !== null)
-
-    // Go through the list, render each boulder with <BoulderCard> and insert
-    // headings in between two cards when the day they were created at changes.
-    const res = editableBoulders.reduce(({boulders, date}, boulder) => {
-        const objectId = boulder.objectId
-        const createdAt = new Date(boulder.content.setDate)
-
-        if (date === null) {
-            return {
-                boulders: boulders.concat([
-                    <BoulderSeparator key={`separator-${createdAt}`}>{moment(createdAt).format('DD. MMMM')}</BoulderSeparator>,
-                    <BoulderCard key={objectId} app={app} boulderE={boulder} />,
-                ]),
-                date: createdAt,
-            }
-        } else if (date.getMonth() === createdAt.getMonth() && date.getDate() === createdAt.getDate()) {
-            return {
-                boulders: boulders.concat([<BoulderCard key={objectId} app={app} boulderE={boulder} />]),
-                date: createdAt,
-            }
-        } else {
-            return {
-                boulders: boulders.concat([
-                    <BoulderSeparator key={`separator-${createdAt}`}>{moment(createdAt).format('DD. MMMM')}</BoulderSeparator>,
-                    <BoulderCard key={objectId} app={app} boulderE={boulder} />,
-                ]),
-                date: createdAt,
-            }
-        }
-    }, { boulders: [] as JSX.Element[], date: null as (null | Date) })
-
-    return (
-        <Site app={app}>
-            <Boulders>
-                {res.boulders}
-            </Boulders>
-        </Site>
-    )
+    return <Home app={app} />
 }
 
+class Home extends React.Component<{app: App}, {}> {
+    state = {
+        search: '',
+        grades: [] as string[],
+    }
+
+    chaneSearch = (ev): void => {
+        this.setState({search: ev.target.value})
+    }
+
+    toggleGrade = (grade: string): void => {
+        const {grades} = this.state
+        if (grades.indexOf(grade) === -1) {
+            this.setState({grades: [grade].concat(grades)})
+        } else {
+            this.setState({grades: grades.filter(x => x !== grade)})
+        }
+    }
+
+    render() {
+        const {app} = this.props
+        const {search, grades} = this.state
+
+        const editableBoulders = app.data.activeBouldersCollection.ids.get([])
+            .map(boulderId => Avers.lookupEditable<Boulder>(app.data.aversH, boulderId).get(null as any))
+            .filter(x => x !== null)
+            .filter(x => {
+                if (search === '' && grades.length === 0) {
+                    return true
+                } else {
+                    return grades.indexOf(x.content.grade) !== -1 && (search === '' || +search === x.content.gradeNr)
+                }
+            })
+
+
+        // Go through the list, render each boulder with <BoulderCard> and insert
+        // headings in between two cards when the day they were created at changes.
+        const res = editableBoulders.reduce(({boulders, date}, boulder) => {
+            const objectId = boulder.objectId
+            const createdAt = new Date(boulder.content.setDate)
+
+            if (date === null) {
+                return {
+                    boulders: boulders.concat([
+                        <BoulderSeparator key={`separator-${createdAt}`}>{moment(createdAt).format('DD. MMMM')}</BoulderSeparator>,
+                        <BoulderCard key={objectId} app={app} boulderE={boulder} />,
+                    ]),
+                    date: createdAt,
+                }
+            } else if (date.getMonth() === createdAt.getMonth() && date.getDate() === createdAt.getDate()) {
+                return {
+                    boulders: boulders.concat([<BoulderCard key={objectId} app={app} boulderE={boulder} />]),
+                    date: createdAt,
+                }
+            } else {
+                return {
+                    boulders: boulders.concat([
+                        <BoulderSeparator key={`separator-${createdAt}`}>{moment(createdAt).format('DD. MMMM')}</BoulderSeparator>,
+                        <BoulderCard key={objectId} app={app} boulderE={boulder} />,
+                    ]),
+                    date: createdAt,
+                }
+            }
+        }, { boulders: [] as JSX.Element[], date: null as (null | Date) })
+
+        return (
+            <Site app={app}>
+                <BoulderFilter>
+                    <BoulderFilterHeader>Filters</BoulderFilterHeader>
+                    <div style={{display: 'flex', marginRight: 20}}>
+                        <BoulderGradeToggleButton grade='yellow' grades={grades} onToggle={this.toggleGrade} />
+                        <BoulderGradeToggleButton grade='green' grades={grades} onToggle={this.toggleGrade} />
+                        <BoulderGradeToggleButton grade='orange' grades={grades} onToggle={this.toggleGrade} />
+                        <BoulderGradeToggleButton grade='blue' grades={grades} onToggle={this.toggleGrade} />
+                        <BoulderGradeToggleButton grade='red' grades={grades} onToggle={this.toggleGrade} />
+                        <BoulderGradeToggleButton grade='white' grades={grades} onToggle={this.toggleGrade} />
+                    </div>
+
+                    <input placeholder='Grade Nr.' value={search} onChange={this.chaneSearch} />
+                </BoulderFilter>
+                <Boulders>
+                    {res.boulders}
+                </Boulders>
+            </Site>
+        )
+    }
+}
+
+const BoulderGradeToggleButton = ({grade, grades, onToggle}) => (
+    <BoulderGradeToggle onClick={() => {onToggle(grade)}}>
+        <BoulderId24 grade={grade}>
+            {grades.indexOf(grade) === -1 ? '' : <Cross />}
+        </BoulderId24>
+    </BoulderGradeToggle>
+)
 
 // ----------------------------------------------------------------------------
+const BoulderFilter = styled.div`
+display: flex;
+align-items: center;
+padding: 20px 16px 12px;
+@media (min-width: 600px) {
+    padding: 20px 24px 20px;
+}
+`
+const BoulderFilterHeader = styled.div`
+${useTypeface(copy16Bold)}
+color: ${text};
+padding-right: 20px;
+`
+
+const BoulderGradeToggle = styled.div`
+margin-right: 4px;
+cursor: pointer;
+`
+
 const Boulders = styled.div`
     margin-top: 1rem;
     display: flex;
@@ -76,7 +151,7 @@ const Boulders = styled.div`
 const BoulderSeparator = styled.div`
     flex: 0 0 100%;
     width: 100%;
-    padding: 40px 16px 12px;
+    padding: 20px 16px 12px;
 
     ${useTypeface(copy16Bold)}
     color: ${text};
@@ -92,3 +167,10 @@ const BoulderSeparator = styled.div`
         }
     }
 `
+
+const Cross = () => (
+    <svg width='18' height='18'>
+      <path stroke='currentColor' strokeWidth='2' d='M 2 2 L 16 16' />
+      <path stroke='currentColor' strokeWidth='2' d='M 16 2 L 2 16' />
+    </svg>
+)
