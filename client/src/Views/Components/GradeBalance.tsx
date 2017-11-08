@@ -17,13 +17,21 @@ export class GradeBalance extends React.Component<GradeBalanceProps, {}> {
         description: 'Boulder grade distribution for a sector.',
         width: this.props.width,
         height: this.props.height,
-        mark: 'bar',
+        mark: {type: 'bar', style: 'bar' },
         encoding: {
             x: {field: 'grade', type: 'nominal', sort: null},
             y: {field: 'count', type: 'quantitative'},
             color: {field: 'grade', type: 'nominal',
                     scale: {range: [blue100, green100, orange100, red100, '#FFFFFF', yellow100]},
                    },
+        },
+        config: {
+            style: {
+                bar: {
+                    stroke: '#000000',
+                    strokeWidth: 0.5,
+                },
+            },
         },
     }
 
