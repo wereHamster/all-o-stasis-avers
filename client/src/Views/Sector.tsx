@@ -2,7 +2,7 @@ import * as Avers from 'avers'
 import * as React from 'react'
 import styled from 'styled-components'
 
-import {role, sectorBoulders} from '../actions'
+import {role, removeBoulders, sectorBoulders} from '../actions'
 import {App, navigateTo, refresh} from '../app'
 import {Boulder, grades, sectors, prettyPrintSector} from '../storage'
 
@@ -45,11 +45,7 @@ class Sector extends React.Component<SectorProps, SectorState> {
     }
 
     removeAllBoulders = () => {
-        // remove all boulders on the currently active sector
-        const now = Date.now()
-        sectorBoulders(this.props.app, this.state.sectorName).forEach(boulder => {
-            boulder.content.removed = now.valueOf()
-        })
+        removeBoulders(sectorBoulders(this.props.app, this.state.sectorName))
         Avers.resetObjectCollection(this.props.app.data.activeBouldersCollection)
         refresh(this.props.app)
     }
