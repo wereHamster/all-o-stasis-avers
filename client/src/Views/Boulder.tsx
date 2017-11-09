@@ -5,7 +5,7 @@ import * as React from 'react'
 import styled from 'styled-components'
 
 import {role} from '../actions'
-import {App, navigateToFn, refresh} from '../app'
+import {App, navigateToFn} from '../app'
 import {Account, Boulder, grades, sectors} from '../storage'
 import {accountGravatarUrl} from './Account'
 
@@ -35,7 +35,6 @@ BoulderDetailsEditor({app, boulderE}: {app: App, boulderE: Avers.Editable<Boulde
     function changeSetDate(date) {
         boulder.setDate = date.valueOf()
         Avers.resetObjectCollection(app.data.activeBouldersCollection)
-        refresh(app)
     }
 
     function getSetDate(): moment.Moment {
@@ -46,7 +45,6 @@ BoulderDetailsEditor({app, boulderE}: {app: App, boulderE: Avers.Editable<Boulde
     function changeRemovedDate(date) {
         boulder.removed = date.valueOf()
         Avers.resetObjectCollection(app.data.activeBouldersCollection)
-        refresh(app)
     }
 
     function setRemoved() {

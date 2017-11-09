@@ -3,7 +3,7 @@ import * as React from 'react'
 import styled from 'styled-components'
 
 import {role, removeBoulders, activeBoulders, sectorBoulders} from '../actions'
-import {App, navigateTo, refresh} from '../app'
+import {App, navigateTo} from '../app'
 import {Boulder, grades, sectors, prettyPrintSector} from '../storage'
 
 import {GradeBalance} from './Components/GradeBalance'
@@ -47,13 +47,11 @@ class Sector extends React.Component<SectorProps, SectorState> {
     removeAllBoulders = () => {
         removeBoulders(activeBoulders(this.props.app))
         Avers.resetObjectCollection(this.props.app.data.activeBouldersCollection)
-        refresh(this.props.app)
     }
 
     removeAllSectorBoulders = () => {
         removeBoulders(sectorBoulders(this.props.app, this.state.sectorName))
         Avers.resetObjectCollection(this.props.app.data.activeBouldersCollection)
-        refresh(this.props.app)
     }
 
     onChange = (e: React.FormEvent<any>) => {
