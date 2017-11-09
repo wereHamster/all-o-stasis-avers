@@ -50,6 +50,13 @@ sectorBoulders(app: App, sectorName: string): Array<Avers.Editable<Storage.Bould
 }
 
 export function
+activeBoulders(app: App): Array<Avers.Editable<Storage.Boulder>> {
+    return app.data.activeBouldersCollection.ids.get([])
+        .map(boulderId => Avers.lookupEditable<Storage.Boulder>(app.data.aversH, boulderId).get(null as any))
+        .filter(x => x !== null)
+}
+
+export function
 removeBoulders(boulders: Array<Avers.Editable<Storage.Boulder>>) {
     // remove all boulders on the currently active sector
     if (window.confirm('Wirklich alle Boulder entfernen?')) {

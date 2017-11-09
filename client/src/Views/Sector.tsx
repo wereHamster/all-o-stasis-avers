@@ -2,7 +2,7 @@ import * as Avers from 'avers'
 import * as React from 'react'
 import styled from 'styled-components'
 
-import {role, removeBoulders, sectorBoulders} from '../actions'
+import {role, removeBoulders, activeBoulders, sectorBoulders} from '../actions'
 import {App, navigateTo, refresh} from '../app'
 import {Boulder, grades, sectors, prettyPrintSector} from '../storage'
 
@@ -45,6 +45,12 @@ class Sector extends React.Component<SectorProps, SectorState> {
     }
 
     removeAllBoulders = () => {
+        removeBoulders(activeBoulders(this.props.app))
+        Avers.resetObjectCollection(this.props.app.data.activeBouldersCollection)
+        refresh(this.props.app)
+    }
+
+    removeAllSectorBoulders = () => {
         removeBoulders(sectorBoulders(this.props.app, this.state.sectorName))
         Avers.resetObjectCollection(this.props.app.data.activeBouldersCollection)
         refresh(this.props.app)
@@ -57,14 +63,24 @@ class Sector extends React.Component<SectorProps, SectorState> {
 
     render() {
         const boulders = sectorBoulders(this.props.app, this.state.sectorName)
+        const actBoulders = activeBoulders(this.props.app)
         return (
-            <div className='sector'>
-                <SectorHeader sectors={sectors()} sectorName={this.state.sectorName} onChange={this.onChange} removeAllBoulders={this.removeAllBoulders} />
+            <Views>
+                <SectorView>
+                <TotalHeader numBoulders={actBoulders.length} removeAllBoulders={this.removeAllBoulders} />
                 <Stats>
-                    <GradeBalance boulders={boulders} height={400} width={300} />
+                    <GradeBalance boulders={actBoulders} height={300} width={300} />
+                </Stats>
+                </SectorView>
+
+                <SectorView>
+                <SectorHeader sectorNames={sectors()} numBoulders={boulders.length} sectorName={this.state.sectorName} onChange={this.onChange} removeAllBoulders={this.removeAllSectorBoulders} />
+                <Stats>
+                    <GradeBalance boulders={boulders} height={300} width={300} />
                     <SectorBoulders boulders={boulders} />
                 </Stats>
-            </div>
+                </SectorView>
+            </Views>
         )
     }
 }
@@ -74,23 +90,45 @@ class Sector extends React.Component<SectorProps, SectorState> {
 // ----------------------------------------------------------------------------
 // SectorHeader
 
+interface TotalHeaderProps {
+    numBoulders: number
+
+    removeAllBoulders(): void
+}
+
 interface SectorHeaderProps {
-    sectors: string[]
+    sectorNames: string[]
+    numBoulders: number
     sectorName: string
 
     onChange(e: React.FormEvent<any>): void
     removeAllBoulders(): void
 }
 
-const SectorHeader = ({sectors, sectorName, onChange, removeAllBoulders}: SectorHeaderProps) => (
+const TotalHeader = ({numBoulders, removeAllBoulders}: TotalHeaderProps) => (
     <Header>
-        <Name>{prettyPrintSector(sectorName)}</Name>
+        <Name>Total ({numBoulders})</Name>
+        <Actions>
+            <div className='form'>
+                <div className='form-row'>
+                    <div className='label'>
+                        <div className='button' onClick={removeAllBoulders}>remove all</div>
+                    </div>
+                </div>
+            </div>
+        </Actions>
+    </Header>
+)
+
+const SectorHeader = ({sectorNames, numBoulders, sectorName, onChange, removeAllBoulders}: SectorHeaderProps) => (
+    <Header>
+        <Name>{prettyPrintSector(sectorName)} ({numBoulders})</Name>
         <Actions>
             <div className='form'>
                 <div className='form-row'>
                     <div className='label'>
                         <select defaultValue={sectorName} onChange={onChange}>
-                            {sectors.map((entry, index) => (
+                            {sectorNames.map((entry, index) => (
                                 <option value={entry} key={index}>{prettyPrintSector(entry)}</option>
                             ))}
                         </select>
@@ -130,6 +168,22 @@ const SectorBoulders = ({boulders}: SectorBouldersProps) => (
 
 // ----------------------------------------------------------------------------
 const Header = styled.div`
+`
+
+const Views = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+`
+
+const SectorView = styled.div`
+    .flex > * {
+        padding-left: 5rem;
+    }
+    .flex > :first-child {
+        padding-left: 0;
+    }
 `
 
 const Name = styled.div`
