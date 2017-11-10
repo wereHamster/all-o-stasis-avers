@@ -17,7 +17,6 @@ createBoulder(app: App) {
         app.createBoulderPromise = undefined
         Avers.resetObjectCollection(app.data.ownedBoulderCollection)
         Avers.resetObjectCollection(app.data.activeBouldersCollection)
-        refresh(app)
         navigateTo('/boulder/' + id)
         return id
     })
