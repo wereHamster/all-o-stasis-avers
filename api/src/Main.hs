@@ -14,6 +14,9 @@ import           Data.Text (Text)
 import           Data.Maybe
 import           Data.ByteString.Lazy (ByteString)
 import           Data.Proxy
+import qualified Data.Vector as V
+
+import qualified Database.RethinkDB as R
 
 import           Network.URI
 
@@ -28,9 +31,11 @@ import           Servant.API
 import           Servant.Server
 
 import           Authorization
+import           Queries
 import           Routes
 
 import           Storage.ObjectTypes
+import           Storage.Objects.Account
 
 import           Network.Wai
 import           Network.Wai.Handler.Warp
@@ -78,6 +83,22 @@ createAversHandle = do
 
     return h
 
+bootstrapAdminAccount:: Avers.Handle -> IO ()
+bootstrapAdminAccount h = do
+    adminAccounts <- evalAvers h $ do
+        runQueryCollect $
+            R.Filter (hasAccess "admin") $
+            viewTable accountsView
+    case adminAccounts of
+        Left e -> error $ show e
+        Right accounts -> if V.length accounts /= 0
+            then pure ()
+            else do
+                res <- evalAvers h createAdminAccount
+                void $ case res of
+                    Left e -> error $ show e
+                    Right _ -> return $ Right ()
+
 
 type API = AversAPI :<|> LocalAPI
 
@@ -94,6 +115,7 @@ server aversH =
 app :: Avers.Handle -> Application
 app aversH = logStdout $ cors mkCorsPolicy $ serve api $ server aversH
 
+
 mkCorsPolicy :: Request -> Maybe CorsResourcePolicy
 mkCorsPolicy req = Just $ simpleCorsResourcePolicy
     { corsOrigins = Just ([origin], True)
@@ -109,10 +131,10 @@ main :: IO ()
 main = do
     args <- getArgs
     h <- createAversHandle
+    bootstrapAdminAccount h
 
     mbPort <- pure $ case args of
         x:_ -> readMay x
         _   -> Nothing
 
     run (fromMaybe 8000 mbPort) (app h)
-
