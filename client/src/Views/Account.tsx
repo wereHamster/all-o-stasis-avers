@@ -134,7 +134,7 @@ class AccountSpec extends React.Component<AccountViewProps, {}> {
                          onChange={this.changeAccountLogin} onClick={onClick}></input>
                 </div>
               </div>
-              {accountE.content.role === 'admin' && this.accountAdminFields(accountE)}
+              {role(this.props.app) === 'admin' && this.accountAdminFields(accountE)}
             </div>
           </div>
         )
