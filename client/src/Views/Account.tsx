@@ -63,7 +63,7 @@ class AccountSpec extends React.Component<AccountViewProps, {}> {
         this.props.accountE.content.email = value
     }
 
-     changeAccountLogin = (e: React.FormEvent<any>) => {
+    changeAccountLogin = (e: React.FormEvent<any>) => {
         const value = (e.target as HTMLInputElement).value
         this.props.accountE.content.login = value
     }
