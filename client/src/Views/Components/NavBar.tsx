@@ -58,7 +58,7 @@ const StatsItem = () => (
 )
 
 const SignInItem = () => (
-    <Item onClick={navigateToFn('/login')}>
+    <Item onClick={navigateToFn('/signup')}>
         <i className='sign in icon'></i>
         Login
     </Item>
