@@ -85,7 +85,11 @@ function setupRoutes(app: App) {
     })
 
     page('/login', () => {
-        loadView(app, loginView)
+        loadView(app, loginView(''))
+    })
+
+    page('/login/:accountId', ctx => {
+        loadView(app, loginView(ctx.params.accountId))
     })
 
     page('/sector', ctx => {
