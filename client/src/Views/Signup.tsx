@@ -1,9 +1,3 @@
-/*
-module Signup
-( signupView
-) where
-*/
-
 import * as Avers from 'avers'
 import * as React from 'react'
 

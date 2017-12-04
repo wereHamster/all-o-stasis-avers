@@ -1,14 +1,3 @@
-/*
-module App
-( App
-, Data
-, refresh
-, loadView
-, navigateTo
-, navigateToFn
-) where
-*/
-
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 
@@ -104,4 +93,3 @@ export function
 navigateToFn(p: string) {
     return () => { navigateTo(p) }
 }
-
