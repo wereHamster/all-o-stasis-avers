@@ -32,6 +32,8 @@ aosAuthorization = Avers.Server.Authorizations
             return $ isSet || isAdm
         , pure RejectR
         ]
+    , lookupObjectAuthz = \_ _ -> [pure AllowR] -- we need to allow CredAnonymous to lookup Account objects
+{--
     , lookupObjectAuthz = \cred objId ->
         [ pure AllowR
         , sufficient $ do
@@ -43,8 +45,8 @@ aosAuthorization = Avers.Server.Authorizations
             hasCreated <- sessionCreatedObject session objId
             isAdm <- sessionIsAdmin session
             return $ hasCreated || isAdm
-        --, pure RejectR
         ]
+--}
     , patchObjectAuthz = \cred objId ops ->
         [ sufficient $ do
             session <- case cred of
