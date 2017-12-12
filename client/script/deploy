@@ -3,6 +3,7 @@ set -e
 
 BUCKET="boulders.iff.io"
 
+./script/confgen production
 npm run build
 
 # Upload all files to the bucket with no cache-control.
