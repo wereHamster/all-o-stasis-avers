@@ -5,7 +5,7 @@ const Visualizer = require('webpack-visualizer-plugin')
 
 module.exports = {
   entry: {
-    vendor: ['avers', 'react', 'react-dom'],
+    vendor: ['avers', 'react', 'react-dom', 'react-datepicker', 'moment', 'vega-lite', 'vega-parser', 'vega-scenegraph', 'vega-transforms', 'vega-dataflow', 'vega-expression'],
     main: ['whatwg-fetch', './src/main.ts'],
   },
 
@@ -43,8 +43,8 @@ module.exports = {
   plugins: [
     new CheckerPlugin(),
     new HashedModuleIdsPlugin(),
-    new optimize.CommonsChunkPlugin({name: "vendor"}),
-    new optimize.CommonsChunkPlugin({name: "commons"}),
+    new optimize.CommonsChunkPlugin({name: 'vendor', minChunks: Infinity}),
+    new optimize.CommonsChunkPlugin({name: 'main', async: true, children: true}),
     new HtmlWebpackPlugin({
       inject: true,
       template: 'assets/index.html'
