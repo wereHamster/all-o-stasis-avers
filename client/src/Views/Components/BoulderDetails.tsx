@@ -37,7 +37,7 @@ const Section = styled.div`
 ${useTypeface(copy16Bold)}
 color: ${text};
 
-padding: 80px 0 12px;
+padding: 40px 0 12px;
 &:first-of-type {
     padding: 0 0 12px;
 }
