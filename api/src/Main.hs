@@ -147,4 +147,5 @@ main = do
         , pcFrom = "auth@boulderapp.com"
         , pcApiDomain = "http://localhost:8000"
         , pcAppDomain = "http://localhost:8081"
+        , pcSendProvider = PCSPTerminal
         }

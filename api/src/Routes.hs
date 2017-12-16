@@ -19,15 +19,19 @@ import Data.Maybe
 import Data.Time
 import Data.Monoid
 
-import Data.Aeson (Value)
+import Data.Aeson
 
 import           Data.Text          (Text)
 import qualified Data.Text          as T
 import qualified Data.Text.Encoding as T
+import qualified Data.Text.Lazy.Encoding as LT
 
 import qualified Data.Vector as V
 
 import qualified Database.RethinkDB as R
+
+import           Network.Mail.Mime (Mail(..), Part(..), Address(..))
+import           Network.HTTP.Simple
 
 import Avers as Avers
 import Avers.TH
@@ -269,11 +273,46 @@ serveLocalAPI pc aversH =
         -- TODO: actually send the email.
         -- TODO: link requires the full domain name where the API is hosted,
         -- it therefore must be configurable.
-        liftIO $ do
-            putStrLn "\n\n-------------------------"
-            putStrLn $ show $ passportConfirmationEmail
+        let mail = passportConfirmationEmail
                 pc reqEmail (unObjId passportId) securityCode confirmationToken
-            putStrLn "\n\n-------------------------"
+        case pcSendProvider pc of
+            PCSPTerminal -> liftIO $ do
+                putStrLn "\n\n-------------------------"
+                putStrLn $ show mail
+                putStrLn "\n\n-------------------------"
+
+            PCSPSendgrid apiKey -> liftIO $ do
+                let partToContent :: Part -> Value
+                    partToContent part = object
+                        [ "type" .= ("text/plain" :: Text) -- partType part
+                        , "value" .= LT.decodeUtf8 (partContent part)
+                        ]
+
+                let subject = fromMaybe "???" $ lookup "Subject" (mailHeaders mail)
+
+                let toPersonalization addr = object
+                        [ "to" .= [ object [ "email" .= addressEmail addr ] ]
+                        , "subject" .= subject
+                        ]
+
+                print $ mailParts mail
+                let body = object
+                        [ "personalizations" .= map toPersonalization (mailTo mail)
+                        , "from" .= object
+                            [ "email" .= addressEmail (mailFrom mail)
+                            ]
+                        , "content" .= concatMap (map partToContent) (mailParts mail)
+                        ]
+
+                let request = setRequestBodyJSON body
+                        $ setRequestHeader "Content-Type" ["application/json"]
+                        $ setRequestHeader "Authorization" ["Bearer " <> T.encodeUtf8 apiKey]
+                        $ "POST https://api.sendgrid.com/v3/mail/send"
+
+                response <- httpLBS request
+                print response
+
+
 
         -- 4. Send response
         pure $ CreatePassportResponse
