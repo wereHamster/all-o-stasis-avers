@@ -1,4 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE RecordWildCards   #-}
 
 module PassportConfirmationEmail
     ( passportConfirmationEmail
@@ -8,10 +9,12 @@ import           Data.Text (Text)
 import qualified Data.Text as T
 import           Data.Monoid
 
+import           PassportAuth
 
-passportConfirmationEmail :: Text -> Text -> Text -> Text
-passportConfirmationEmail passportId securityCode confirmationToken = T.intercalate "\n"
-    [ "Verify your email to log on to the boulder app"
+
+passportConfirmationEmail :: PassportConfig -> Text -> Text -> Text -> Text
+passportConfirmationEmail PassportConfig{..} passportId securityCode confirmationToken = T.intercalate "\n"
+    [ "Verify your email to log on to the " <> pcRealm
     , ""
     , "We have received a login attempt with the following code:"
     , ""
@@ -25,4 +28,4 @@ passportConfirmationEmail passportId securityCode confirmationToken = T.intercal
     ]
   where
     -- TODO: Use servant to render the URL.
-    confirmationUrl =  "http://localhost:8000/login/confirm?passportId=" <> passportId <> "&confirmationToken=" <> confirmationToken
+    confirmationUrl =  pcApiDomain <> "/login/confirm?passportId=" <> passportId <> "&confirmationToken=" <> confirmationToken

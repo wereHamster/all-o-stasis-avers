@@ -33,6 +33,7 @@ import           Servant.Server
 import           Authorization
 import           Queries
 import           Routes
+import           PassportAuth
 
 import           Storage.ObjectTypes
 import           Storage.Objects.Account
@@ -107,14 +108,14 @@ api :: Proxy API
 api = Proxy
 
 
-server :: Avers.Handle -> Server API
-server aversH =
+server :: PassportConfig -> Avers.Handle -> Server API
+server pc aversH =
          serveAversAPI aversH Authorization.aosAuthorization
-    :<|> serveLocalAPI aversH
+    :<|> serveLocalAPI pc aversH
 
 
-app :: Avers.Handle -> Application
-app aversH = logStdout $ cors mkCorsPolicy $ serve api $ server aversH
+app :: PassportConfig -> Avers.Handle -> Application
+app pc aversH = logStdout $ cors mkCorsPolicy $ serve api $ server pc aversH
 
 
 mkCorsPolicy :: Request -> Maybe CorsResourcePolicy
@@ -138,4 +139,11 @@ main = do
         x:_ -> readMay x
         _   -> Nothing
 
-    run (fromMaybe 8000 mbPort) (app h)
+    run (fromMaybe 8000 mbPort) (app pc h)
+
+  where
+    pc = PassportConfig
+        { pcRealm = "Minimum Boulder App"
+        , pcApiDomain = "http://localhost:8000"
+        , pcAppDomain = "http://localhost:8081"
+        }

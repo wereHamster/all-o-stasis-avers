@@ -6,7 +6,11 @@
 {-# LANGUAGE TypeOperators       #-}
 {-# LANGUAGE DataKinds           #-}
 
-module Routes (LocalAPI, serveLocalAPI) where
+module Routes
+    ( PassportConfig(..)
+    , LocalAPI
+    , serveLocalAPI
+    ) where
 
 import Control.Monad.Except
 import Control.Concurrent
@@ -39,6 +43,7 @@ import Queries
 import Revision
 import Types
 import Wordlist
+import PassportAuth
 import PassportConfirmationEmail
 
 import Storage.ObjectTypes
@@ -128,8 +133,8 @@ type LocalAPI
     :<|> PassportAPI
 
 
-serveLocalAPI :: Avers.Handle -> Server LocalAPI
-serveLocalAPI aversH =
+serveLocalAPI :: PassportConfig -> Avers.Handle -> Server LocalAPI
+serveLocalAPI pc aversH =
          serveRevision
     :<|> serveActiveBouldersCollection
     :<|> serveOwnBouldersCollection
@@ -265,10 +270,9 @@ serveLocalAPI aversH =
         -- TODO: link requires the full domain name where the API is hosted,
         -- it therefore must be configurable.
         liftIO $ do
-            let confirmationLink = "http://localhost:8000/login/confirm?passportId=" <> (unObjId passportId) <> "&confirmationToken=" <> confirmationToken
             putStrLn "\n\n-------------------------"
             putStrLn $ T.unpack $ passportConfirmationEmail
-                (unObjId passportId) securityCode confirmationToken
+                pc (unObjId passportId) securityCode confirmationToken
             putStrLn "\n\n-------------------------"
 
         -- 4. Send response
@@ -311,7 +315,7 @@ serveLocalAPI aversH =
         -- Apparently this is how you do a 30x redirect in Servant…
         -- TODO: Domain must be configurable.
         throwError $ err301
-            { errHeaders = [("Location", "http://localhost:8081/email-confirmed")]
+            { errHeaders = [("Location", T.encodeUtf8 (pcAppDomain pc) <> "/email-confirmed")]
             }
 
     -- This request blocks until the Passport either becomes valid or expires.
