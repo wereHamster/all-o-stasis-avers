@@ -65,7 +65,7 @@ class LoginView extends React.Component<{ app: App }, LoginState> {
     }
 
     doLogin = (e) => {
-        const {app: {data: {aversH: {fetch, apiHost}}}} = this.props
+        const {app: {data: {aversH: {fetch, apiHost}, session}}} = this.props
         const {email} = this.state
 
         e.stopPropagation()
@@ -79,6 +79,7 @@ class LoginView extends React.Component<{ app: App }, LoginState> {
         const createPassportPromise = fetch(apiHost + '/login', options as any).then(res => {
             res.json().then(json => {
                 const awaitPassportConfirmationPromise = fetch(apiHost + '/login/verify?passportId=' + json.passportId, {credentials: 'include'}).then(res => {
+                    Avers.restoreSession(session)
                     navigateTo('/')
                 })
                 this.setState({ createPassportPromise: undefined, createPassportResponse: json, awaitPassportConfirmationPromise})
