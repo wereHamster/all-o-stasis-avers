@@ -39,6 +39,7 @@ import Queries
 import Revision
 import Types
 import Wordlist
+import PassportConfirmationEmail
 
 import Storage.ObjectTypes
 import Storage.Objects.Account
@@ -265,7 +266,10 @@ serveLocalAPI aversH =
         -- it therefore must be configurable.
         liftIO $ do
             let confirmationLink = "http://localhost:8000/login/confirm?passportId=" <> (unObjId passportId) <> "&confirmationToken=" <> confirmationToken
-            putStrLn $ T.unpack $ "\n\nOpen this link in a browser:\n\n   " <> confirmationLink <> "\n\n"
+            putStrLn "\n\n-------------------------"
+            putStrLn $ T.unpack $ passportConfirmationEmail
+                (unObjId passportId) securityCode confirmationToken
+            putStrLn "\n\n-------------------------"
 
         -- 4. Send response
         pure $ CreatePassportResponse
