@@ -9,11 +9,17 @@
 module Routes (LocalAPI, serveLocalAPI) where
 
 import Control.Monad.Except
+import Control.Concurrent
 
 import Data.Maybe
-import Data.Text (Text)
+import Data.Time
+import Data.Monoid
+
 import Data.Aeson (Value)
-import qualified Data.Text as T
+
+import           Data.Text          (Text)
+import qualified Data.Text          as T
+import qualified Data.Text.Encoding as T
 
 import qualified Data.Vector as V
 
@@ -27,13 +33,17 @@ import Avers.Server
 import Servant.API hiding (Patch)
 import Servant.Server
 
+import Web.Cookie
+
 import Queries
 import Revision
 import Types
+import Wordlist
 
 import Storage.ObjectTypes
 import Storage.Objects.Account
 import Storage.Objects.Boulder
+import Storage.Objects.Passport
 
 import Prelude
 
@@ -45,6 +55,46 @@ data SignupRequest2 = SignupRequest2
 data SignupResponse2 = SignupResponse2
     { _resObjId :: ObjId
     }
+
+
+
+-------------------------------------------------------------------------------
+type CreatePassport
+    = "login"
+        :> ReqBody '[JSON] CreatePassportBody
+        :> Post '[JSON] CreatePassportResponse
+
+data CreatePassportBody = CreatePassportBody
+    { reqEmail :: Text
+    }
+
+data CreatePassportResponse = CreatePassportResponse
+    { _resPassportId :: Text
+    , _resSecurityCode :: Text
+    }
+
+
+-------------------------------------------------------------------------------
+type ConfirmPassport
+    = "login" :> "confirm"
+        :> QueryParam "passportId" Text
+        :> QueryParam "confirmationToken" Text
+        :> Get '[JSON] (Headers '[Header "Location" Text] NoContent)
+
+
+-------------------------------------------------------------------------------
+type AwaitPassportConfirmation
+    = "login" :> "verify"
+        :> QueryParam "passportId" Text
+        :> Get '[JSON] (Headers '[Header "Set-Cookie" SetCookie] NoContent)
+
+
+-------------------------------------------------------------------------------
+type PassportAPI
+    =    CreatePassport
+    :<|> ConfirmPassport
+    :<|> AwaitPassportConfirmation
+
 
 
 type LocalAPI
@@ -74,6 +124,8 @@ type LocalAPI
       :> ReqBody '[JSON] SignupRequest2
       :> Post '[JSON] SignupResponse2
 
+    :<|> PassportAPI
+
 
 serveLocalAPI :: Avers.Handle -> Server LocalAPI
 serveLocalAPI aversH =
@@ -83,7 +135,30 @@ serveLocalAPI aversH =
     :<|> serveAccounts
     :<|> serveAdminAccounts
     :<|> serveSignup
+    :<|> servePassportAPI
+
   where
+    servePassportAPI =
+             serveCreatePassport
+        :<|> serveConfirmPassport
+        :<|> serveAwaitPassportConfirmation
+
+    ----------------------------------------------------------------------------
+    sessionCookieName     = "session"
+    sessionExpirationTime = 2 * 365 * 24 * 60 * 60
+
+    mkSetCookie :: SessionId -> Handler SetCookie
+    mkSetCookie sId = do
+        now <- liftIO $ getCurrentTime
+        pure $ def
+            { setCookieName = sessionCookieName
+            , setCookieValue = T.encodeUtf8 (unSessionId sId)
+            , setCookiePath = Just "/"
+            , setCookieExpires = Just $ addUTCTime sessionExpirationTime now
+            , setCookieHttpOnly = True
+            }
+
+
     serveRevision =
         pure $ T.pack $ fromMaybe "HEAD" $(revision)
 
@@ -133,16 +208,162 @@ serveLocalAPI aversH =
 
         pure $ map ObjId $ V.toList objIds
 
-    serveSignup body = do
-        let content = Account (reqLogin body) User (Just "") (Just "")
 
-        accId <- reqAvers2 aversH $ do
-            accId <- Avers.createObject accountObjectType rootObjId content
+    createAccount :: Text -> Maybe Text -> Handler ObjId
+    createAccount login mbEmail = do
+        reqAvers2 aversH $ do
+            accId <- Avers.createObject accountObjectType rootObjId $ Account
+                { accountLogin = login
+                , accountRole = User
+                , accountEmail = mbEmail
+                , accountName = Just ""
+                }
+
+            -- TODO: Is this necessary if we have login only via email? It's rather
+            -- dangerous to have accounts protected with an empty secret because then
+            -- anyone can authenticate against that account.
             updateSecret (SecretId (unObjId accId)) ""
+
             pure accId
 
+    serveSignup body = do
+        accId <- createAccount (reqLogin body) Nothing
         pure $ SignupResponse2 accId
+
+
+    serveCreatePassport CreatePassportBody{..} = do
+        -- 1. Lookup account by email. If no such account exists, create a new one.
+        accId <- do
+            accountIds <- reqAvers2 aversH $ runQueryCollect $
+                R.Limit 1 $
+                R.Map mapId $
+                R.Filter (matchEmail (R.lift reqEmail)) $
+                viewTable accountsView
+
+            case V.toList accountIds of
+                [accId] -> pure $ ObjId accId
+                _ -> do
+                    liftIO $ putStrLn $ T.unpack $ "Account with email " <>
+                        reqEmail <> " not found, creating new account."
+                    createAccount reqEmail (Just reqEmail)
+
+        -- 2. Create a new Passport object.
+        securityCode <- liftIO mkSecurityCode
+        confirmationToken <- liftIO (newId 16)
+
+        passportId <- reqAvers2 aversH $ do
+            Avers.createObject passportObjectType rootObjId $ Passport
+                { passportAccountId = accId
+                , passportSecurityCode = securityCode
+                , passportConfirmationToken = confirmationToken
+                , passportValidity = PVUnconfirmed
+                }
+
+        -- 3. Send email
+        -- TODO: actually send the email.
+        -- TODO: link requires the full domain name where the API is hosted,
+        -- it therefore must be configurable.
+        liftIO $ do
+            let confirmationLink = "http://localhost:8000/login/confirm?passportId=" <> (unObjId passportId) <> "&confirmationToken=" <> confirmationToken
+            putStrLn $ T.unpack $ "\n\nOpen this link in a browser:\n\n   " <> confirmationLink <> "\n\n"
+
+        -- 4. Send response
+        pure $ CreatePassportResponse
+            { _resPassportId = unObjId passportId
+            , _resSecurityCode = securityCode
+            }
+
+    serveConfirmPassport mbPassportId mbConfirmationToken = do
+        -- Query params in Servant are always optional (Maybe), but we require them here.
+        passportId <- case mbPassportId of
+            Nothing -> throwError err400 { errBody = "passportId missing" }
+            Just pId -> pure $ ObjId pId
+
+        confirmationToken <- case mbConfirmationToken of
+            Nothing -> throwError err400 { errBody = "confirmationToken missing" }
+            Just x -> pure x
+
+        -- Lookup the latest snapshot of the Passport object.
+        (Snapshot{..}, Passport{..}) <- reqAvers2 aversH $ do
+            snapshot <- lookupLatestSnapshot (BaseObjectId passportId)
+            passport <- case parseValueAs passportObjectType (snapshotContent snapshot) of
+                Left e  -> throwError e
+                Right x -> pure x
+
+            pure (snapshot, passport)
+
+        -- Check the confirmationToken. Fail if it doesn't match.
+        when (confirmationToken /= passportConfirmationToken) $ do
+            throwError err400 { errBody = "wrong confirmation token" }
+
+        -- Patch the "validity" field to mark the Passport as valid.
+        reqAvers2 aversH $ applyObjectUpdates
+            (BaseObjectId passportId)
+            snapshotRevisionId
+            rootObjId
+            [Set { opPath = "validity", opValue = Just (toJSON PVValid) }]
+            False
+
+        -- Apparently this is how you do a 30x redirect in Servant…
+        -- TODO: Domain must be configurable.
+        throwError $ err301
+            { errHeaders = [("Location", "http://localhost:8081/email-confirmed")]
+            }
+
+    -- This request blocks until the Passport either becomes valid or expires.
+    serveAwaitPassportConfirmation mbPassportId = do
+        passportId <- case mbPassportId of
+            Nothing -> throwError err400
+            Just pId -> pure $ ObjId pId
+
+        let go = do
+                -- Lookup the latest snapshot of the Passport object.
+                (Snapshot{..}, Passport{..}) <- reqAvers2 aversH $ do
+                    snapshot <- lookupLatestSnapshot (BaseObjectId passportId)
+                    passport <- case parseValueAs passportObjectType (snapshotContent snapshot) of
+                        Left e  -> throwError e
+                        Right x -> pure x
+
+                    pure (snapshot, passport)
+
+                case passportValidity of
+                    PVValid ->
+                        -- Exit the loop.
+                        pure (passportAccountId, snapshotRevisionId)
+
+                    PVUnconfirmed ->
+                        -- Sleep a bit and then retry.
+                        liftIO (threadDelay 500000) >> go
+
+                    PVExpired ->
+                        -- Fail the request.
+                        throwError err400
+
+        (accId, revId) <- go
+
+        -- Mark the passport as expired, so that it can not be reused.
+        reqAvers2 aversH $ applyObjectUpdates
+            (BaseObjectId passportId)
+            revId
+            rootObjId
+            [Set { opPath = "validity", opValue = Just (toJSON PVExpired) }]
+            False
+
+        -- The Passport object is valid. Create a new session for the
+        -- account in the Passport object.
+        now <- liftIO getCurrentTime
+        sessId <- SessionId <$> liftIO (newId 80)
+
+        reqAvers2 aversH $ saveSession $ Session sessId accId now now
+
+        setCookie <- mkSetCookie sessId
+
+        -- 4. Respond with the session cookie and status=200
+        pure $ addHeader setCookie NoContent
 
 
 $(deriveJSON (deriveJSONOptions "req")  ''SignupRequest2)
 $(deriveJSON (deriveJSONOptions "_res") ''SignupResponse2)
+
+$(deriveJSON (deriveJSONOptions "req")  ''CreatePassportBody)
+$(deriveJSON (deriveJSONOptions "_res") ''CreatePassportResponse)

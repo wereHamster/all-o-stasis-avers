@@ -12,9 +12,9 @@ export const Site = ({app, children}: {app: App, children?: JSX.Element | JSX.El
     }
 
     return (
-        <div onClick={onClick}>
+        <div style={{minHeight: '100vh', display: 'flex', flexDirection: 'column'}} onClick={onClick}>
             <NavBar app={app} />
-            <div>{children}</div>
+            {children}
             <TransientNotification app={app} />
         </div>
     )

@@ -3,6 +3,7 @@
 module Storage.ObjectTypes
     ( accountObjectType
     , boulderObjectType
+    , passportObjectType
     ) where
 
 
@@ -12,3 +13,4 @@ import Avers
 
 import Storage.Objects.Account
 import Storage.Objects.Boulder
+import Storage.Objects.Passport

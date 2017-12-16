@@ -5,6 +5,7 @@ module Queries
     , isOwnBoulder
     , isSetter
     , hasAccess
+    , matchEmail
     ) where
 
 import           Avers
@@ -35,3 +36,8 @@ isOwnBoulder :: Session -> R.Exp R.Object -> R.Exp Bool
 isOwnBoulder session = \x -> R.Eq
     (R.GetField "setter" x :: R.Exp Text)
     (R.lift $ unObjId $ sessionObjId session :: R.Exp Text)
+
+matchEmail :: R.Exp Text -> R.Exp R.Object -> R.Exp Bool
+matchEmail email = \x -> R.Eq
+    (R.GetField "email" x :: R.Exp Text)
+    email

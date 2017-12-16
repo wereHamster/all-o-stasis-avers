@@ -63,6 +63,7 @@ allObjectTypes :: [SomeObjectType]
 allObjectTypes =
     [ SomeObjectType accountObjectType
     , SomeObjectType boulderObjectType
+    , SomeObjectType passportObjectType
     ]
 
 
