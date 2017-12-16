@@ -42,3 +42,4 @@ executable all-o-stasis-api
                        , wai-extra
                        , wai-cors
                        , warp
+                       , mime-mail

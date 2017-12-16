@@ -271,8 +271,8 @@ serveLocalAPI pc aversH =
         -- it therefore must be configurable.
         liftIO $ do
             putStrLn "\n\n-------------------------"
-            putStrLn $ T.unpack $ passportConfirmationEmail
-                pc (unObjId passportId) securityCode confirmationToken
+            putStrLn $ show $ passportConfirmationEmail
+                pc reqEmail (unObjId passportId) securityCode confirmationToken
             putStrLn "\n\n-------------------------"
 
         -- 4. Send response

@@ -144,6 +144,7 @@ main = do
   where
     pc = PassportConfig
         { pcRealm = "Minimum Boulder App"
+        , pcFrom = "auth@boulderapp.com"
         , pcApiDomain = "http://localhost:8000"
         , pcAppDomain = "http://localhost:8081"
         }
