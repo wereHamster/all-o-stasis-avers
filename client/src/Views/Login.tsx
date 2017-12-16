@@ -79,7 +79,6 @@ class LoginView extends React.Component<{ app: App }, LoginState> {
         const createPassportPromise = fetch(apiHost + '/login', options as any).then(res => {
             res.json().then(json => {
                 const awaitPassportConfirmationPromise = fetch(apiHost + '/login/verify?passportId=' + json.passportId, {credentials: 'include'}).then(res => {
-                    console.log(res)
                     navigateTo('/')
                 })
                 this.setState({ createPassportPromise: undefined, createPassportResponse: json, awaitPassportConfirmationPromise})
@@ -91,32 +90,6 @@ class LoginView extends React.Component<{ app: App }, LoginState> {
     render() {
         const { app } = this.props
         const { email, createPassportPromise, createPassportResponse, awaitPassportConfirmationPromise } = this.state
-
-        let progressIndicator
-        let failure
-
-        if (createPassportPromise) {
-            progressIndicator = (
-                <div className='login-progress-indicator'>
-                  Signing in..
-                </div>
-            )
-        } else if (createPassportResponse) {
-            progressIndicator = (
-                <div className='login-progress-indicator'>
-                    Waiting for email confirmation
-                </div>
-            )
-        }
-
-        if (app.data.session.lastError && !createPassportPromise) {
-            failure = (
-                <div className='login-failure'>
-                  We could not find that account identifier/password combination.
-                  Please check your credentials and try again.
-                </div>
-            )
-        }
 
         if (!awaitPassportConfirmationPromise) {
             return (
