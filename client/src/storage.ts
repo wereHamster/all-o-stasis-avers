@@ -56,3 +56,18 @@ prettyPrintSector(sectorName: string): string {
         .replace(/four/i, ' 4')
 }
 
+
+export interface SetterMonthlyStats {
+    Yellow?: number
+    Green?: number
+    Orange?: number
+    Blue?: number
+    Red?: number
+    White?: number
+}
+
+const aosNS = Symbol('all-o-stasis')
+export const setterMonthlyStats = (aversH: Avers.Handle, setterId: string, year: number, month: number): Avers.Static<SetterMonthlyStats> => {
+    const fetch = () => aversH.fetch(`${aversH.apiHost}/stats/${setterId}/${year}/${month}`).then(res => res.json())
+    return new Avers.Static<SetterMonthlyStats>(aosNS, `${setterId}-${year}-${month}`, fetch)
+}
