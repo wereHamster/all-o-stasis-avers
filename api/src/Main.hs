@@ -34,6 +34,7 @@ import           Authorization
 import           Queries
 import           Routes
 import           PassportAuth
+import           Config
 
 import           Storage.ObjectTypes
 import           Storage.Objects.Account
@@ -46,12 +47,6 @@ import           Network.Wai.Middleware.Cors
 
 import           Prelude
 
-
-
-databaseConfig :: IO URI
-databaseConfig = do
-    uri <- fromMaybe "//localhost/allostasis" <$> lookupEnv "RETHINKDB"
-    return $ fromJust $ parseRelativeReference uri
 
 
 -- Currently we dont need a blob storage (inline avatar images)
@@ -70,10 +65,9 @@ allObjectTypes =
 
 createAversHandle :: IO Avers.Handle
 createAversHandle = do
-    dbURI <- databaseConfig
     bsc  <- createBlobStorageConfig
 
-    eH <- newHandle $ Avers.Config dbURI bsc allObjectTypes (\_ _ -> return ())
+    eH <- newHandle $ Avers.Config (cRethinkDB config) bsc allObjectTypes (\_ _ -> return ())
     h <- case eH of
         Left e -> error $ show e
         Right h -> return h
@@ -131,21 +125,7 @@ mkCorsPolicy req = Just $ simpleCorsResourcePolicy
 
 main :: IO ()
 main = do
-    args <- getArgs
     h <- createAversHandle
     bootstrapAdminAccount h
 
-    mbPort <- pure $ case args of
-        x:_ -> readMay x
-        _   -> Nothing
-
-    run (fromMaybe 8000 mbPort) (app pc h)
-
-  where
-    pc = PassportConfig
-        { pcRealm = "Minimum Boulder App"
-        , pcFrom = "auth@boulderapp.com"
-        , pcApiDomain = "http://localhost:8000"
-        , pcAppDomain = "http://localhost:8081"
-        , pcSendProvider = PCSPTerminal
-        }
+    run (cPort config) (app (cPassport config) h)
