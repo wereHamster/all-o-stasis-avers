@@ -19,6 +19,7 @@ executable all-o-stasis-api
                        , avers
                        , avers-api
                        , avers-server
+                       , containers
                        , cookie
                        , either
                        , servant

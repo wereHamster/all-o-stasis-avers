@@ -6,6 +6,10 @@ module Storage.Objects.Boulder.Types where
 import GHC.Generics
 
 import Data.Text
+import qualified Data.Text as T
+
+import Data.Aeson
+import Data.Aeson.Encoding
 
 import Avers
 import Avers.TH
@@ -55,8 +59,13 @@ data BoulderGrade
     | Blue
     | Red
     | White
-    deriving (Show, Generic)
+    deriving (Show, Eq, Ord, Generic)
 
 $(deriveEncoding (deriveJSONOptions "boulder")   ''Boulder)
 $(deriveEncoding (defaultVariantOptions "")      ''BoulderGrade)
 $(deriveEncoding (defaultVariantOptions "")      ''BoulderSector)
+
+instance ToJSONKey BoulderGrade where
+    toJSONKey = ToJSONKeyText f g
+        where f = T.pack . show
+              g = text . T.pack . show
