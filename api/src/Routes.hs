@@ -112,6 +112,13 @@ type PassportAPI
 
 type SetterMonthlyStats = Map BoulderGrade Int
 
+data BoulderStat = BoulderStat
+    { bsDate :: UTCTime
+    , bsSetters :: [ObjId]
+    , bsSector :: BoulderSector
+    , bsGrade :: BoulderGrade
+    }
+
 type LocalAPI
     -- server the git revsion sha
     = "revision"
@@ -145,6 +152,9 @@ type LocalAPI
         :> Capture "month" Int -- 1..12
         :> Get '[JSON] SetterMonthlyStats
 
+    :<|> "stats" :> "boulders"
+        :> Get '[JSON] [BoulderStat]
+
     :<|> PassportAPI
 
 
@@ -157,6 +167,7 @@ serveLocalAPI pc aversH =
     :<|> serveAdminAccounts
     :<|> serveSignup
     :<|> serveSetterMonthlyStats
+    :<|> serveBouldersStats
     :<|> servePassportAPI
 
   where
@@ -269,6 +280,23 @@ serveLocalAPI pc aversH =
         -- And construct the response.
         let entries = map (\Boulder{..} -> (boulderGrade, 1)) $ V.toList boulders
         pure $ foldl (\m (grade, count) -> M.insertWith (+) grade count m) M.empty entries
+
+
+    serveBouldersStats = do
+        allBoulders <- reqAvers2 aversH $ do
+            datums <- runQueryCollect $ viewTable bouldersView
+            V.sequence $ V.map parseDatum datums
+
+        let toBoulderStat Boulder{..} = BoulderStat
+                { bsDate = utcTime
+                , bsSetters = boulderSetter
+                , bsSector = boulderSector
+                , bsGrade = boulderGrade
+                }
+              where
+                utcTime = posixSecondsToUTCTime (fromIntegral boulderSetDate / 1000)
+
+        pure $ map toBoulderStat $ V.toList allBoulders
 
 
     serveCreatePassport CreatePassportBody{..} = do
@@ -444,3 +472,5 @@ $(deriveJSON (deriveJSONOptions "_res") ''SignupResponse2)
 
 $(deriveJSON (deriveJSONOptions "req")  ''CreatePassportBody)
 $(deriveJSON (deriveJSONOptions "_res") ''CreatePassportResponse)
+
+$(deriveJSON (deriveJSONOptions "bs") ''BoulderStat)
