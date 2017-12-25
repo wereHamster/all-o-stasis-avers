@@ -15,6 +15,7 @@ import {signupView} from './Views/Signup'
 import {catalogView} from './Views/Catalog'
 import {updateSecretView} from './Views/UpdateSecret'
 import {emailConfirmedView} from './Views/EmailConfirmed'
+import {statsView} from './Views/Stats'
 
 const mkApp = (): App => {
     const aversH = new Avers.Handle(
@@ -86,6 +87,10 @@ function setupRoutes(app: App) {
 
     page('/sector', ctx => {
         loadView(app, sectorView)
+    })
+
+    page('/stats', ctx => {
+        loadView(app, statsView)
     })
 
     page('/boulder/:boulderId', ctx => {
