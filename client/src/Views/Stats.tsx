@@ -20,7 +20,7 @@ export const statsView = (app: App) => (
         <div style={{margin: '20px 24px', display: 'flex', flex: 1}}>
             <div style={{flexBasis: '400px', width: '400px'}}>
                 <SectorSelector
-                    sectors={['bigboss']}
+                    sectors={['bigboss', 'dune']}
                     clear={() => {}}
                     toggle={() => {}}
                 />

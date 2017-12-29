@@ -15,7 +15,7 @@ import {SectorPicker} from './SectorPicker'
 export const BoulderDetails = ({app, boulder}: {app: App, boulder: Boulder}) => (
     <Root>
         <Section>Sector</Section>
-        <SectorPicker sector={boulder.sector} onChange={() => {}} />
+        <SectorPicker sectors={[boulder.sector]} onChange={() => {}} />
 
         <Section>Setters</Section>
         <div style={{display: 'flex'}}>

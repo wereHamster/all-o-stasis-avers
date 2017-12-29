@@ -68,7 +68,7 @@ BoulderDetailsEditor({app, boulderE}: {app: App, boulderE: Avers.Editable<Boulde
         <Section>Sector</Section>
         <div>
           <div style={{maxWidth: 400}}>
-            <SectorPicker sector={boulder.sector} onChange={sector => { boulder.sector = sector }}/>
+            <SectorPicker sectors={[boulder.sector]} onChange={sector => { boulder.sector = sector }}/>
           </div>
         </div>
 

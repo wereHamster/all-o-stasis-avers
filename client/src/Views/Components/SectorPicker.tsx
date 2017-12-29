@@ -12,7 +12,7 @@ import {useTypeface, copy16} from '../../Materials/Typefaces'
 import SectorPickerSVG from '../../../assets/SectorPicker.svg'
 
 export interface SectorPickerProps {
-    sector: string
+    sectors: string[]
     onChange(sector: string): void
 }
 
@@ -36,7 +36,7 @@ export class SectorPicker extends React.Component<SectorPickerProps> {
     render() {
         return (
             <div ref={this.refFn}>
-                <Root sector={this.props.sector}>
+                <Root sectors={this.props.sectors}>
                     <SectorPickerSVG />
                 </Root>
             </div>
@@ -52,7 +52,7 @@ const Root: any = styled.div`
     height: 100%;
 }
 
-& svg #sectors g[id="${({sector}: any) => sector}"] > use {
+${({sectors}: {sectors: string[]}) => sectors.map(s => `& svg #sectors g[id="${s}"] > use`).join(', ')} {
     fill: red;
 }
 

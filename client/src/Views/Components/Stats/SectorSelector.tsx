@@ -21,7 +21,10 @@ export const SectorSelector = ({sectors, clear, toggle}: SectorSelectorProps) =>
             <SectionLink>(reset)</SectionLink>
         </Section>
 
-        <SectorPicker sector='bigboss' onChange={toggle} />
+        <SectorPicker
+            sectors={sectors}
+            onChange={toggle}
+        />
     </div>
 )
 
