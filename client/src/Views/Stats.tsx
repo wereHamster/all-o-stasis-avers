@@ -113,6 +113,24 @@ class StatsPage extends React.Component<StatsPageProps, StatsPageState> {
                         </Section>
 
                         <GradeVisContainer bssC={bssC} />
+
+                        <Section>
+                            Additions
+
+                            <div style={{display: 'inline', marginLeft: 20}}>
+                                <DisplaySelectButton>
+                                    daily
+                                </DisplaySelectButton>
+                                <DisplaySelectButton style={{color: text}}>
+                                    weekly
+                                </DisplaySelectButton>
+                                <DisplaySelectButton>
+                                    monthly
+                                </DisplaySelectButton>
+                            </div>
+                        </Section>
+
+                        <AdditionsVisContainer bssC={bssC} />
                     </div>
                 </div>
             </Site>
@@ -146,7 +164,7 @@ const GradesVis = ({width, height, bss}: {width: number, height: number, bss: Bo
                 type: 'temporal',
                 timeUnit: 'yearmonthdate',
                 scale: {nice: 'month'},
-                axis: {domain: false, format: '%Y %m', labelAngle: 0, tickSize: 0},
+                axis: {domain: false, format: '%Y %m %d', labelAngle: 0, tickSize: 0},
             },
 
             y: {
@@ -210,6 +228,64 @@ const GradesVis = ({width, height, bss}: {width: number, height: number, bss: Bo
         <VegaLite spec={spec} data={{values}} />
     )
 }
+
+const AdditionsVisContainer = ({bssC}) => {
+    return (
+        <Measure bounds>
+            {({measureRef, contentRect}) => (
+                <div ref={measureRef} style={{height: 345, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                    {contentRect.bounds && bssC
+                        .fmap(bss => <AdditionsVis width={contentRect.bounds.width - 200} height={300} bss={bss} />)
+                        .get(<div>Loading…</div>)}
+                </div>
+            )}
+        </Measure>
+    )
+}
+
+const AdditionsVis = ({width, height, bss}: {width: number, height: number, bss: BoulderStat[]}) => {
+    const spec = {
+        description: 'Newly set boulders',
+        width,
+        height,
+        mark: 'bar',
+        encoding: {
+            x: {
+                field: 'date',
+                type: 'temporal',
+                timeUnit: 'yearmonthdate',
+                // scale: {nice: 'month'},
+                axis: {domain: false, format: '%Y %m %d', labelAngle: 0, tickSize: 0},
+            },
+
+            y: {
+                aggregate: 'count',
+                field: '*',
+                type: 'quantitative',
+            },
+
+            color: {
+                field: 'grade',
+                type: 'nominal',
+                scale: {
+                    range: [blue100, green100, orange100, red100, '#FFFFFF', yellow100],
+                },
+            },
+        },
+    }
+
+    const values = bss.filter(bs => !bs.removedOn)
+        .map(bs => ({date: bs.setOn, grade: bs.grade}))
+        .sort((a, b) => +a.date - +b.date)
+        .filter(a => a.date.getTime() > 10000)
+
+    console.log(values)
+
+    return (
+        <VegaLite spec={spec} data={{values}} />
+    )
+}
+
 
 // ----------------------------------------------------------------------------
 
