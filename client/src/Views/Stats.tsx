@@ -111,7 +111,7 @@ class StatsPage extends React.Component<StatsPageProps, StatsPageState> {
                             </div>
                         </Section>
 
-                        <GradeVisContainer bssC={bssC} aversH={app.data.aversH} />
+                        <GradeVisContainer bssC={bssC} />
                     </div>
                 </div>
             </Site>
@@ -124,7 +124,7 @@ const Measure = ({children}) => (
     children({ref: null})
 )
 
-const GradeVisContainer = ({bssC, aversH}) => {
+const GradeVisContainer = ({bssC}) => {
     return (
         <Measure bounds>
             {({ref}) => (
