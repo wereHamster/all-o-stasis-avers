@@ -2,6 +2,7 @@ import * as Avers from 'avers'
 import * as React from 'react'
 import styled from 'styled-components'
 import VegaLite from 'react-vega-lite'
+import Measure from 'react-measure'
 
 import {Account, BoulderStat, boulderStats} from '../storage'
 import {App} from '../app'
@@ -119,18 +120,13 @@ class StatsPage extends React.Component<StatsPageProps, StatsPageState> {
     }
 }
 
-// Replace with react-measure
-const Measure = ({children}) => (
-    children({ref: null})
-)
-
 const GradeVisContainer = ({bssC}) => {
     return (
         <Measure bounds>
-            {({ref}) => (
-                <div ref={ref} style={{height: 345, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                    {bssC
-                        .fmap(bss => <GradesVis width={1050} height={300} bss={bss} />)
+            {({measureRef, contentRect}) => (
+                <div ref={measureRef} style={{height: 345, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                    {contentRect.bounds && bssC
+                        .fmap(bss => <GradesVis width={contentRect.bounds.width - 200} height={300} bss={bss} />)
                         .get(<div>Loading…</div>)}
                 </div>
             )}
