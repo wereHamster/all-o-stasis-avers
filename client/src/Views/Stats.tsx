@@ -13,14 +13,17 @@ import {useTypeface, heading18, copy16, copy16Bold, copy14} from '../Materials/T
 
 import {Site} from './Components/Site'
 import {SectorPicker} from './Components/SectorPicker'
-
+import {SectorSelector} from './Components/Stats/SectorSelector'
 
 export const statsView = (app: App) => (
     <Site app={app}>
         <div style={{margin: '20px 24px', display: 'flex', flex: 1}}>
             <div style={{flexBasis: '400px', width: '400px'}}>
-                <Section>Sector</Section>
-                <SectorPicker sector='bigboss' onChange={() => {}} />
+                <SectorSelector
+                    sectors={['bigboss']}
+                    clear={() => {}}
+                    toggle={() => {}}
+                />
 
                 <Section>Setter</Section>
                 <SettersPicker app={app} />
