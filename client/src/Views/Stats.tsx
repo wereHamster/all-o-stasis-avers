@@ -61,6 +61,18 @@ class StatsPage extends React.Component<StatsPageProps, StatsPageState> {
     render() {
         const {app} = this.props
         const {sectors, selectedSetters} = this.state
+        const aversH = app.data.aversH
+
+        const matchSector = sectors.length === 0
+            ? () => true
+            : (bs: BoulderStat) => sectors.indexOf(bs.sector) !== -1
+
+        const matchSetter = selectedSetters.length === 0
+            ? () => true
+            : (bs: BoulderStat) => bs.setters.some(setterId => selectedSetters.indexOf(setterId) !== -1)
+
+        const bssC = Avers.staticValue(aversH, boulderStats(aversH)).fmap(bss =>
+            bss.filter(bs => matchSector(bs) && matchSetter(bs)))
 
         return (
             <Site app={app}>
@@ -99,7 +111,7 @@ class StatsPage extends React.Component<StatsPageProps, StatsPageState> {
                             </div>
                         </Section>
 
-                        <GradeVisContainer aversH={app.data.aversH} />
+                        <GradeVisContainer bssC={bssC} aversH={app.data.aversH} />
                     </div>
                 </div>
             </Site>
@@ -112,12 +124,12 @@ const Measure = ({children}) => (
     children({ref: null})
 )
 
-const GradeVisContainer = ({aversH}) => {
+const GradeVisContainer = ({bssC, aversH}) => {
     return (
         <Measure bounds>
             {({ref}) => (
                 <div ref={ref} style={{height: 345, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                    {Avers.staticValue(aversH, boulderStats(aversH))
+                    {bssC
                         .fmap(bss => <GradesVis width={1050} height={300} bss={bss} />)
                         .get(<div>Loading…</div>)}
                 </div>
@@ -202,58 +214,6 @@ const GradesVis = ({width, height, bss}: {width: number, height: number, bss: Bo
         <VegaLite spec={spec} data={{values}} />
     )
 }
-
-const SettersPicker = ({app}: {app: App}) => {
-    const setters = app.data.accountsCollection.ids.get([]).map(accountId => {
-        const accountC = Avers.lookupContent<Account>(app.data.aversH, accountId)
-        return accountC.fmap(account =>
-            <Setter key={accountId} app={app} accountId={accountId} account={account} />)
-        .get(<Setter key={accountId} app={app} accountId={accountId} account={undefined} />)
-    })
-
-    return (
-        <div>
-            {setters}
-        </div>
-    )
-}
-
-const placeholderImageSrc = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAAAAACoWZBhAAAAF0lEQVQI12P4BAI/QICBFCaYBPNJYQIAkUZftTbC4sIAAAAASUVORK5CYII='
-const Setter = ({accountId, account}) => (
-    <SetterC>
-        <SetterImage src={account ? accountGravatarUrl(account.email) : placeholderImageSrc} />
-        <SetterName>{(account && account.name !== '') ? account.name : accountId.slice(0, 7)}</SetterName>
-    </SetterC>
-)
-
-const SetterC = styled.div`
-display: flex;
-align-items: center;
-margin: 4px 0;
-padding: 0 0 0 2px;
-border-left: 4px solid transparent;
-cursor: pointer;
-user-select: none;
-
-transition all .2s;
-
-&:hover {
-    border-left-color: ${text};
-}
-`
-
-const SetterImage = styled.img`
-display: block;
-width: 24px;
-height: 24px;
-margin-right: 8px;
-border-radius: 2px;
-`
-
-const SetterName = styled.div`
-${useTypeface(copy14)}
-color: ${text};
-`
 
 // ----------------------------------------------------------------------------
 
