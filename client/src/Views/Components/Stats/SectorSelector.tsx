@@ -10,7 +10,7 @@ import {SectorPicker} from '..//SectorPicker'
 export interface SectorSelectorProps {
     sectors: string[]
 
-    clear(): void
+    clear: undefined | (() => void)
     toggle(sector: string): void
 }
 
@@ -18,7 +18,7 @@ export const SectorSelector = ({sectors, clear, toggle}: SectorSelectorProps) =>
     <div>
         <Section>
             Sector
-            <SectionLink>(reset)</SectionLink>
+            <SectionLink onClick={clear}>(reset)</SectionLink>
         </Section>
 
         <SectorPicker
@@ -47,6 +47,8 @@ color: ${lightGrey};
 margin-left: 6px;
 cursor: pointer;
 transition all .16s;
+
+opacity: ${({onClick}) => onClick ? 1 : 0};
 
 &:hover {
     color: ${text};

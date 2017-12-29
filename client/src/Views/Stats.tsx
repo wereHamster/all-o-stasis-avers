@@ -16,43 +16,74 @@ import {SectorPicker} from './Components/SectorPicker'
 import {SectorSelector} from './Components/Stats/SectorSelector'
 
 export const statsView = (app: App) => (
-    <Site app={app}>
-        <div style={{margin: '20px 24px', display: 'flex', flex: 1}}>
-            <div style={{flexBasis: '400px', width: '400px'}}>
-                <SectorSelector
-                    sectors={['bigboss', 'dune']}
-                    clear={() => {}}
-                    toggle={() => {}}
-                />
-
-                <Section>Setter</Section>
-                <SettersPicker app={app} />
-            </div>
-            <div style={{marginLeft: 80, flex: 1, display: 'flex', flexDirection: 'column'}}>
-                <Section>
-                    Boulders
-
-                    <div style={{display: 'inline', marginLeft: 20}}>
-                        <DisplaySelectButton style={{color: text}}>
-                            total
-                        </DisplaySelectButton>
-                        <DisplaySelectButton>
-                            by grade
-                        </DisplaySelectButton>
-                        <DisplaySelectButton>
-                            by sector
-                        </DisplaySelectButton>
-                        <DisplaySelectButton>
-                            by setter
-                        </DisplaySelectButton>
-                    </div>
-                </Section>
-
-                <GradeVisContainer aversH={app.data.aversH} />
-            </div>
-        </div>
-    </Site>
+    <StatsPage app={app} />
 )
+
+
+interface StatsPageProps {
+    app: App
+}
+
+interface StatsPageState {
+    sectors: string[]
+}
+
+class StatsPage extends React.Component<StatsPageProps, StatsPageState> {
+    state: StatsPageState = {
+        sectors: [],
+    }
+
+    clearSectors = (): void => {
+        this.setState({sectors: []})
+    }
+    toggleSector = (sector: string): void => {
+        this.setState({sectors: [sector].concat(this.state.sectors)})
+    }
+
+    render() {
+        const {app} = this.props
+        const {sectors} = this.state
+
+        return (
+            <Site app={app}>
+                <div style={{margin: '20px 24px', display: 'flex', flex: 1}}>
+                    <div style={{flexBasis: '400px', width: '400px'}}>
+                        <SectorSelector
+                            sectors={sectors}
+                            clear={sectors.length === 0 ? undefined : this.clearSectors}
+                            toggle={this.toggleSector}
+                        />
+
+                        <Section>Setter</Section>
+                        <SettersPicker app={app} />
+                    </div>
+                    <div style={{marginLeft: 80, flex: 1, display: 'flex', flexDirection: 'column'}}>
+                        <Section>
+                            Boulders
+
+                            <div style={{display: 'inline', marginLeft: 20}}>
+                                <DisplaySelectButton style={{color: text}}>
+                                    total
+                                </DisplaySelectButton>
+                                <DisplaySelectButton>
+                                    by grade
+                                </DisplaySelectButton>
+                                <DisplaySelectButton>
+                                    by sector
+                                </DisplaySelectButton>
+                                <DisplaySelectButton>
+                                    by setter
+                                </DisplaySelectButton>
+                            </div>
+                        </Section>
+
+                        <GradeVisContainer aversH={app.data.aversH} />
+                    </div>
+                </div>
+            </Site>
+        )
+    }
+}
 
 // Replace with react-measure
 const Measure = ({children}) => (

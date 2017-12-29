@@ -52,7 +52,7 @@ const Root: any = styled.div`
     height: 100%;
 }
 
-${({sectors}: {sectors: string[]}) => sectors.map(s => `& svg #sectors g[id="${s}"] > use`).join(', ')} {
+${({sectors}: {sectors: string[]}) => sectors.length === 0 ? '& .ignore' : sectors.map(s => `& svg #sectors g[id="${s}"] > use`).join(', ')} {
     fill: red;
 }
 
