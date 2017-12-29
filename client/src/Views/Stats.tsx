@@ -14,6 +14,7 @@ import {useTypeface, heading18, copy16, copy16Bold, copy14} from '../Materials/T
 import {Site} from './Components/Site'
 import {SectorPicker} from './Components/SectorPicker'
 import {SectorSelector} from './Components/Stats/SectorSelector'
+import {SetterSelector} from './Components/Stats/SetterSelector'
 
 export const statsView = (app: App) => (
     <StatsPage app={app} />
@@ -26,23 +27,40 @@ interface StatsPageProps {
 
 interface StatsPageState {
     sectors: string[]
+    selectedSetters: string[] // ObjId[]
 }
 
 class StatsPage extends React.Component<StatsPageProps, StatsPageState> {
     state: StatsPageState = {
         sectors: [],
+        selectedSetters: [],
     }
 
     clearSectors = (): void => {
         this.setState({sectors: []})
     }
     toggleSector = (sector: string): void => {
-        this.setState({sectors: [sector].concat(this.state.sectors)})
+        if (this.state.sectors.indexOf(sector) === -1) {
+            this.setState({sectors: [sector].concat(this.state.sectors)})
+        } else {
+            this.setState({sectors: this.state.sectors.filter(x => x !== sector)})
+        }
+    }
+
+    clearSetters = (): void => {
+        this.setState({selectedSetters: []})
+    }
+    toggleSetter = (setterId: string): void => {
+        if (this.state.selectedSetters.indexOf(setterId) === -1) {
+            this.setState({selectedSetters: [setterId].concat(this.state.selectedSetters)})
+        } else {
+            this.setState({selectedSetters: this.state.selectedSetters.filter(x => x !== setterId)})
+        }
     }
 
     render() {
         const {app} = this.props
-        const {sectors} = this.state
+        const {sectors, selectedSetters} = this.state
 
         return (
             <Site app={app}>
@@ -54,8 +72,12 @@ class StatsPage extends React.Component<StatsPageProps, StatsPageState> {
                             toggle={this.toggleSector}
                         />
 
-                        <Section>Setter</Section>
-                        <SettersPicker app={app} />
+                        <SetterSelector
+                            app={app}
+                            selectedSetters={selectedSetters}
+                            clear={selectedSetters.length === 0 ? undefined : this.clearSetters}
+                            toggle={this.toggleSetter}
+                        />
                     </div>
                     <div style={{marginLeft: 80, flex: 1, display: 'flex', flexDirection: 'column'}}>
                         <Section>
