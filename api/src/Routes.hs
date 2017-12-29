@@ -113,7 +113,8 @@ type PassportAPI
 type SetterMonthlyStats = Map BoulderGrade Int
 
 data BoulderStat = BoulderStat
-    { bsDate :: UTCTime
+    { bsSetOn :: Day
+    , bsRemovedOn :: Maybe Day
     , bsSetters :: [ObjId]
     , bsSector :: BoulderSector
     , bsGrade :: BoulderGrade
@@ -288,13 +289,16 @@ serveLocalAPI pc aversH =
             V.sequence $ V.map parseDatum datums
 
         let toBoulderStat Boulder{..} = BoulderStat
-                { bsDate = utcTime
+                { bsSetOn = toUTCTime boulderSetDate
+                , bsRemovedOn = if boulderRemoved == 0
+                    then Nothing
+                    else Just (toUTCTime boulderRemoved)
                 , bsSetters = boulderSetter
                 , bsSector = boulderSector
                 , bsGrade = boulderGrade
                 }
               where
-                utcTime = posixSecondsToUTCTime (fromIntegral boulderSetDate / 1000)
+                toUTCTime x = utctDay (posixSecondsToUTCTime (fromIntegral x / 1000))
 
         pure $ map toBoulderStat $ V.toList allBoulders
 

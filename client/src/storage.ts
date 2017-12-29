@@ -71,3 +71,23 @@ export const setterMonthlyStats = (aversH: Avers.Handle, setterId: string, year:
     const fetch = () => aversH.fetch(`${aversH.apiHost}/stats/${setterId}/${year}/${month}`).then(res => res.json())
     return new Avers.Static<SetterMonthlyStats>(aosNS, `${setterId}-${year}-${month}`, fetch)
 }
+
+export interface BoulderStat {
+    setOn: Date
+    removedOn: void | Date
+    setters: string[]
+    sector: string
+    grade: string
+}
+
+export const boulderStats = (aversH: Avers.Handle): Avers.Static<BoulderStat[]> => {
+    const fetch = () => aversH.fetch(`${aversH.apiHost}/stats/boulders`)
+        .then(res => res.json())
+        .then(bss => bss.map(bs => ({
+            ...bs,
+            setOn: new Date(Date.parse(bs.setOn)),
+            removedOn: bs.removedOn ? new Date(Date.parse(bs.removedOn)) : undefined,
+        })))
+
+    return new Avers.Static<BoulderStat[]>(aosNS, `boulderStats`, fetch)
+}
