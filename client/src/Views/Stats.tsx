@@ -4,16 +4,14 @@ import styled from 'styled-components'
 import VegaLite from 'react-vega-lite'
 import Measure from 'react-measure'
 
-import {Account, BoulderStat, boulderStats} from '../storage'
+import {BoulderStat, boulderStats} from '../storage'
 import {App} from '../app'
-import {accountGravatarUrl} from './Account'
 
-import {text, darkGrey, lightGrey} from '../Materials/Colors'
+import {text, lightGrey} from '../Materials/Colors'
 import {yellow100, green100, orange100, blue100, red100} from '../Materials/Colors'
-import {useTypeface, heading18, copy16, copy16Bold, copy14} from '../Materials/Typefaces'
+import {useTypeface, copy16Bold, copy14} from '../Materials/Typefaces'
 
 import {Site} from './Components/Site'
-import {SectorPicker} from './Components/SectorPicker'
 import {SectorSelector} from './Components/Stats/SectorSelector'
 import {SetterSelector} from './Components/Stats/SetterSelector'
 

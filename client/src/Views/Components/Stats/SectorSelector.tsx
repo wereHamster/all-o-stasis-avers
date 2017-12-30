@@ -1,8 +1,4 @@
 import * as React from 'react'
-import styled from 'styled-components'
-
-import {text, darkGrey, lightGrey} from '../../../Materials/Colors'
-import {useTypeface, copy16Bold, copy14} from '../../../Materials/Typefaces'
 
 import {SectorPicker} from '../SectorPicker'
 import {Section, SectionLink} from './Internal'

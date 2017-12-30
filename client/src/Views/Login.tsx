@@ -10,15 +10,11 @@ import styled from 'styled-components'
 
 import {useTypeface, h1, copy16, copy16Bold} from '../Materials/Typefaces'
 
-import {App, navigateTo, navigateToFn} from '../app'
+import {App, navigateTo} from '../app'
 import {Site} from './Components/Site'
 
-export const loginView = (accountId: string) => (app: App) => {
+export const loginView = () => (app: App) => {
     return <LoginView app={app} />
-}
-
-function stopPropagation(e) {
-    e.stopPropagation()
 }
 
 interface LoginState {

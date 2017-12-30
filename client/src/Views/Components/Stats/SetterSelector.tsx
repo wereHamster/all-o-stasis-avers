@@ -2,13 +2,12 @@ import * as Avers from 'avers'
 import * as React from 'react'
 import styled from 'styled-components'
 
-import {Account, BoulderStat, boulderStats} from '../../../storage'
+import {Account} from '../../../storage'
 import {App} from '../../../app'
 import {accountGravatarUrl} from '../../Account'
 
-import {text, darkGrey, lightGrey} from '../../../Materials/Colors'
-import {yellow100, green100, orange100, blue100, red100} from '../../../Materials/Colors'
-import {useTypeface, heading18, copy16, copy16Bold, copy14} from '../../../Materials/Typefaces'
+import {text, lightGrey} from '../../../Materials/Colors'
+import {useTypeface, copy14} from '../../../Materials/Typefaces'
 
 import {Section, SectionLink} from './Internal'
 

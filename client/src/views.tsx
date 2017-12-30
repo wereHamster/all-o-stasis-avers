@@ -5,7 +5,7 @@ import logo from '!!url-loader!../assets/logo.svg'
 
 import {Site} from './Views/Components/Site'
 
-export function loadingView(app: App) {
+export function loadingView() {
     return (
       <div style={{minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
         <img src={logo} style={{display: 'block', maxWidth: '50vw'}} />
