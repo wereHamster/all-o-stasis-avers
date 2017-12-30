@@ -1,3 +1,6 @@
+/* Users log in via email, passwords are obsolete, so this whole file can go away */
+/* tslint:disable */
+
 /*
 module Login
 ( UpdateSecretView

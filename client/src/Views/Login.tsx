@@ -73,12 +73,12 @@ class LoginView extends React.Component<{ app: App }, LoginState> {
         const options = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email })
+            body: JSON.stringify({ email }),
         }
 
         const createPassportPromise = fetch(apiHost + '/login', options as any).then(res => {
             res.json().then(json => {
-                const awaitPassportConfirmationPromise = fetch(apiHost + '/login/verify?passportId=' + json.passportId, {credentials: 'include'}).then(res => {
+                const awaitPassportConfirmationPromise = fetch(apiHost + '/login/verify?passportId=' + json.passportId, {credentials: 'include'}).then(() => {
                     Avers.restoreSession(session)
                     navigateTo('/')
                 })

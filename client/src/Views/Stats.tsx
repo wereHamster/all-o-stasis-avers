@@ -279,8 +279,6 @@ const AdditionsVis = ({width, height, bss}: {width: number, height: number, bss:
         .sort((a, b) => +a.date - +b.date)
         .filter(a => a.date.getTime() > 10000)
 
-    console.log(values)
-
     return (
         <VegaLite spec={spec} data={{values}} />
     )
