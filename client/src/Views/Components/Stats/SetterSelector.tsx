@@ -10,6 +10,8 @@ import {text, darkGrey, lightGrey} from '../../../Materials/Colors'
 import {yellow100, green100, orange100, blue100, red100} from '../../../Materials/Colors'
 import {useTypeface, heading18, copy16, copy16Bold, copy14} from '../../../Materials/Typefaces'
 
+import {Section, SectionLink} from './Internal'
+
 
 export interface SetterSelectorProps {
     app: App
@@ -86,31 +88,4 @@ const SetterName = styled.div`
 ${useTypeface(copy14)}
 transition all .2s;
 color: ${({isSelected}) => isSelected ? text : lightGrey}
-`
-
-// ----------------------------------------------------------------------------
-
-const Section = styled.div`
-${useTypeface(copy16Bold)}
-color: ${text};
-
-padding: 80px 0 20px;
-&:first-of-type {
-    padding: 0 0 12px;
-}
-`
-
-const SectionLink = styled.span`
-${useTypeface(copy14)}
-color: ${lightGrey};
-
-margin-left: 6px;
-cursor: pointer;
-transition all .16s;
-
-opacity: ${({onClick}) => onClick ? 1 : 0};
-
-&:hover {
-    color: ${text};
-}
 `
