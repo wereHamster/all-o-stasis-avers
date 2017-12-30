@@ -16,7 +16,7 @@ export interface SectorSelectorProps {
 }
 
 export const SectorSelector = ({sectors, clear, toggle}: SectorSelectorProps) => (
-    <div>
+    <>
         <Section>
             Sector
             <SectionLink onClick={clear}>(reset)</SectionLink>
@@ -26,5 +26,5 @@ export const SectorSelector = ({sectors, clear, toggle}: SectorSelectorProps) =>
             sectors={sectors}
             onChange={toggle}
         />
-    </div>
+    </>
 )

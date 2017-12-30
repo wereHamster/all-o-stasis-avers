@@ -36,7 +36,7 @@ export const SetterSelector = ({app, selectedSetters, clear, toggle}: SetterSele
     })
 
     return (
-        <div style={{marginTop: 80}}>
+        <>
             <Section>
                 Setter
                 <SectionLink onClick={clear}>(reset)</SectionLink>
@@ -45,7 +45,7 @@ export const SetterSelector = ({app, selectedSetters, clear, toggle}: SetterSele
             <div>
                 {setters}
             </div>
-        </div>
+        </>
     )
 }
 
