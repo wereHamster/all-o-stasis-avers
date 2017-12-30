@@ -4,7 +4,12 @@ import styled from 'styled-components'
 import VegaLite from 'react-vega-lite'
 import Measure from 'react-measure'
 
-import {BoulderStat, boulderStats} from '../storage'
+import {scaleTime, scaleLinear, scaleOrdinal} from 'd3-scale'
+import {stack, area, line, curveStepAfter} from 'd3-shape'
+import {select} from 'd3-selection'
+import {axisBottom} from 'd3-axis'
+
+import {BoulderStat, boulderStats, grades} from '../storage'
 import {App} from '../app'
 
 import {text, lightGrey} from '../Materials/Colors'
@@ -15,10 +20,10 @@ import {Site} from './Components/Site'
 import {SectorSelector} from './Components/Stats/SectorSelector'
 import {SetterSelector} from './Components/Stats/SetterSelector'
 
+
 export const statsView = (app: App) => (
     <StatsPage app={app} />
 )
-
 
 interface StatsPageProps {
     app: App
@@ -91,50 +96,131 @@ class StatsPage extends React.Component<StatsPageProps, StatsPageState> {
                         />
                     </div>
                     <div style={{marginLeft: 80, flex: 1, display: 'flex', flexDirection: 'column'}}>
-                        <Section>
-                            Boulders
-
-                            <div style={{display: 'inline', marginLeft: 20}}>
-                                <DisplaySelectButton style={{color: text}}>
-                                    total
-                                </DisplaySelectButton>
-                                <DisplaySelectButton>
-                                    by grade
-                                </DisplaySelectButton>
-                                <DisplaySelectButton>
-                                    by sector
-                                </DisplaySelectButton>
-                                <DisplaySelectButton>
-                                    by setter
-                                </DisplaySelectButton>
-                            </div>
-                        </Section>
-
-                        <GradeVisContainer bssC={bssC} />
-
-                        <Section>
-                            Additions
-
-                            <div style={{display: 'inline', marginLeft: 20}}>
-                                <DisplaySelectButton>
-                                    daily
-                                </DisplaySelectButton>
-                                <DisplaySelectButton style={{color: text}}>
-                                    weekly
-                                </DisplaySelectButton>
-                                <DisplaySelectButton>
-                                    monthly
-                                </DisplaySelectButton>
-                            </div>
-                        </Section>
-
-                        <AdditionsVisContainer bssC={bssC} />
+                        <Visualization bssC={bssC} />
                     </div>
                 </div>
             </Site>
         )
     }
 }
+
+const Visualization = ({bssC}) => (
+    <Measure bounds>
+        {({measureRef, contentRect}) => (
+            <div ref={measureRef} style={{flex: 1}}>
+                {contentRect.bounds && <VisualizationRenderer bssC={bssC} bounds={contentRect.bounds} />}
+            </div>
+        )}
+    </Measure>
+)
+
+const VisualizationRenderer = ({bssC, bounds}) => {
+    const vs = bssC.get([])
+
+    const values = (() => {
+        const events = vs.map(bs => bs.removedOn === undefined
+            ? [
+                { type: 'set', date: bs.setOn, sector: bs.sector, grade: bs.grade },
+              ]
+            : [
+                { type: 'set', date: bs.setOn, sector: bs.sector, grade: bs.grade },
+                { type: 'removed', date: bs.removedOn, sector: bs.sector, grade: bs.grade },
+              ],
+        )
+        .reduce((a, x) => a.concat(x), [])
+        .sort((a, b) => +a.date - +b.date)
+        .filter(a => a.date.getTime() > 10000)
+
+        const res = events.reduce((a, ev) => {
+            if (ev.grade in a.acc) {
+                a.acc[ev.grade] = Math.max(0, a.acc[ev.grade] + (ev.type === 'set' ? 1 : -1))
+            } else if (ev.type === 'set') {
+                a.acc[ev.grade] = 1
+            }
+
+            if (+a.date === +ev.date) {
+                return a
+            } else {
+                return {
+                    values: a.values.concat([{
+                        date: a.date,
+                        ...Object.keys(a.acc).reduce((o, k) => ({ ...o, [k]: a.acc[k] }), {}),
+                    }]),
+                    date: ev.date,
+                    acc: a.acc,
+                }
+            }
+        }, { values: [] as any, date: undefined as any, acc: {} as any })
+
+        return res.values.concat([{
+            date: res.date,
+            ...Object.keys(res.acc).reduce((o, k) => ({ ...o, [k]: res.acc[k] }), {}),
+        }]).filter(x => x.date !== undefined)
+    })()
+
+    var xScale = scaleTime().range([0, bounds.width])
+    var yScale = scaleLinear().range([400, 0])
+    var colorScale = scaleOrdinal([yellow100, green100, orange100, blue100, red100, '#FFFFFF'])
+
+    const skeys = grades()
+    var s = stack()
+        .keys(skeys)
+        .value(function(d, key) { return d[key] || 0 })
+
+    colorScale.domain(skeys)
+
+    var a = area()
+        .curve(curveStepAfter)
+        .x(function(d) { return xScale(d.data.date) })
+        .y0(function(d) { return yScale(d[0]) })
+        .y1(function(d) { return yScale(d[1]) })
+
+    const data = s(values)
+
+    xScale.domain([
+        new Date(Date.now() - 4 * 30 * 24 * 60 * 60 * 1000),
+        new Date(Date.now()),
+    ])
+    yScale.domain([0, 30])
+
+    return (
+        <svg width={bounds.width} height={bounds.height} style={{display: 'block'}}>
+            <g transform={`translate(0,80)`}>
+                {data.map((d, i) => (
+                    <path
+                        key={i}
+                        fill={colorScale(d)}
+                        d={a(d)}
+                    />
+                ))}
+
+                <TotalLine xScale={xScale} yScale={yScale} data={data} />
+
+                <g
+                    transform={`translate(0,410)`}
+                    ref={el => {
+                        if (el) {
+                            select(el).call(axisBottom(xScale))
+                        }
+                    }}
+                />
+            </g>
+        </svg>
+    )
+}
+
+const TotalLine = ({xScale, yScale, data}) => (
+    <path
+        fill='none'
+        stroke='#222222'
+        strokeWidth={2}
+        d={line()
+            .curve(curveStepAfter)
+            .x(d => xScale(d.data.date))
+            .y(d => yScale(d[1]))
+            (data[data.length - 1])}
+    />
+)
 
 const GradeVisContainer = ({bssC}) => {
     return (
