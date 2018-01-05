@@ -80,14 +80,16 @@ export interface BoulderStat {
     grade: string
 }
 
+export const parseBoulderStat = (json: any): BoulderStat => ({
+    ...json,
+    setOn: new Date(Date.parse(json.setOn)),
+    removedOn: json.removedOn ? new Date(Date.parse(json.removedOn)) : undefined,
+})
+
 export const boulderStats = (aversH: Avers.Handle): Avers.Static<BoulderStat[]> => {
     const fetch = () => aversH.fetch(`${aversH.apiHost}/stats/boulders`)
         .then(res => res.json())
-        .then(bss => bss.map(bs => ({
-            ...bs,
-            setOn: new Date(Date.parse(bs.setOn)),
-            removedOn: bs.removedOn ? new Date(Date.parse(bs.removedOn)) : undefined,
-        })))
+        .then(bss => bss.map(parseBoulderStat))
 
     return new Avers.Static<BoulderStat[]>(aosNS, `boulderStats`, fetch)
 }
