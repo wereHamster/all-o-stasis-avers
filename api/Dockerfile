@@ -15,4 +15,4 @@ RUN cd src && \
     rm -rf /src
 
 EXPOSE 80
-CMD ["/usr/bin/all-o-stasis-api", "80"]
+CMD ["/usr/bin/all-o-stasis-api"]
