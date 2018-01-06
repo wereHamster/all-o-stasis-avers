@@ -14,7 +14,7 @@ import {teamView} from './Views/Team'
 import {signupView} from './Views/Signup'
 import {catalogView} from './Views/Catalog'
 import {updateSecretView} from './Views/UpdateSecret'
-
+import {emailConfirmedView} from './Views/EmailConfirmed'
 
 const mkApp = (): App => {
     const aversH = new Avers.Handle(
@@ -80,16 +80,8 @@ function setupRoutes(app: App) {
         loadView(app, homeView)
     })
 
-    page('/signup', () => {
-        loadView(app, signupView)
-    })
-
     page('/login', () => {
         loadView(app, loginView(''))
-    })
-
-    page('/login/:accountId', ctx => {
-        loadView(app, loginView(ctx.params.accountId))
     })
 
     page('/sector', ctx => {
@@ -110,6 +102,10 @@ function setupRoutes(app: App) {
 
     page('/team', () => {
         loadView(app, teamView)
+    })
+
+    page('/email-confirmed', () => {
+        loadView(app, emailConfirmedView)
     })
 
     page('/_catalog', () => {

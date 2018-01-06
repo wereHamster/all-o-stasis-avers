@@ -55,6 +55,11 @@ const LoadableCatalog = Loadable({
                         title: 'SectorPicker',
                         component: pageLoader(() => import('./Components/SectorPicker.doc').then(x => x.default)),
                     },
+                    {
+                        path: '/components/login',
+                        title: 'Login',
+                        component: pageLoader(() => import('./Login.doc').then(x => x.default)),
+                    },
                 ],
             },
         ]

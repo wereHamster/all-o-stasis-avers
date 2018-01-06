@@ -19,6 +19,7 @@ executable all-o-stasis-api
                        , avers
                        , avers-api
                        , avers-server
+                       , cookie
                        , either
                        , servant
                        , servant-server
@@ -31,6 +32,7 @@ executable all-o-stasis-api
                        , transformers
                        , mtl
                        , vector
+                       , random
                        , rethinkdb-client-driver
                        , unordered-containers
                        , template-haskell
@@ -40,3 +42,5 @@ executable all-o-stasis-api
                        , wai-extra
                        , wai-cors
                        , warp
+                       , mime-mail
+                       , http-conduit

@@ -33,6 +33,8 @@ import           Servant.Server
 import           Authorization
 import           Queries
 import           Routes
+import           PassportAuth
+import           Config
 
 import           Storage.ObjectTypes
 import           Storage.Objects.Account
@@ -47,12 +49,6 @@ import           Prelude
 
 
 
-databaseConfig :: IO URI
-databaseConfig = do
-    uri <- fromMaybe "//localhost/allostasis" <$> lookupEnv "RETHINKDB"
-    return $ fromJust $ parseRelativeReference uri
-
-
 -- Currently we dont need a blob storage (inline avatar images)
 createBlobStorageConfig :: IO (BlobId -> Text -> ByteString -> IO (Either AversError ()))
 createBlobStorageConfig = return $ \_blobId _contentType _content ->
@@ -63,15 +59,15 @@ allObjectTypes :: [SomeObjectType]
 allObjectTypes =
     [ SomeObjectType accountObjectType
     , SomeObjectType boulderObjectType
+    , SomeObjectType passportObjectType
     ]
 
 
 createAversHandle :: IO Avers.Handle
 createAversHandle = do
-    dbURI <- databaseConfig
     bsc  <- createBlobStorageConfig
 
-    eH <- newHandle $ Avers.Config dbURI bsc allObjectTypes (\_ _ -> return ())
+    eH <- newHandle $ Avers.Config (cRethinkDB config) bsc allObjectTypes (\_ _ -> return ())
     h <- case eH of
         Left e -> error $ show e
         Right h -> return h
@@ -106,14 +102,14 @@ api :: Proxy API
 api = Proxy
 
 
-server :: Avers.Handle -> Server API
-server aversH =
+server :: PassportConfig -> Avers.Handle -> Server API
+server pc aversH =
          serveAversAPI aversH Authorization.aosAuthorization
-    :<|> serveLocalAPI aversH
+    :<|> serveLocalAPI pc aversH
 
 
-app :: Avers.Handle -> Application
-app aversH = logStdout $ cors mkCorsPolicy $ serve api $ server aversH
+app :: PassportConfig -> Avers.Handle -> Application
+app pc aversH = logStdout $ cors mkCorsPolicy $ serve api $ server pc aversH
 
 
 mkCorsPolicy :: Request -> Maybe CorsResourcePolicy
@@ -129,12 +125,7 @@ mkCorsPolicy req = Just $ simpleCorsResourcePolicy
 
 main :: IO ()
 main = do
-    args <- getArgs
     h <- createAversHandle
     bootstrapAdminAccount h
 
-    mbPort <- pure $ case args of
-        x:_ -> readMay x
-        _   -> Nothing
-
-    run (fromMaybe 8000 mbPort) (app h)
+    run (cPort config) (app (cPassport config) h)
