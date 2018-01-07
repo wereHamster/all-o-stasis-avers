@@ -13,7 +13,6 @@ import {sectorView} from './Views/Sector'
 import {teamView} from './Views/Team'
 import {signupView} from './Views/Signup'
 import {catalogView} from './Views/Catalog'
-import {updateSecretView} from './Views/UpdateSecret'
 import {emailConfirmedView} from './Views/EmailConfirmed'
 
 const mkApp = (): App => {
@@ -94,10 +93,6 @@ function setupRoutes(app: App) {
 
     page('/account/:accountId', ctx => {
         loadView(app, accountView(ctx.params.accountId))
-    })
-
-    page('/account/:accountId/updateSecret', ctx => {
-        loadView(app, updateSecretView(ctx.params.accountId))
     })
 
     page('/team', () => {
