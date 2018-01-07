@@ -8,6 +8,8 @@ module Storage.Objects.Account
     ) where
 
 import Avers
+import Config
+
 import Control.Monad.State
 import Storage.Objects.Account.Types
 
@@ -35,7 +37,7 @@ accountsView = View
     }
 
 adminAccount :: Account
-adminAccount = Account "admin" Admin (Just "") (Just "")
+adminAccount = Account "admin" Admin (Just (cAdminAccountEmail config)) (Just "")
 
 createAdminAccount :: Avers ()
 createAdminAccount = do

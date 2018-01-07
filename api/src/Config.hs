@@ -8,6 +8,8 @@ config :: Config
 config = Config
     { cPort = 8000
 
+    , cAdminAccountEmail = "y@iff.io"
+
       -- TODO: Find a way to parse the URL at compile time.
     , cRethinkDB = case parseRelativeReference "//localhost/allostasis" of
         Nothing -> error "config"
