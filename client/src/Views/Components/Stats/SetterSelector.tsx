@@ -21,7 +21,7 @@ export interface SetterSelectorProps {
 }
 
 export const SetterSelector = ({app, selectedSetters, clear, toggle}: SetterSelectorProps) => {
-    const setters = app.data.accountsCollection.ids.get([]).map(accountId => {
+    const setters = app.data.adminAccountCollection.ids.get([]).map(accountId => {
         return Avers.lookupContent<Account>(app.data.aversH, accountId).fmap(account => (
             <Setter
                 key={accountId}
