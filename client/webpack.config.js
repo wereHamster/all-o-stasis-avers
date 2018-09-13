@@ -6,19 +6,6 @@ module.exports = {
   mode: "development",
 
   entry: {
-    vendor: [
-      "avers",
-      "react",
-      "react-dom",
-      "react-datepicker",
-      "moment",
-      "vega-lite",
-      "vega-parser",
-      "vega-scenegraph",
-      "vega-transforms",
-      "vega-dataflow",
-      "vega-expression"
-    ],
     main: ["./src/main.ts"]
   },
 
@@ -62,6 +49,25 @@ module.exports = {
     }),
     new Visualizer()
   ],
+
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "vendor",
+          chunks: "initial",
+          minChunks: 1
+        },
+        catalog: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "catalog",
+          chunks: "async",
+          minChunks: 2
+        }
+      }
+    }
+  },
 
   devServer: {
     contentBase: __dirname + "/assets",
