@@ -19,7 +19,7 @@ module.exports = {
       "vega-dataflow",
       "vega-expression"
     ],
-    main: ["whatwg-fetch", "./src/main.ts"]
+    main: ["./src/main.ts"]
   },
 
   output: {
