@@ -4,7 +4,7 @@ import * as ReactDOM from 'react-dom'
 import * as Avers from 'avers'
 import {Account, Boulder} from './storage'
 
-import * as page from 'page'
+import page from 'page'
 
 import configObject from './config'
 

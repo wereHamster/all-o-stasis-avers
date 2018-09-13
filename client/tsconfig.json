@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "es5",
+        "target": "esnext",
         "lib": ["es2015", "dom"],
         "module": "esnext",
         "moduleResolution": "node",
@@ -9,6 +9,7 @@
         "removeComments": true,
         "preserveConstEnums": true,
         "suppressImplicitAnyIndexErrors": true,
+        "allowSyntheticDefaultImports": true,
         "rootDir": "src/",
         "outDir": "dist/js/",
         "jsx": "react",

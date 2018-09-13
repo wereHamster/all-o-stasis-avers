@@ -1,5 +1,5 @@
 import * as React from 'react'
-import * as page from 'page'
+import page from 'page'
 
 import * as Avers from 'avers'
 import {Data, App, config, infoTable, refresh, loadView} from './app'

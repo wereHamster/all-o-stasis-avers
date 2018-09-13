@@ -1,5 +1,5 @@
 import * as React from 'react'
-import * as Loadable from 'react-loadable'
+import Loadable from 'react-loadable'
 
 const LoadableCatalog = Loadable({
     loader: () => import('catalog'),
