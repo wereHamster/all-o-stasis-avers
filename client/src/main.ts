@@ -16,13 +16,13 @@ import {catalogView} from './Views/Catalog'
 import {emailConfirmedView} from './Views/EmailConfirmed'
 
 const mkApp = (): App => {
-    const aversH = new Avers.Handle(
-        config.apiHost,
-        window.fetch.bind(window),
-        path => new WebSocket('ws:' + config.apiHost + path),
-        window.performance.now.bind(window.performance),
+    const aversH = new Avers.Handle({
+        apiHost: config.apiHost,
+        fetch: window.fetch.bind(window),
+        createWebSocket: path => new WebSocket('ws:' + config.apiHost + path),
+        now: window.performance.now.bind(window.performance),
         infoTable,
-    )
+    })
 
     const data = new Data(aversH)
 
