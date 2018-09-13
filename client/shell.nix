@@ -3,6 +3,6 @@ let
 
 in pkgs.mkShell {
   buildInputs = [
-    pkgs.nodejs-8_x
+    pkgs.nodejs-10_x
   ];
 }
