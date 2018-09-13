@@ -34,16 +34,14 @@
     "webpack": "^3.6.0",
     "webpack-dev-server": "^2.8.2",
     "webpack-visualizer-plugin": "^0.1.11",
-    "whatwg-fetch": "^2.0.3"
+    "whatwg-fetch": "^2.0.3",
+    "react-vega": "^3.1.1",
+    "vega": "^3.0.5",
+    "vega-lite": "^2.0.0-rc3"
   },
   "scripts": {
     "lint": "tslint src/**/*.ts src/**/*.tsx",
     "dev": "webpack-dev-server",
     "build": "webpack -p"
-  },
-  "devDependencies": {
-    "react-vega": "^3.1.1",
-    "vega": "^3.0.5",
-    "vega-lite": "^2.0.0-rc3"
   }
 }
