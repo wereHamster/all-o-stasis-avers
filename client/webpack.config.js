@@ -24,6 +24,11 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.jsx?$/,
+        include: /node_modules/,
+        loader: "babel-loader"
+      },
+      {
         test: /\.tsx?$/,
         loader: "awesome-typescript-loader",
         options: {
