@@ -1,4 +1,3 @@
-const { optimize, HashedModuleIdsPlugin } = require("webpack");
 const { CheckerPlugin } = require("awesome-typescript-loader");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const Visualizer = require("webpack-visualizer-plugin");

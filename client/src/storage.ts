@@ -1,10 +1,10 @@
 import * as Avers from 'avers'
 
 export class Account
-    { login  : string
-      role   : string
-      email  : string
-      name   : string
+    { login  !: string
+      role   !: string
+      email  !: string
+      name   !: string
     }
 Avers.definePrimitive(Account, 'login', '')
 Avers.definePrimitive(Account, 'role',  'user')
@@ -13,13 +13,13 @@ Avers.definePrimitive(Account, 'name',  '')
 
 
 export class Boulder
-    { setter     : string[]
-      sector     : string
-      grade      : string
-      gradeNr    : number
-      setDate    : number
-      removed    : number
-      name       : string
+    { setter     !: string[]
+      sector     !: string
+      grade      !: string
+      gradeNr    !: number
+      setDate    !: number
+      removed    !: number
+      name       !: string
     }
 
 Avers.definePrimitive(Boulder, 'setter',   [])
