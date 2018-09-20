@@ -4,12 +4,12 @@ import * as ReactDOM from 'react-dom'
 import * as Avers from 'avers'
 import {Account, Boulder} from './storage'
 
-import * as page from 'page'
+import page from 'page'
 
 import configObject from './config'
 
 export class Config {
-    apiHost: string
+    apiHost!: string
 }
 
 Avers.definePrimitive(Config, 'apiHost', '//localhost:8000')
@@ -27,7 +27,7 @@ export class App {
     ) {}
 }
 
-export const infoTable = new Map<string, Avers.ObjectConstructor<any>>()
+export const infoTable = new Map<string, { new(): any }>()
 
 infoTable.set('account',  Account)
 infoTable.set('boulder',  Boulder)

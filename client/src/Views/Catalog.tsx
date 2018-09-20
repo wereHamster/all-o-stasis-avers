@@ -33,32 +33,32 @@ const LoadableCatalog = Loadable({
                     {
                         path: '/components/boulder-id',
                         title: 'BoulderId',
-                        component: pageLoader(() => import('./Components/BoulderId.doc').then(x => x.default)),
+                        component: pageLoader(() => import('./Components/BoulderId.doc')),
                     },
                     {
                         path: '/components/boulder-card',
                         title: 'BoulderCard',
-                        component: pageLoader(() => import('./Components/BoulderCard.doc').then(x => x.default)),
+                        component: pageLoader(() => import('./Components/BoulderCard.doc')),
                     },
                     {
                         path: '/components/boulder-details',
                         title: 'BoulderDetails',
-                        component: pageLoader(() => import('./Components/BoulderDetails.doc').then(x => x.default)),
+                        component: pageLoader(() => import('./Components/BoulderDetails.doc')),
                     },
                     {
                         path: '/components/setter-card',
                         title: 'SetterCard',
-                        component: pageLoader(() => import('./Components/SetterCard.doc').then(x => x.default)),
+                        component: pageLoader(() => import('./Components/SetterCard.doc')),
                     },
                     {
                         path: '/components/sector-picker',
                         title: 'SectorPicker',
-                        component: pageLoader(() => import('./Components/SectorPicker.doc').then(x => x.default)),
+                        component: pageLoader(() => import('./Components/SectorPicker.doc')),
                     },
                     {
                         path: '/components/login',
                         title: 'Login',
-                        component: pageLoader(() => import('./Login.doc').then(x => x.default)),
+                        component: pageLoader(() => import('./Login.doc')),
                     },
                     {
                         path: '/components/stats',

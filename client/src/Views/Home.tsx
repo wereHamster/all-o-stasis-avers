@@ -6,7 +6,7 @@ module Home
 
 import * as Avers from 'avers'
 import * as React from 'react'
-import * as moment from 'moment'
+import moment from 'moment'
 import styled from 'styled-components'
 
 import {App} from '../app'

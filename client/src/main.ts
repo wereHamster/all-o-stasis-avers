@@ -1,4 +1,4 @@
-import * as page from 'page'
+import page from 'page'
 
 import * as Avers from 'avers'
 import {Data, App, config, infoTable, refresh, loadView} from './app'
@@ -11,18 +11,17 @@ import {loginView} from './Views/Login'
 import {sectorView} from './Views/Sector'
 import {teamView} from './Views/Team'
 import {catalogView} from './Views/Catalog'
-import {updateSecretView} from './Views/UpdateSecret'
 import {emailConfirmedView} from './Views/EmailConfirmed'
 import {statsView} from './Views/Stats'
 
 const mkApp = (): App => {
-    const aversH = new Avers.Handle(
-        config.apiHost,
-        window.fetch.bind(window),
-        path => new WebSocket('ws:' + config.apiHost + path),
-        window.performance.now.bind(window.performance),
+    const aversH = new Avers.Handle({
+        apiHost: config.apiHost,
+        fetch: window.fetch.bind(window),
+        createWebSocket: path => new WebSocket('ws:' + config.apiHost + path),
+        now: window.performance.now.bind(window.performance),
         infoTable,
-    )
+    })
 
     const data = new Data(aversH)
 
@@ -97,10 +96,6 @@ function setupRoutes(app: App) {
 
     page('/account/:accountId', ctx => {
         loadView(app, accountView(ctx.params.accountId))
-    })
-
-    page('/account/:accountId/updateSecret', ctx => {
-        loadView(app, updateSecretView(ctx.params.accountId))
     })
 
     page('/team', () => {

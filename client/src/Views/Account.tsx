@@ -58,16 +58,6 @@ class AccountSpec extends React.Component<AccountViewProps, {}> {
         this.props.accountE.content.name = value
     }
 
-    changeAccountEmail = (e: React.FormEvent<any>) => {
-        const value = (e.target as HTMLInputElement).value
-        this.props.accountE.content.email = value
-    }
-
-    changeAccountLogin = (e: React.FormEvent<any>) => {
-        const value = (e.target as HTMLInputElement).value
-        this.props.accountE.content.login = value
-    }
-
     render() {
         const {app, accountE} = this.props
 
@@ -89,6 +79,7 @@ class AccountSpec extends React.Component<AccountViewProps, {}> {
           <Avatar>
             <img src={accountGravatarUrl(accountE.content.email)}/>
             <Name>{accountE.content.name}</Name>
+            <Email>{accountE.content.email}</Email>
           </Avatar>
         )
     }
@@ -120,18 +111,6 @@ class AccountSpec extends React.Component<AccountViewProps, {}> {
                 <div className='content'>
                   <input className='wide' type='text' value={account.name}
                          onChange={this.changeAccountName} onClick={onClick}></input>
-                </div>
-              </div>
-              <div className='form-row'>
-                <div className='label'>Email</div>
-                <div className='content'>
-                  <input className='wide' type='text' value={account.email}
-                         onChange={this.changeAccountEmail} onClick={onClick}></input>
-                </div>
-              </div>
-              <div className='form-row'> <div className='label'>Login</div> <div className='content'>
-                  <input className='wide' type='text' value={account.login}
-                         onChange={this.changeAccountLogin} onClick={onClick}></input>
                 </div>
               </div>
               {role(this.props.app) === 'admin' && this.accountAdminFields(accountE)}
@@ -166,6 +145,15 @@ const Name = styled.div`
     font-size: 4rem;
     font-family: "trajan-sans-pro";
     margin-top: 0.7rem;
+
+`
+
+const Email = styled.div`
+    text-align: center;
+    font-size: 1rem;
+    font-family: "trajan-sans-pro";
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
 
 `
 

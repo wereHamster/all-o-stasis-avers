@@ -25,7 +25,6 @@ export const NavBar = ({app}: {app: App}) => (
         <FlexItem />
 
         {role(app) !== 'user' && <CreateBoulder app={app} />}
-        {app.data.session.objId && <ChangeSecret app={app} />}
         {app.data.session.objId ? <AccountSettings app={app} /> : <SignInItem/>}
     </Root>
 )
@@ -74,12 +73,6 @@ const CreateBoulder = ({app}: {app: App}) => (
 const AccountSettings = ({app}: {app: App}) => (
     <Item onClick={navigateToFn('/account/' + app.data.session.objId)}>
         <i className='settings icon'></i>Account Settings
-    </Item>
-)
-
-const ChangeSecret = ({app}: {app: App}) => (
-    <Item onClick={navigateToFn('/account/' + app.data.session.objId + '/updateSecret')}>
-        <i className='key icon'></i>Change Secret
     </Item>
 )
 

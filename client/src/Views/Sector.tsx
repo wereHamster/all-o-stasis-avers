@@ -75,7 +75,6 @@ class Sector extends React.Component<SectorProps, SectorState> {
                 <SectorHeader sectorNames={sectors()} numBoulders={boulders.length} sectorName={this.state.sectorName} onChange={this.onChange} removeAllBoulders={this.removeAllSectorBoulders} />
                 <Stats>
                     <GradeBalance boulders={boulders} height={300} width={300} />
-                    <SectorBoulders boulders={boulders} />
                 </Stats>
                 </SectorView>
             </Views>
@@ -170,6 +169,7 @@ const Header = styled.div`
 
 const Views = styled.div`
     display: flex;
+    flex-wrap: wrap;
     flex-direction: row;
     align-items: center;
     justify-content: center;

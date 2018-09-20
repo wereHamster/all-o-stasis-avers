@@ -1,6 +1,6 @@
 import * as Avers from 'avers'
 import DatePicker from 'react-datepicker'
-import * as moment from 'moment'
+import moment from 'moment'
 import * as React from 'react'
 import styled from 'styled-components'
 

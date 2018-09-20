@@ -61,7 +61,7 @@ class LoginView extends React.Component<{ app: App }, LoginState> {
     }
 
     doLogin = (e) => {
-        const {app: {data: {aversH: {fetch, apiHost}, session}}} = this.props
+        const {app: {data: {aversH: {config: {fetch, apiHost}}, session}}} = this.props
         const {email} = this.state
 
         e.stopPropagation()

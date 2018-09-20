@@ -10,7 +10,13 @@ import {Boulder} from '../storage'
 const fetch = (url) =>
     Promise.reject(new Error(`Failed request to ${url}`))
 
-export const aversH = new Avers.Handle('localhost', fetch, path => new WebSocket('ws:localhost' + path), () => window.performance.now(), infoTable)
+export const aversH = new Avers.Handle({
+    apiHost: 'localhost',
+    fetch,
+    createWebSocket: path => new WebSocket('ws:localhost' + path),
+    now: () => window.performance.now(),
+    infoTable,
+})
 const data = new Data(aversH)
 export const app = new App(null as any, data, () => { throw new Error('mkViewFn') })
 

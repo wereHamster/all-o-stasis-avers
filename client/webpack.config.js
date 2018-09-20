@@ -1,59 +1,82 @@
-const {optimize, HashedModuleIdsPlugin, DefinePlugin} = require('webpack')
-const {CheckerPlugin} = require('awesome-typescript-loader')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const Visualizer = require('webpack-visualizer-plugin')
+const { CheckerPlugin } = require("awesome-typescript-loader");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const Visualizer = require("webpack-visualizer-plugin");
 
 module.exports = {
+  mode: "development",
+
   entry: {
-    vendor: ['avers', 'react', 'react-dom', 'react-datepicker', 'moment', 'vega-lite', 'vega-parser', 'vega-scenegraph', 'vega-transforms', 'vega-dataflow', 'vega-expression'],
-    main: ['whatwg-fetch', './src/main.ts'],
+    main: ["./src/main.ts"]
   },
 
   output: {
-    publicPath: '/',
-    path: __dirname + '/dist',
-    filename: '[name].[chunkhash].js'
+    publicPath: "/",
+    path: __dirname + "/dist",
+    filename: "[name].[chunkhash].js"
   },
 
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.jsx']
+    extensions: [".ts", ".tsx", ".js", ".jsx"]
   },
 
-  devtool: 'source-map',
+  devtool: "source-map",
 
   module: {
     rules: [
       {
+        test: /\.jsx?$/,
+        include: /node_modules/,
+        loader: "babel-loader"
+      },
+      {
         test: /\.tsx?$/,
-        loader: 'awesome-typescript-loader',
+        loader: "awesome-typescript-loader",
         options: {
-        },
+          useBabel: true,
+          babelCore: "@babel/core"
+        }
       },
       {
         test: /\.md$/,
-        loaders: [require.resolve('catalog/loader'), require.resolve('raw-loader')]
+        loaders: [require.resolve("catalog/loader"), "raw-loader"]
       },
       {
         test: /\.svg$/,
-        loader: 'svg-react-loader',
-      },
+        loader: "svg-react-loader"
+      }
     ]
   },
 
   plugins: [
     new CheckerPlugin(),
-    new HashedModuleIdsPlugin(),
-    new optimize.CommonsChunkPlugin({name: 'vendor', minChunks: Infinity}),
-    new optimize.CommonsChunkPlugin({name: 'main', async: true, children: true}),
     new HtmlWebpackPlugin({
       inject: true,
-      template: 'assets/index.html'
+      template: "assets/index.html"
     }),
-    new Visualizer(),
+    new Visualizer()
   ],
 
-  devServer: {
-    contentBase: __dirname + '/assets',
-    historyApiFallback: true,
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "vendor",
+          chunks: "initial",
+          minChunks: 1
+        },
+        catalog: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "catalog",
+          chunks: "async",
+          minChunks: 2
+        }
+      }
+    }
   },
-}
+
+  devServer: {
+    contentBase: __dirname + "/assets",
+    historyApiFallback: true
+  }
+};
