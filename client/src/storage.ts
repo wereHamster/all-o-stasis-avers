@@ -68,7 +68,7 @@ export interface SetterMonthlyStats {
 
 const aosNS = Symbol('all-o-stasis')
 export const setterMonthlyStats = (aversH: Avers.Handle, setterId: string, year: number, month: number): Avers.Static<SetterMonthlyStats> => {
-    const fetch = () => aversH.fetch(`${aversH.apiHost}/stats/${setterId}/${year}/${month}`).then(res => res.json())
+    const fetch = () => aversH.config.fetch(`${aversH.config.apiHost}/stats/${setterId}/${year}/${month}`).then(res => res.json())
     return new Avers.Static<SetterMonthlyStats>(aosNS, `${setterId}-${year}-${month}`, fetch)
 }
 
@@ -87,7 +87,7 @@ export const parseBoulderStat = (json: any): BoulderStat => ({
 })
 
 export const boulderStats = (aversH: Avers.Handle): Avers.Static<BoulderStat[]> => {
-    const fetch = () => aversH.fetch(`${aversH.apiHost}/stats/boulders`)
+    const fetch = () => aversH.config.fetch(`${aversH.config.apiHost}/stats/boulders`)
         .then(res => res.json())
         .then(bss => bss.map(parseBoulderStat))
 
