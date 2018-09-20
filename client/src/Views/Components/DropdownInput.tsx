@@ -27,18 +27,18 @@ function asString(value) {
 
 class DropdownInputSpec extends React.Component<DropdownInputProps, DropdownInputState> {
 
-    initialState(props) {
-        var selectedValue = props.object[props.field];
-        return { selectedValue : asString(selectedValue) };
-    }
-
     constructor(props) {
         super(props);
         this.state = this.initialState(props);
     }
 
+    initialState(props) {
+        const selectedValue = props.object[props.field];
+        return { selectedValue : asString(selectedValue) };
+    }
+
     onChange = (e: React.FormEvent<any>) => {
-        let value = (e.target as HTMLSelectElement).value;
+        const value = (e.target as HTMLSelectElement).value;
 
         this.setState({ selectedValue: value });
         this.props.object[this.props.field] = value;
@@ -49,7 +49,7 @@ class DropdownInputSpec extends React.Component<DropdownInputProps, DropdownInpu
             e.stopPropagation();
         }
 
-        let options = this.props.options.map( (entry, index) => {
+        const options = this.props.options.map( (entry, index) => {
             return (
                 <option value={entry} key={index}>
                     {entry}
@@ -72,4 +72,4 @@ class DropdownInputSpec extends React.Component<DropdownInputProps, DropdownInpu
     }
 }
 
-export var DropDownInput = React.createFactory(DropdownInputSpec);
+export const DropDownInput = React.createFactory(DropdownInputSpec);

@@ -13,8 +13,8 @@ interface NumberInputState {
 // The value is only valid if it can be fully parsed into a number.
 function
 isValidNumber(value: string): boolean {
-    var num = parseFloat(value);
-    return !isNaN(num) && value == '' + num;
+    const num = parseFloat(value);
+    return !isNaN(num) && ('' + value) === ('' + num);
 }
 
 function
@@ -28,18 +28,18 @@ asString(value) {
 
 class NumberInputSpec extends React.Component<NumberInputProps, NumberInputState> {
 
-    initialState(props) {
-        var rawValue = props.object[props.field];
-        return { rawValue : asString(rawValue) };
-    }
-
     constructor(props) {
         super(props);
         this.state = this.initialState(props);
     }
 
+    initialState(props) {
+        const rawValue = props.object[props.field];
+        return { rawValue : asString(rawValue) };
+    }
+
     onChange = (e: React.FormEvent<any>) => {
-        let value = (e.target as HTMLInputElement).value;
+        const value = (e.target as HTMLInputElement).value;
 
         this.setState({ rawValue: value });
         if (isValidNumber(value)) {
@@ -68,4 +68,4 @@ class NumberInputSpec extends React.Component<NumberInputProps, NumberInputState
     }
 }
 
-export var NumberInput = React.createFactory(NumberInputSpec);
+export const NumberInput = React.createFactory(NumberInputSpec);

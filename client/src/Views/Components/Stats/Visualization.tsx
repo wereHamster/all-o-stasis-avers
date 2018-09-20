@@ -37,25 +37,25 @@ const VisualizationRenderer = ({bssC, sectors, selectedSetters, bounds}) => {
     const events = bssC.get([])
 
     const values = (() => {
-        const res = events.reduce((a, ev) => {
+        const res = events.reduce((acc, ev) => {
             if (matchSector(sectors)(ev.bs) && matchSetter(selectedSetters)(ev.bs)) {
-                if (ev.grade in a.acc) {
-                    a.acc[ev.grade] = Math.max(0, a.acc[ev.grade] + (ev.type === 'set' ? 1 : -1))
+                if (ev.grade in acc.acc) {
+                    acc.acc[ev.grade] = Math.max(0, acc.acc[ev.grade] + (ev.type === 'set' ? 1 : -1))
                 } else if (ev.type === 'set') {
-                    a.acc[ev.grade] = 1
+                    acc.acc[ev.grade] = 1
                 }
             }
 
-            if (+a.date === +ev.date) {
-                return a
+            if (+acc.date === +ev.date) {
+                return acc
             } else {
                 return {
-                    values: a.values.concat([{
-                        date: a.date,
-                        ...Object.keys(a.acc).reduce((o, k) => ({ ...o, [k]: a.acc[k] }), {}),
+                    values: acc.values.concat([{
+                        date: acc.date,
+                        ...Object.keys(acc.acc).reduce((o, k) => ({ ...o, [k]: acc.acc[k] }), {}),
                     }]),
                     date: ev.date,
-                    acc: a.acc,
+                    acc: acc.acc,
                 }
             }
         }, {
@@ -77,15 +77,15 @@ const VisualizationRenderer = ({bssC, sectors, selectedSetters, bounds}) => {
     const skeys = grades()
     const s = stack()
         .keys(skeys)
-        .value(function(d, key) { return d[key] || 0 })
+        .value((d, key) => d[key] || 0)
 
     colorScale.domain(skeys)
 
-    const a = area()
+    const areaGenerator = area()
         .curve(curve)
-        .x(function(d) { return xScale(d.data.date) })
-        .y0(function(d) { return yScale(d[0]) })
-        .y1(function(d) { return yScale(d[1]) })
+        .x((d) => xScale(d.data.date))
+        .y0((d) => yScale(d[0]))
+        .y1((d) => yScale(d[1]))
 
     const data = s(values)
 
@@ -104,7 +104,7 @@ const VisualizationRenderer = ({bssC, sectors, selectedSetters, bounds}) => {
                         index={i}
                         colorScale={colorScale}
                         data={d}
-                        a={a}
+                        a={areaGenerator}
                     />
                 ))}
 
