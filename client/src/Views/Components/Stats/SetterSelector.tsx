@@ -50,7 +50,7 @@ export const SetterSelector = ({app, selectedSetters, clear, toggle}: SetterSele
 
 const placeholderImageSrc = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAAAAACoWZBhAAAAF0lEQVQI12P4BAI/QICBFCaYBPNJYQIAkUZftTbC4sIAAAAASUVORK5CYII='
 const Setter = ({accountId, account, toggle, isSelected}) => (
-    <SetterC isSelected={isSelected} onClick={() => toggle(accountId)}>
+    <SetterC onClick={() => toggle(accountId)}>
         <SetterImage isSelected={isSelected} src={account ? accountGravatarUrl(account.email) : placeholderImageSrc} />
         <SetterName isSelected={isSelected}>{(account && account.name !== '') ? account.name : accountId.slice(0, 7)}</SetterName>
     </SetterC>
@@ -72,7 +72,7 @@ transition all .2s;
 }
 `
 
-const SetterImage = styled.img`
+const SetterImage = styled<{ isSelected: boolean }, "img">("img")`
 display: block;
 width: 24px;
 height: 24px;
@@ -83,7 +83,7 @@ transition all .2s;
 opacity: ${({isSelected}) => isSelected ? 1 : 0.2}
 `
 
-const SetterName = styled.div`
+const SetterName = styled<{ isSelected: boolean }, "div">("div")`
 ${useTypeface(copy14)}
 transition all .2s;
 color: ${({isSelected}) => isSelected ? text : lightGrey}

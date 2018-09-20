@@ -6,7 +6,6 @@ import {accountGravatarUrl} from '../Account'
 import {App, navigateTo} from '../../app'
 import {Account, Boulder, prettyPrintSector} from '../../storage'
 
-import {lightGrey, darkGrey, text, gradeBackgroundColor, gradeBorderColor, gradeColor} from '../../Materials/Colors'
 import {useTypeface, copy16} from '../../Materials/Typefaces'
 
 import {BoulderId} from './BoulderId'
@@ -23,7 +22,7 @@ export class BoulderCard extends React.Component<BoulderCardProps> {
 
     render() {
         const {app, boulderE} = this.props
-        const {objectId, content} = boulderE
+        const {content} = boulderE
         const {grade, gradeNr, sector, setter} = content
 
         return (

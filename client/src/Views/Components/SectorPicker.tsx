@@ -1,13 +1,5 @@
-import * as Avers from 'avers'
 import * as React from 'react'
 import styled from 'styled-components'
-
-import {accountGravatarUrl} from '../Account'
-import {App, navigateTo} from '../../app'
-import {Account, Boulder, prettyPrintSector} from '../../storage'
-
-import {lightGrey, darkGrey, text, gradeBackgroundColor, gradeBorderColor, gradeColor} from '../../Materials/Colors'
-import {useTypeface, copy16} from '../../Materials/Typefaces'
 
 import SectorPickerSVG from '../../../assets/SectorPicker.svg'
 

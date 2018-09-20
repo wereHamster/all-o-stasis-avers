@@ -3,8 +3,7 @@ import * as React from 'react'
 
 import {markdown, ReactSpecimen} from 'catalog'
 
-import {App, Data, infoTable} from '../../app'
-import {Boulder, Account} from '../../storage'
+import {Account} from '../../storage'
 
 import {SetterCard} from './SetterCard'
 import {aversH, app, setter1Id} from '../../Catalog/App'

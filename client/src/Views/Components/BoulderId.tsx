@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import {lightGrey, darkGrey, text, gradeBackgroundColor, gradeBorderColor, gradeColor} from '../../Materials/Colors'
+import {gradeBackgroundColor, gradeBorderColor, gradeColor} from '../../Materials/Colors'
 
 export const BoulderId: any = styled.div`
     width: 32px;

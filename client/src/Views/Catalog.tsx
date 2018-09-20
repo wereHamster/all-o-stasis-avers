@@ -63,7 +63,7 @@ const LoadableCatalog = Loadable({
                     {
                         path: '/components/stats',
                         title: 'Stats',
-                        component: pageLoader(() => import('./Components/Stats/Visualization.doc').then(x => x.default)),
+                        component: pageLoader(() => import('./Components/Stats/Visualization.doc')),
                     },
                 ],
             },

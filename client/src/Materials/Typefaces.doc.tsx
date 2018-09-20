@@ -2,7 +2,6 @@ import * as React from 'react'
 
 import {markdown, ReactSpecimen} from 'catalog'
 
-import * as C from './Colors'
 import * as T from './Typefaces'
 
 export default () => markdown`

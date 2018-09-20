@@ -59,7 +59,7 @@ class AccountSpec extends React.Component<AccountViewProps, {}> {
     }
 
     render() {
-        const {app, accountE} = this.props
+        const {accountE} = this.props
 
         return (
           <Root>
@@ -70,11 +70,6 @@ class AccountSpec extends React.Component<AccountViewProps, {}> {
     }
 
     accountHeader(accountE: Avers.Editable<Account>): JSX.Element {
-        let title = accountE.objectId
-        if (accountE.content.name !== '') {
-            title = accountE.content.name
-        }
-
         return (
           <Avatar>
             <img src={accountGravatarUrl(accountE.content.email)}/>

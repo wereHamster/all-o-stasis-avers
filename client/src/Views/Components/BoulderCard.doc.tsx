@@ -3,7 +3,6 @@ import * as React from 'react'
 
 import {markdown, ReactSpecimen} from 'catalog'
 
-import {App, Data, infoTable} from '../../app'
 import {Boulder} from '../../storage'
 
 import {BoulderCard} from './BoulderCard'
