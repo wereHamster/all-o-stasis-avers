@@ -6,6 +6,8 @@ import {role, removeBoulders, activeBoulders, sectorBoulders} from '../actions'
 import {App} from '../app'
 import {sectors, prettyPrintSector} from '../storage'
 
+import {useTypeface, heading28} from '../Materials/Typefaces'
+
 import {GradeBalance} from './Components/GradeBalance'
 import {Site} from './Components/Site'
 
@@ -162,9 +164,8 @@ const SectorView = styled.div`
 `
 
 const Name = styled.div`
+    ${useTypeface(heading28)}
     text-align: center;
-    font-size: 3rem;
-    font-family: "trajan-sans-pro";
     margin: 4rem 0 2rem;
     text-transform: uppercase;
 `

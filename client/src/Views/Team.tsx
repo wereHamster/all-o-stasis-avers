@@ -5,6 +5,8 @@ import styled from 'styled-components'
 import {App} from '../app'
 import {Account} from '../storage'
 
+import {useTypeface, heading28} from '../Materials/Typefaces'
+
 import {Site} from './Components/Site'
 import {SetterCard} from './Components/SetterCard'
 
@@ -34,9 +36,8 @@ const Root = styled.div`
 `
 
 const Logo = styled.div`
+    ${useTypeface(heading28)}
     text-align: center;
-    font-size: 4rem;
-    font-family: "trajan-sans-pro";
     margin-top: 4rem;
 `
 const Members = styled.div`

@@ -1,20 +1,17 @@
 *, *::before, *::after {
     box-sizing: inherit;
 }
-
 html {
     box-sizing: border-box;
 }
 
 body {
     margin: 0;
-    /*font-family: 'Muli', sans-serif;*/
-    font-family: 'Enriqueta', serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
 }
 
 input {
-    /*font-family: 'Muli', sans-serif;*/
-    font-family: 'Enriqueta', serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
     font-size: 1rem;
     margin: 0;
     padding: .3rem .4rem;
@@ -91,8 +88,6 @@ input.invalid {
     background-color: rgb(157, 20, 10);
 }
 
-.site {}
-
 
 /* --------------------------------------------------------------------------------*/
 
@@ -131,7 +126,6 @@ input.invalid {
 .login .logo {
     text-align: center;
     font-size: 4rem;
-    font-family: "trajan-sans-pro";
     margin-top: 4rem;
 }
 
@@ -363,7 +357,6 @@ input.invalid {
     padding-top: 80px;
     text-align: center;
     font-size: 4rem;
-    font-family: "trajan-sans-pro";
     margin-top: 4rem;
     text-transform: uppercase;
 }

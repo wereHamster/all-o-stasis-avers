@@ -7,6 +7,8 @@ import {role} from '../actions'
 import {App} from '../app'
 import {Account, roles, setterMonthlyStats} from '../storage'
 
+import {useTypeface, heading28, copy16} from '../Materials/Typefaces'
+
 import {DropDownInput} from './Components/DropdownInput'
 import {Site} from './Components/Site'
 
@@ -136,17 +138,15 @@ const Root = styled.div`
 `
 
 const Name = styled.div`
+    ${useTypeface(heading28)}
     text-align: center;
-    font-size: 4rem;
-    font-family: "trajan-sans-pro";
     margin-top: 0.7rem;
 
 `
 
 const Email = styled.div`
+    ${useTypeface(copy16)}
     text-align: center;
-    font-size: 1rem;
-    font-family: "trajan-sans-pro";
     margin-top: 0.2rem;
     margin-bottom: 0.2rem;
 
