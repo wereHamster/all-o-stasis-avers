@@ -1,0 +1,12 @@
+[build]
+  base = "client"
+  command = "./script/confgen production && npm run build && cp -r -n assets/* dist/"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "10.9.0"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
