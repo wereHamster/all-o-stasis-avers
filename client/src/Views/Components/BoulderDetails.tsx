@@ -1,21 +1,20 @@
 import * as Avers from 'avers'
 import * as React from 'react'
-import moment from 'moment'
 import styled from 'styled-components'
 
 import {App} from '../../app'
 import {Account, Boulder} from '../../storage'
 import {accountGravatarUrl} from '../Account'
 
-import {text, darkGrey, lightGrey} from '../../Materials/Colors'
-import {useTypeface, copy16, copy16Bold, copy14} from '../../Materials/Typefaces'
+import {text} from '../../Materials/Colors'
+import {useTypeface, copy16, copy16Bold} from '../../Materials/Typefaces'
 
 import {SectorPicker} from './SectorPicker'
 
 export const BoulderDetails = ({app, boulder}: {app: App, boulder: Boulder}) => (
     <Root>
         <Section>Sector</Section>
-        <SectorPicker sector={boulder.sector} onChange={() => {}} />
+        <SectorPicker sectors={[boulder.sector]} onChange={() => {}} />
 
         <Section>Setters</Section>
         <div style={{display: 'flex'}}>

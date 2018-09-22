@@ -1,4 +1,3 @@
-import * as Avers from 'avers'
 import * as React from 'react'
 import styled from 'styled-components'
 
@@ -12,7 +11,7 @@ export interface SetterCardProps {
     account: void | Account
 }
 
-export const SetterCard = ({app, accountId, account}: SetterCardProps) => (
+export const SetterCard = ({accountId, account}: SetterCardProps) => (
     <Setter>
         <div onClick={navigateToFn('/account/' + accountId)}>
             <img src={account ? accountGravatarUrl(account.email) : placeholderImageSrc}/>

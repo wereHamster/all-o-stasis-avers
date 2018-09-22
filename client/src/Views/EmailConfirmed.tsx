@@ -1,14 +1,11 @@
-import * as Avers from 'avers'
 import * as React from 'react'
 import styled from 'styled-components'
 
 import {useTypeface, h1, copy16} from '../Materials/Typefaces'
 
 import {App} from '../app'
-import {Account} from '../storage'
 
 import {Site} from './Components/Site'
-import {SetterCard} from './Components/SetterCard'
 
 export function
 emailConfirmedView(app: App) {

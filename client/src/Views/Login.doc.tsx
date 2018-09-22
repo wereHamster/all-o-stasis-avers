@@ -1,4 +1,3 @@
-import * as Avers from 'avers'
 import * as React from 'react'
 
 import {markdown, ReactSpecimen} from 'catalog'

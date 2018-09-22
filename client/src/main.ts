@@ -1,4 +1,3 @@
-import * as React from 'react'
 import page from 'page'
 
 import * as Avers from 'avers'
@@ -11,9 +10,9 @@ import {homeView} from './Views/Home'
 import {loginView} from './Views/Login'
 import {sectorView} from './Views/Sector'
 import {teamView} from './Views/Team'
-import {signupView} from './Views/Signup'
 import {catalogView} from './Views/Catalog'
 import {emailConfirmedView} from './Views/EmailConfirmed'
+import {statsView} from './Views/Stats'
 
 const mkApp = (): App => {
     const aversH = new Avers.Handle({
@@ -80,11 +79,15 @@ function setupRoutes(app: App) {
     })
 
     page('/login', () => {
-        loadView(app, loginView(''))
+        loadView(app, loginView())
     })
 
-    page('/sector', ctx => {
+    page('/sector', () => {
         loadView(app, sectorView)
+    })
+
+    page('/stats', () => {
+        loadView(app, statsView)
     })
 
     page('/boulder/:boulderId', ctx => {

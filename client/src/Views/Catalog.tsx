@@ -60,6 +60,11 @@ const LoadableCatalog = Loadable({
                         title: 'Login',
                         component: pageLoader(() => import('./Login.doc')),
                     },
+                    {
+                        path: '/components/stats',
+                        title: 'Stats',
+                        component: pageLoader(() => import('./Components/Stats/Visualization.doc')),
+                    },
                 ],
             },
         ]

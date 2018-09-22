@@ -3,13 +3,11 @@ import * as React from 'react'
 import styled from 'styled-components'
 
 import {role, removeBoulders, activeBoulders, sectorBoulders} from '../actions'
-import {App, navigateTo} from '../app'
-import {Boulder, grades, sectors, prettyPrintSector} from '../storage'
+import {App} from '../app'
+import {sectors, prettyPrintSector} from '../storage'
 
 import {GradeBalance} from './Components/GradeBalance'
 import {Site} from './Components/Site'
-
-import {BoulderId} from './Components/BoulderId'
 
 export function
 sectorView(app: App) {
@@ -142,27 +140,6 @@ const SectorHeader = ({sectorNames, numBoulders, sectorName, onChange, removeAll
 )
 
 
-
-// ----------------------------------------------------------------------------
-// SectorBoulders
-
-interface SectorBouldersProps {
-    boulders: Array<Avers.Editable<Boulder>>
-}
-
-// TODO: onClick={navigateTo('/boulder/' + boulder.objectId)}
-const SectorBoulders = ({boulders}: SectorBouldersProps) => (
-    <Boulders>
-        {boulders.map(boulder => (
-            <BoulderId grade={boulder.content.grade}>
-                {boulder.content.gradeNr}
-            </BoulderId>
-        ))}
-    </Boulders>
-)
-
-
-
 // ----------------------------------------------------------------------------
 const Header = styled.div`
 `
@@ -214,12 +191,4 @@ const Stats = styled.div`
     align-items: center;
     justify-content: center;
     margin-top: 6rem;
-`
-
-const Boulders = styled.div`
-    margin-top: 1rem;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    max-width: 500px;
 `

@@ -1,4 +1,3 @@
-import * as Avers from 'avers'
 import * as React from 'react'
 import styled from 'styled-components'
 
@@ -6,9 +5,7 @@ import {useTypeface, copy14} from '../../Materials/Typefaces'
 import {lightGrey, text} from '../../Materials/Colors'
 
 import {createBoulder, role} from '../../actions'
-import {App, navigateTo, navigateToFn} from '../../app'
-
-import {gradeBackgroundColor, gradeBorderColor, gradeColor} from '../../Materials/Colors'
+import {App, navigateToFn} from '../../app'
 
 import logo from '!!url-loader!../../../assets/logo.svg'
 
@@ -21,6 +18,7 @@ export const NavBar = ({app}: {app: App}) => (
         <HomeItem />
         <TeamItem />
         {role(app) === 'admin' && <SectorItem />}
+        {role(app) === 'admin' && <StatsItem />}
 
         <FlexItem />
 
@@ -76,6 +74,7 @@ const AccountSettings = ({app}: {app: App}) => (
     </Item>
 )
 
+/*
 const SignOut = ({app}: {app: App}) => (
     <Item onClick={doSignOutF(app)}>
         <i className='sign out icon'></i>Logout
@@ -90,6 +89,7 @@ function doSignOutF(app: App) {
         })
     }
 }
+*/
 
 function createNewBoulder(app: App) {
     return (e) => {

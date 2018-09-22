@@ -5,7 +5,7 @@ import {Md5} from 'ts-md5/dist/md5'
 
 import {role} from '../actions'
 import {App} from '../app'
-import {Account, roles} from '../storage'
+import {Account, roles, setterMonthlyStats} from '../storage'
 
 import {DropDownInput} from './Components/DropdownInput'
 import {Site} from './Components/Site'
@@ -59,7 +59,7 @@ class AccountSpec extends React.Component<AccountViewProps, {}> {
     }
 
     render() {
-        const {app, accountE} = this.props
+        const {accountE} = this.props
 
         return (
           <Root>
@@ -70,11 +70,6 @@ class AccountSpec extends React.Component<AccountViewProps, {}> {
     }
 
     accountHeader(accountE: Avers.Editable<Account>): JSX.Element {
-        let title = accountE.objectId
-        if (accountE.content.name !== '') {
-            title = accountE.content.name
-        }
-
         return (
           <Avatar>
             <img src={accountGravatarUrl(accountE.content.email)}/>
@@ -114,6 +109,17 @@ class AccountSpec extends React.Component<AccountViewProps, {}> {
                 </div>
               </div>
               {role(this.props.app) === 'admin' && this.accountAdminFields(accountE)}
+            </div>
+
+            <div>
+                <h2>Stats for 09.2017</h2>
+                <div>
+                    {Avers.staticValue(this.props.app.data.aversH, setterMonthlyStats(this.props.app.data.aversH, accountE.objectId, 2017, 9)).fmap(sms => (
+                        <div>{Object.keys(sms).map(grade => (
+                            <div>{grade}: {sms[grade]}</div>
+                        ))}</div>
+                    )).get(<div/>)}
+                </div>
             </div>
           </div>
         )

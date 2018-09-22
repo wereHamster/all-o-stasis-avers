@@ -6,6 +6,8 @@
         "moduleResolution": "node",
         "declaration": false,
         "noImplicitAny": false,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
         "removeComments": true,
         "preserveConstEnums": true,
         "suppressImplicitAnyIndexErrors": true,

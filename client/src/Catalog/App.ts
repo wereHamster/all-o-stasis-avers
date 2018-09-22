@@ -1,7 +1,6 @@
 import * as Avers from 'avers'
 
 import {App, Data, infoTable} from '../app'
-import {Boulder} from '../storage'
 
 
 // ----------------------------------------------------------------------------

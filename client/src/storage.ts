@@ -56,3 +56,40 @@ prettyPrintSector(sectorName: string): string {
         .replace(/four/i, ' 4')
 }
 
+
+export interface SetterMonthlyStats {
+    Yellow?: number
+    Green?: number
+    Orange?: number
+    Blue?: number
+    Red?: number
+    White?: number
+}
+
+const aosNS = Symbol('all-o-stasis')
+export const setterMonthlyStats = (aversH: Avers.Handle, setterId: string, year: number, month: number): Avers.Static<SetterMonthlyStats> => {
+    const fetch = () => aversH.config.fetch(`${aversH.config.apiHost}/stats/${setterId}/${year}/${month}`).then(res => res.json())
+    return new Avers.Static<SetterMonthlyStats>(aosNS, `${setterId}-${year}-${month}`, fetch)
+}
+
+export interface BoulderStat {
+    setOn: Date
+    removedOn: void | Date
+    setters: string[]
+    sector: string
+    grade: string
+}
+
+export const parseBoulderStat = (json: any): BoulderStat => ({
+    ...json,
+    setOn: new Date(Date.parse(json.setOn)),
+    removedOn: json.removedOn ? new Date(Date.parse(json.removedOn)) : undefined,
+})
+
+export const boulderStats = (aversH: Avers.Handle): Avers.Static<BoulderStat[]> => {
+    const fetch = () => aversH.config.fetch(`${aversH.config.apiHost}/stats/boulders`)
+        .then(res => res.json())
+        .then(bss => bss.map(parseBoulderStat))
+
+    return new Avers.Static<BoulderStat[]>(aosNS, `boulderStats`, fetch)
+}

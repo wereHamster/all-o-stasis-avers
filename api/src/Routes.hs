@@ -17,6 +17,7 @@ import Control.Concurrent
 
 import Data.Maybe
 import Data.Time
+import Data.Time.Clock.POSIX
 import Data.Monoid
 
 import Data.Aeson
@@ -27,6 +28,9 @@ import qualified Data.Text.Encoding as T
 import qualified Data.Text.Lazy.Encoding as LT
 
 import qualified Data.Vector as V
+
+import           Data.Map (Map)
+import qualified Data.Map as M
 
 import qualified Database.RethinkDB as R
 
@@ -106,6 +110,15 @@ type PassportAPI
     :<|> AwaitPassportConfirmation
 
 
+type SetterMonthlyStats = Map BoulderGrade Int
+
+data BoulderStat = BoulderStat
+    { bsSetOn :: Day
+    , bsRemovedOn :: Maybe Day
+    , bsSetters :: [ObjId]
+    , bsSector :: BoulderSector
+    , bsGrade :: BoulderGrade
+    }
 
 type LocalAPI
     -- server the git revsion sha
@@ -134,6 +147,15 @@ type LocalAPI
       :> ReqBody '[JSON] SignupRequest2
       :> Post '[JSON] SignupResponse2
 
+    :<|> "stats"
+        :> Capture "setterId" ObjId
+        :> Capture "year" Integer
+        :> Capture "month" Int -- 1..12
+        :> Get '[JSON] SetterMonthlyStats
+
+    :<|> "stats" :> "boulders"
+        :> Get '[JSON] [BoulderStat]
+
     :<|> PassportAPI
 
 
@@ -145,6 +167,8 @@ serveLocalAPI pc aversH =
     :<|> serveAccounts
     :<|> serveAdminAccounts
     :<|> serveSignup
+    :<|> serveSetterMonthlyStats
+    :<|> serveBouldersStats
     :<|> servePassportAPI
 
   where
@@ -239,6 +263,44 @@ serveLocalAPI pc aversH =
     serveSignup body = do
         accId <- createAccount (reqLogin body) Nothing
         pure $ SignupResponse2 accId
+
+
+    serveSetterMonthlyStats setterId year month = do
+        -- Fetch all boulders (this may be inefficient when we'll have many boulders)
+        allBoulders <- reqAvers2 aversH $ do
+            datums <- runQueryCollect $ viewTable bouldersView
+            V.sequence $ V.map parseDatum datums
+
+        -- Filter those which match the setter, year, and month.
+        let boulders = V.filter (\Boulder{..} ->
+                let utcTime = posixSecondsToUTCTime (fromIntegral boulderSetDate / 1000)
+                    (y, m, _) = toGregorian (utctDay utcTime)
+                in y == year && m == month && setterId `elem` boulderSetter
+                ) allBoulders
+
+        -- And construct the response.
+        let entries = map (\Boulder{..} -> (boulderGrade, 1)) $ V.toList boulders
+        pure $ foldl (\m (grade, count) -> M.insertWith (+) grade count m) M.empty entries
+
+
+    serveBouldersStats = do
+        allBoulders <- reqAvers2 aversH $ do
+            datums <- runQueryCollect $ viewTable bouldersView
+            V.sequence $ V.map parseDatum datums
+
+        let toBoulderStat Boulder{..} = BoulderStat
+                { bsSetOn = toUTCTime boulderSetDate
+                , bsRemovedOn = if boulderRemoved == 0
+                    then Nothing
+                    else Just (toUTCTime boulderRemoved)
+                , bsSetters = boulderSetter
+                , bsSector = boulderSector
+                , bsGrade = boulderGrade
+                }
+              where
+                toUTCTime x = utctDay (posixSecondsToUTCTime (fromIntegral x / 1000))
+
+        pure $ map toBoulderStat $ V.toList allBoulders
 
 
     serveCreatePassport CreatePassportBody{..} = do
@@ -414,3 +476,5 @@ $(deriveJSON (deriveJSONOptions "_res") ''SignupResponse2)
 
 $(deriveJSON (deriveJSONOptions "req")  ''CreatePassportBody)
 $(deriveJSON (deriveJSONOptions "_res") ''CreatePassportResponse)
+
+$(deriveJSON (deriveJSONOptions "bs") ''BoulderStat)

@@ -6,7 +6,6 @@ module Home
 
 import * as Avers from 'avers'
 import * as React from 'react'
-import timeago from 'timeago.js'
 import moment from 'moment'
 import styled from 'styled-components'
 
@@ -14,7 +13,7 @@ import {App} from '../app'
 import {Boulder} from '../storage'
 
 import {text} from '../Materials/Colors'
-import {useTypeface, heading28, heading24, heading20, heading18, copy16Bold} from '../Materials/Typefaces'
+import {useTypeface, copy16Bold} from '../Materials/Typefaces'
 
 import {BoulderCard} from './Components/BoulderCard'
 import {Site} from './Components/Site'

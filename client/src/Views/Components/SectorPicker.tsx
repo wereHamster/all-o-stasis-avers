@@ -1,18 +1,10 @@
-import * as Avers from 'avers'
 import * as React from 'react'
 import styled from 'styled-components'
-
-import {accountGravatarUrl} from '../Account'
-import {App, navigateTo} from '../../app'
-import {Account, Boulder, prettyPrintSector} from '../../storage'
-
-import {lightGrey, darkGrey, text, gradeBackgroundColor, gradeBorderColor, gradeColor} from '../../Materials/Colors'
-import {useTypeface, copy16} from '../../Materials/Typefaces'
 
 import SectorPickerSVG from '../../../assets/SectorPicker.svg'
 
 export interface SectorPickerProps {
-    sector: string
+    sectors: string[]
     onChange(sector: string): void
 }
 
@@ -24,11 +16,10 @@ export class SectorPicker extends React.Component<SectorPickerProps> {
 
     componentDidMount() {
         if (this.ref) {
-            this.ref.addEventListener('click', ev => {
-                const target: HTMLElement = ev.target as any
-                if (target.parentElement) {
-                    this.props.onChange(target.parentElement.id)
-                }
+            Array.from(this.ref.querySelectorAll('#sectors > g')).forEach(el => {
+                el.addEventListener('click', () => {
+                    this.props.onChange(el.id)
+                })
             })
         }
     }
@@ -36,7 +27,7 @@ export class SectorPicker extends React.Component<SectorPickerProps> {
     render() {
         return (
             <div ref={this.refFn}>
-                <Root sector={this.props.sector}>
+                <Root sectors={this.props.sectors}>
                     <SectorPickerSVG />
                 </Root>
             </div>
@@ -52,7 +43,7 @@ const Root: any = styled.div`
     height: 100%;
 }
 
-& svg #sectors g[id="${({sector}: any) => sector}"] > use {
+${({sectors}: {sectors: string[]}) => sectors.length === 0 ? '& .ignore' : sectors.map(s => `& svg #sectors g[id="${s}"] > use`).join(', ')} {
     fill: red;
 }
 
