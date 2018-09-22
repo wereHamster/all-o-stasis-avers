@@ -11,12 +11,17 @@ function mkBoulder(app: App): Storage.Boulder {
     )
 }
 
+export const resetBoulderCollections = (app: App): void => {
+    Avers.resetObjectCollection(app.data.bouldersCollection)
+    Avers.resetObjectCollection(app.data.ownedBoulderCollection)
+    Avers.resetObjectCollection(app.data.activeBouldersCollection)
+}
+
 export function
 createBoulder(app: App) {
     const promise = Avers.createObject(app.data.aversH, 'boulder', mkBoulder(app)).then(id => {
         app.createBoulderPromise = undefined
-        Avers.resetObjectCollection(app.data.ownedBoulderCollection)
-        Avers.resetObjectCollection(app.data.activeBouldersCollection)
+        resetBoulderCollections(app);
         navigateTo('/boulder/' + id)
         return id
     })
@@ -46,6 +51,7 @@ sectorBoulders(app: App, sectorName: string): Array<Avers.Editable<Storage.Bould
         .map(boulderId => Avers.lookupEditable<Storage.Boulder>(app.data.aversH, boulderId).get(null as any))
         .filter(x => x !== null)
         .filter(x => x.content.sector === sectorName)
+        .filter(x => !x.content.removed)
 }
 
 export function
@@ -53,15 +59,18 @@ activeBoulders(app: App): Array<Avers.Editable<Storage.Boulder>> {
     return app.data.activeBouldersCollection.ids.get([])
         .map(boulderId => Avers.lookupEditable<Storage.Boulder>(app.data.aversH, boulderId).get(null as any))
         .filter(x => x !== null)
+        .filter(x => !x.content.removed)
 }
 
 export function
-removeBoulders(boulders: Array<Avers.Editable<Storage.Boulder>>) {
+removeBoulders(app: App, boulders: Array<Avers.Editable<Storage.Boulder>>) {
     // remove all boulders on the currently active sector
     if (window.confirm('Wirklich alle Boulder entfernen?')) {
         const now = Date.now()
         boulders.forEach(boulder => {
             boulder.content.removed = now.valueOf()
         })
+
+        resetBoulderCollections(app);
     }
 }

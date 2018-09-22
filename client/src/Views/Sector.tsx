@@ -1,4 +1,3 @@
-import * as Avers from 'avers'
 import * as React from 'react'
 import styled from 'styled-components'
 
@@ -45,13 +44,11 @@ class Sector extends React.Component<SectorProps, SectorState> {
     }
 
     removeAllBoulders = () => {
-        removeBoulders(activeBoulders(this.props.app))
-        Avers.resetObjectCollection(this.props.app.data.activeBouldersCollection)
+        removeBoulders(this.props.app, activeBoulders(this.props.app))
     }
 
     removeAllSectorBoulders = () => {
-        removeBoulders(sectorBoulders(this.props.app, this.state.sectorName))
-        Avers.resetObjectCollection(this.props.app.data.activeBouldersCollection)
+        removeBoulders(this.props.app, sectorBoulders(this.props.app, this.state.sectorName))
     }
 
     onChange = (e: React.FormEvent<any>) => {
