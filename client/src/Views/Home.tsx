@@ -18,6 +18,7 @@ import {useTypeface, copy16Bold} from '../Materials/Typefaces'
 import {BoulderCard} from './Components/BoulderCard'
 import {Site} from './Components/Site'
 import {BoulderId24} from './Components/BoulderId'
+import { Input } from '../Components/Input';
 
 export function
 homeView(app: App) {
@@ -102,7 +103,9 @@ class Home extends React.Component<{app: App}, {}> {
                         <BoulderGradeToggleButton grade='white' grades={grades} onToggle={this.toggleGrade} />
                     </div>
 
-                    <input placeholder='Grade Nr.' value={search} onChange={this.chaneSearch} />
+                    <div style={{ width: 200, maxWidth: 200 }}>
+                        <Input placeholder='Grade Nr.' value={search} onChange={this.chaneSearch} />
+                    </div>
                 </BoulderFilter>
                 <Boulders>
                     {res.boulders}

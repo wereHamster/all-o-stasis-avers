@@ -1,204 +1,203 @@
-import * as Avers from 'avers'
-import * as React from 'react'
-import styled from 'styled-components'
+import * as Avers from "avers";
+import * as React from "react";
+import styled from "styled-components";
 
-import {useTypeface, h1, copy16, copy16Bold} from '../Materials/Typefaces'
+import { text, secondary, secondaryText } from "../Materials/Colors";
+import { useTypeface, h1, copy16, copy16Bold } from "../Materials/Typefaces";
 
-import {App, navigateTo} from '../app'
-import {Site} from './Components/Site'
+import { App, navigateTo } from "../app";
+import { Button } from "../Components/Button";
+import { Input } from "../Components/Input";
+import { Site } from "./Components/Site";
 
 export const loginView = () => (app: App) => {
-    return <LoginView app={app} />
-}
+  return <LoginView app={app} />;
+};
 
 interface LoginState {
-    email: string
+  email: string;
 
-    createPassportPromise: void | Promise<any>
-    createPassportResponse: void | {passportId: string, securityCode: string}
+  createPassportPromise: void | Promise<any>;
+  createPassportResponse: void | { passportId: string; securityCode: string };
 
-    awaitPassportConfirmationPromise: void | Promise<any>
+  awaitPassportConfirmationPromise: void | Promise<any>;
 }
 
 class LoginView extends React.Component<{ app: App }, LoginState> {
+  state: LoginState = {
+    email: "",
 
-    state: LoginState = {
-        email: '',
+    createPassportPromise: undefined,
+    createPassportResponse: undefined,
 
-        createPassportPromise: undefined,
-        createPassportResponse: undefined,
+    awaitPassportConfirmationPromise: undefined
+  };
 
-        awaitPassportConfirmationPromise: undefined,
-    }
+  onChangeEmail = e => {
+    this.setState({
+      email: e.target.value,
 
-    onChangeEmail = (e) => {
-        this.setState({
-            email: e.target.value,
+      createPassportPromise: undefined,
+      createPassportResponse: undefined,
 
-            createPassportPromise: undefined,
-            createPassportResponse: undefined,
+      awaitPassportConfirmationPromise: undefined
+    });
+  };
 
-            awaitPassportConfirmationPromise: undefined,
-        })
-    }
+  onReset = e => {
+    e.preventDefault();
+    this.setState({
+      email: "",
 
-    onReset = (e) => {
-        e.preventDefault()
-        this.setState({
-            email: '',
+      createPassportPromise: undefined,
+      createPassportResponse: undefined,
 
-            createPassportPromise: undefined,
-            createPassportResponse: undefined,
+      awaitPassportConfirmationPromise: undefined
+    });
+  };
 
-            awaitPassportConfirmationPromise: undefined,
-        })
-    }
-
-    doLogin = (e) => {
-        const {app: {data: {aversH: {config: {fetch, apiHost}}, session}}} = this.props
-        const {email} = this.state
-
-        e.stopPropagation()
-
-        const options = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email }),
+  doLogin = e => {
+    const {
+      app: {
+        data: {
+          aversH: {
+            config: { fetch, apiHost }
+          },
+          session
         }
+      }
+    } = this.props;
+    const { email } = this.state;
 
-        const createPassportPromise = fetch(apiHost + '/login', options as any).then(res => {
-            res.json().then(json => {
-                const awaitPassportConfirmationPromise = fetch(apiHost + '/login/verify?passportId=' + json.passportId, {credentials: 'include'}).then(() => {
-                    Avers.restoreSession(session)
-                    navigateTo('/')
-                })
-                this.setState({ createPassportPromise: undefined, createPassportResponse: json, awaitPassportConfirmationPromise})
-            })
-        })
-        this.setState({ createPassportPromise })
+    e.stopPropagation();
+
+    const options = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email })
+    };
+
+    const createPassportPromise = fetch(apiHost + "/login", options as any).then(res => {
+      res.json().then(json => {
+        const awaitPassportConfirmationPromise = fetch(apiHost + "/login/verify?passportId=" + json.passportId, {
+          credentials: "include"
+        }).then(() => {
+          Avers.restoreSession(session);
+          navigateTo("/");
+        });
+        this.setState({
+          createPassportPromise: undefined,
+          createPassportResponse: json,
+          awaitPassportConfirmationPromise
+        });
+      });
+    });
+    this.setState({ createPassportPromise });
+  };
+
+  render() {
+    const { app } = this.props;
+    const { email, createPassportPromise, createPassportResponse, awaitPassportConfirmationPromise } = this.state;
+
+    if (!awaitPassportConfirmationPromise) {
+      return (
+        <Site app={app}>
+          <Container>
+            <Form
+              email={email}
+              onChangeEmail={this.onChangeEmail}
+              doLogin={this.doLogin}
+              isSubmitting={createPassportPromise !== undefined}
+            />
+          </Container>
+        </Site>
+      );
+    } else if (createPassportResponse && awaitPassportConfirmationPromise) {
+      return (
+        <Site app={app}>
+          <Container>
+            <AwaitingConfirmation
+              email={email}
+              onReset={this.onReset}
+              securityCode={createPassportResponse.securityCode}
+            />
+          </Container>
+        </Site>
+      );
+    } else {
+      return <div>IMPOSSIBLE</div>;
     }
-
-    render() {
-        const { app } = this.props
-        const { email, createPassportPromise, createPassportResponse, awaitPassportConfirmationPromise } = this.state
-
-        if (!awaitPassportConfirmationPromise) {
-            return (
-                <Site app={app}>
-                    <Container>
-                        <Form
-                            email={email}
-                            onChangeEmail={this.onChangeEmail}
-                            doLogin={this.doLogin}
-                            isSubmitting={createPassportPromise !== undefined}
-                        />
-                    </Container>
-                </Site>
-            )
-        } else if (createPassportResponse && awaitPassportConfirmationPromise) {
-            return (
-                <Site app={app}>
-                    <Container>
-                        <AwaitingConfirmation
-                            email={email}
-                            onReset={this.onReset}
-                            securityCode={createPassportResponse.securityCode}
-                        />
-                    </Container>
-                </Site>
-            )
-        } else {
-            return <div>IMPOSSIBLE</div>
-        }
-    }
+  }
 }
 
-const Container = ({children}) => (
-    <div style={{flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-        {children}
-    </div>
-)
+const Container = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 20vh;
+  text-align: center;
 
-export const Form = ({email, onChangeEmail, doLogin, isSubmitting}) => (
-    <form style={{textAlign: 'center', maxWidth: 528}}>
-        <H1>Authenticate</H1>
-        <P>To sign up or log in, fill in your email address below:</P>
-        <Input
-            type='text'
-            placeholder='you@domain.com'
-            value={email}
-            onChange={onChangeEmail}
-            disabled={isSubmitting}
-        />
-        <Button onClick={doLogin} disabled={isSubmitting || email.length === 0}>GO</Button>
-    </form>
-)
+  > * {
+    max-width: 528px;
+  }
 
-export const AwaitingConfirmation = ({email, onReset, securityCode}) => (
-    <div style={{textAlign: 'center', maxWidth: 528}}>
-        <H1>Authenticating</H1>
+  input {
+    text-align: center;
+  }
+`;
 
-        <P>
-            We sent an email to <strong>{email}</strong> (<a href='#' onClick={onReset}>undo</a>).
-        </P>
+export const Form = ({ email, onChangeEmail, doLogin, isSubmitting }) => (
+  <form>
+    <H1>Authenticate</H1>
+    <P>To sign up or log in, fill in your email address below:</P>
+    <Input type="text" placeholder="you@domain.com" value={email} onChange={onChangeEmail} disabled={isSubmitting} />
+    <Button onClick={doLogin} disabled={isSubmitting || email.length === 0}>
+      LOGIN
+    </Button>
+  </form>
+);
 
-        <P>
-            Please verify that the provided security code
-            in the email matches the following text:
-        </P>
+export const AwaitingConfirmation = ({ email, onReset, securityCode }) => (
+  <div>
+    <H1>Authenticating</H1>
 
-        <SecurityCode>{securityCode}</SecurityCode>
+    <P>
+      We sent an email to <strong>{email}</strong> (
+      <a href="#" onClick={onReset}>
+        undo
+      </a>
+      ).
+    </P>
 
-        <P>Waiting for your confirmation…</P>
-    </div>
-)
+    <P>Please verify that the provided security code in the email matches the following text:</P>
 
+    <SecurityCode>{securityCode}</SecurityCode>
+
+    <P>Waiting for your confirmation…</P>
+  </div>
+);
 
 const H1 = styled.h1`
-${useTypeface(h1)};
-`
+  ${useTypeface(h1)};
+  color: ${text};
+  margin: 0;
+`;
 
 const P = styled.p`
-${useTypeface(copy16)};
-`
-
-const Input = styled.input`
-${useTypeface(copy16)};
-width: 100%;
-text-align: center;
-
-height: 40px;
-line-height: 40px;
-`
-
-const Button = styled.button`
-${useTypeface(copy16Bold)}
-width: 100%;
-border: none;
-border-radius: 0;
-background-color: rgb(246, 246, 246);
-outline: none;
-
-height: 40px;
-margin-top: 10px;
-
-transition: all .16s;
-
-&:not(:disabled) {
-    cursor: pointer;
-}
-&:not(:disabled):hover {
-    background-color: rgb(230, 230, 230);
-}
-`
+  ${useTypeface(copy16)};
+  color: ${text};
+`;
 
 const SecurityCode = styled.div`
-${useTypeface(copy16Bold)}
-background-color: rgb(246, 246, 246);
-font-weight: bold;
-margin: 40px auto;
-height: 40px;
-display: flex;
-align-items: center;
-justify-content: center;
-`
+  ${useTypeface(copy16Bold)};
+  background-color: ${secondary};
+  color: ${secondaryText};
+  padding: 16px 0;
+  font-weight: bold;
+  margin: 40px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;

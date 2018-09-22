@@ -11,29 +11,6 @@ body {
     background: #FBF8FA;
 }
 
-input {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-    font-size: 1rem;
-    margin: 0;
-    padding: .3rem .4rem;
-    border: 1px solid #ccc;
-    width: 8rem;
-    margin-right: 1rem;
-}
-
-input.wide {
-    width: 18rem;
-}
-
-input:focus {
-    outline: none;
-    border-color: blue;
-}
-
-input.invalid {
-    border-color: red;
-}
-
 .app .overlay {
     position: fixed;
     top: 0;

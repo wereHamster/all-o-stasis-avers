@@ -40,6 +40,16 @@ const LoadableCatalog = Loadable({
         title: "Components",
         pages: [
           {
+            path: "/components/button",
+            title: "Button",
+            component: pageLoader(() => import("../Components/Button.doc"))
+          },
+          {
+            path: "/components/input",
+            title: "Input",
+            component: pageLoader(() => import("../Components/Input.doc"))
+          },
+          {
             path: "/components/navbar",
             title: "NavBar",
             component: pageLoader(() => import("../Components/NavBar.doc"))

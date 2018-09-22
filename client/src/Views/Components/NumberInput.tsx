@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import { Input } from '../../Components/Input';
 
 export interface NumberInputProps {
     object : any;
@@ -57,7 +58,7 @@ class NumberInputSpec extends React.Component<NumberInputProps, NumberInputState
             e.stopPropagation();
         }
 
-        return <input type="text" className={className} value={this.state.rawValue}
+        return <Input type="text" className={className} value={this.state.rawValue}
                       onChange={this.onChange} onClick={onClick} />;
     }
 
