@@ -17,6 +17,7 @@ import {Site} from './Components/Site'
 import {BoulderDetails} from './Components/BoulderDetails'
 import {BoulderId} from './Components/BoulderId'
 import {SectorPicker} from './Components/SectorPicker'
+import { Button } from '../Components/Button';
 
 function
 BoulderDetailsEditor({app, boulderE}: {app: App, boulderE: Avers.Editable<Boulder>}) {
@@ -330,29 +331,8 @@ color: ${darkGrey};
 padding: 0 0 4px;
 `
 
-const DangerButton = styled.button`
-${useTypeface(copy16)}
-font-size: 1rem;
-line-height: normal;
-margin: 0;
-padding: .3rem .8rem;
-display: inline-block;
-background-color: #dfe9f1;
-text-align: center;
-color: red;
-outline: none;
-border: 1px solid #92a0ad;
-border-radius: 2px;
-cursor: pointer;
-
-transition: all .2s;
-
-&:hover {
-  background-color: #b2d0e6;
-  color: #a00c0c;
-}
+const DangerButton = styled(Button)`
 `
-
 
 // ----------------------------------------------------------------------------
 
