@@ -59,7 +59,7 @@ export const gradeBackgroundColor = (grade: string) => {
     case 'orange': return orange100
     case 'blue': return blue100
     case 'red': return red100
-    case 'white': return 'transparent'
+    case 'white': return 'white'
     }
 
     return 'magenta'
@@ -72,7 +72,7 @@ export const gradeBorderColor = (grade: string) => {
     case 'orange': return orange100
     case 'blue': return blue100
     case 'red': return red100
-    case 'white': return 'transparent'
+    case 'white': return 'white'
     }
 
     return 'magenta'

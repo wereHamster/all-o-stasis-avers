@@ -2,7 +2,7 @@ import * as React from 'react'
 import styled from 'styled-components'
 
 import {useTypeface, copy14} from '../../Materials/Typefaces'
-import {lightGrey, text} from '../../Materials/Colors'
+import {text} from '../../Materials/Colors'
 
 import {createBoulder, role} from '../../actions'
 import {App, navigateToFn} from '../../app'
@@ -104,8 +104,8 @@ flex-direction: row;
 align-items: center;
 height: 64px;
 
-${useTypeface(copy14)}
-color: ${lightGrey};
+${useTypeface(copy14)};
+color: #22222288;
 
 text-transform: uppercase;
 `
@@ -141,7 +141,7 @@ padding-right: 16px;
 cursor: pointer;
 white-space: nowrap;
 
-color: ${({isActive}) => isActive ? text : 'inherit'};
+color: ${({isActive}) => isActive ? '#000000EE' : 'inherit'};
 
 &:hover {
     color: ${text};
