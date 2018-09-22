@@ -1,13 +1,13 @@
 import * as React from "react";
 import styled from "styled-components";
 
-import { useTypeface, copy14 } from "../../Materials/Typefaces";
-import { text } from "../../Materials/Colors";
+import { useTypeface, copy14 } from "../Materials/Typefaces";
+import { text } from "../Materials/Colors";
 
-import { createBoulder, role } from "../../actions";
-import { App, navigateToFn } from "../../app";
+import { createBoulder, role } from "../actions";
+import { App, navigateToFn } from "../app";
 
-import logo from "!!url-loader!../../../assets/logo.svg";
+import logo from "!!url-loader!../../assets/logo.svg";
 
 export const NavBar = ({ app }: { app: App }) => (
   <Root>

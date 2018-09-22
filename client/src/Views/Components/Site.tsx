@@ -3,7 +3,7 @@ import * as React from 'react'
 
 import {App} from '../../app'
 
-import {NavBar} from './NavBar'
+import {NavBar} from '../../Components/NavBar'
 import {TransientNotification} from './TransientNotification'
 
 export const Site = ({app, children}: {app: App, children?: JSX.Element | JSX.Element[]}) => {

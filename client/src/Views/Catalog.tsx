@@ -31,6 +31,11 @@ const LoadableCatalog = Loadable({
                 title: 'Components',
                 pages: [
                     {
+                        path: '/components/navbar',
+                        title: 'NavBar',
+                        component: pageLoader(() => import('../Components/NavBar.doc')),
+                    },
+                    {
                         path: '/components/boulder-id',
                         title: 'BoulderId',
                         component: pageLoader(() => import('./Components/BoulderId.doc')),
