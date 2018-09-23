@@ -3,4 +3,4 @@ set -e
 cd "$(dirname "$0")/.."
 
 
-stack ghci all-o-stasis
+stack ghci all-o-stasis-api
