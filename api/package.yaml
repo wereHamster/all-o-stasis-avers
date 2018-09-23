@@ -1,0 +1,44 @@
+name: all-o-stasis-api
+version: 0.0.1
+maintainer: Yves Ineichen <iff@yvesineichen.com>
+
+extra-source-files:
+  - GIT-REVISION-FILE
+
+ghc-options: -Wall
+
+dependencies:
+  - aeson
+  - avers
+  - avers-api
+  - avers-server
+  - base
+  - bytestring
+  - containers
+  - cookie
+  - directory
+  - either
+  - http-conduit
+  - mime-mail
+  - mtl
+  - network-uri
+  - random
+  - rethinkdb-client-driver
+  - safe
+  - servant
+  - servant-server
+  - split
+  - template-haskell
+  - text
+  - time
+  - transformers
+  - unordered-containers
+  - vector
+  - wai
+  - wai-cors
+  - wai-extra
+  - warp
+
+executable:
+  main: Main.hs
+  source-dirs: src

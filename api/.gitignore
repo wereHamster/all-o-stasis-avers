@@ -3,3 +3,5 @@ staging/
 .cabal-sandbox/
 cabal.sandbox.config
 .stack-work/
+*.cabal
+GIT-REVISION-FILE

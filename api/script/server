@@ -3,5 +3,6 @@ set -e
 cd "$(dirname "$0")/.."
 
 
+git rev-parse HEAD > GIT-REVISION-FILE
 stack build
 stack exec all-o-stasis-api -- 8000

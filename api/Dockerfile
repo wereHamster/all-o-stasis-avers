@@ -5,7 +5,7 @@ WORKDIR /src
 ADD stack.yaml .
 RUN stack setup
 
-ADD *.cabal .
+ADD package.yaml .
 RUN stack install --only-dependencies
 
 ADD . /src
