@@ -231,8 +231,8 @@ serveLocalAPI pc aversH =
 
         pure $ map ObjId $ V.toList objIds
 
-    serveAdminAccounts cred = do
-        ownerId <- credentialsObjId aversH cred
+    serveAdminAccounts _cred = do
+        -- ownerId <- credentialsObjId aversH cred
         objIds <- reqAvers2 aversH $ do
             runQueryCollect $
                 R.Map mapId $
@@ -406,7 +406,7 @@ serveLocalAPI pc aversH =
             throwError err400 { errBody = "wrong confirmation token" }
 
         -- Patch the "validity" field to mark the Passport as valid.
-        reqAvers2 aversH $ applyObjectUpdates
+        void $ reqAvers2 aversH $ applyObjectUpdates
             (BaseObjectId passportId)
             snapshotRevisionId
             rootObjId
@@ -414,7 +414,6 @@ serveLocalAPI pc aversH =
             False
 
         -- Apparently this is how you do a 30x redirect in Servant…
-        -- TODO: Domain must be configurable.
         throwError $ err301
             { errHeaders = [("Location", T.encodeUtf8 (_pcAppDomain pc) <> "/email-confirmed")]
             }
@@ -451,7 +450,7 @@ serveLocalAPI pc aversH =
         (accId, revId) <- go
 
         -- Mark the passport as expired, so that it can not be reused.
-        reqAvers2 aversH $ applyObjectUpdates
+        void $ reqAvers2 aversH $ applyObjectUpdates
             (BaseObjectId passportId)
             revId
             rootObjId

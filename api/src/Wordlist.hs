@@ -1646,9 +1646,7 @@ randomWord :: IO Text
 randomWord = fmap (wordlist !!) $ randomRIO (0, length wordlist - 1)
 
 randomWords :: Int -> IO Text
-randomWords n = do
-    words <- sequence $ replicate n randomWord
-    pure $ T.intercalate " " words
+randomWords n = T.intercalate " " <$> sequence (replicate n randomWord)
 
 -- Security code is a 2 or 3 random words from the wordlist.
 mkSecurityCode :: IO Text

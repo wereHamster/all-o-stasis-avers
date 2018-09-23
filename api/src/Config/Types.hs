@@ -14,10 +14,9 @@ import Data.Text (Text)
 import PassportAuth
 import Network.URI
 import qualified Data.Yaml as Y
-import Data.Yaml (FromJSON(..), (.:))
+import Data.Yaml (FromJSON(..))
 import Data.Maybe
 import Control.Lens
-import Data.Monoid
 import Configuration.Utils
 
 data Config = Config

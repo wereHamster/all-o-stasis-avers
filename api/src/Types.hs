@@ -9,7 +9,6 @@ module Types where
 
 
 import Control.Monad.IO.Class
-import Control.Monad.Trans.Either
 import Control.Monad.Except
 
 import Servant.Server

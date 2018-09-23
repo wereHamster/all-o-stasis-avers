@@ -16,7 +16,6 @@ import           Prelude
 
 import           Queries
 import           Storage.Objects.Account
-import           Storage.Objects.Boulder
 
 
 aosAuthorization :: Avers.Server.Authorizations
@@ -47,7 +46,7 @@ aosAuthorization = Avers.Server.Authorizations
             return $ hasCreated || isAdm
         ]
 --}
-    , patchObjectAuthz = \cred objId ops ->
+    , patchObjectAuthz = \cred objId _ops ->
         [ sufficient $ do
             session <- case cred of
                 CredAnonymous -> throwError NotAuthorized
@@ -99,7 +98,7 @@ sessionIsSetter session = do
 
 -- | True if the session is in setter list of boulder.
 sessionIsBoulderSetter :: Session -> ObjId -> Avers Bool
-sessionIsBoulderSetter session objId = do
+sessionIsBoulderSetter session _objId = do
     let sessionId = sessionObjId session
     setters <- runQueryCollect $
             R.Map mapId $

@@ -11,7 +11,6 @@ import Data.Text (Text)
 import qualified Data.Yaml as Y
 import Data.Yaml (FromJSON(..), (.:))
 import Control.Lens
-import Data.Monoid
 import Configuration.Utils
 
 
