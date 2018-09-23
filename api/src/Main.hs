@@ -6,8 +6,6 @@
 
 module Main (main) where
 
-import           Safe
-
 import           Control.Monad.State
 
 import           Data.Text (Text)
@@ -18,12 +16,10 @@ import qualified Data.Vector as V
 
 import qualified Database.RethinkDB as R
 
-import           Network.URI
-
 import           System.IO
-import           System.Environment
 
-import           Avers
+import           Avers hiding (Config)
+import qualified Avers
 import           Avers.API
 import           Avers.Server
 
@@ -33,7 +29,6 @@ import           Servant.Server
 import           Authorization
 import           Queries
 import           Routes
-import           PassportAuth
 import           Config
 
 import           Storage.ObjectTypes
@@ -44,6 +39,8 @@ import           Network.Wai.Handler.Warp
 
 import           Network.Wai.Middleware.RequestLogger
 import           Network.Wai.Middleware.Cors
+
+import           Configuration.Utils
 
 import           Prelude
 
@@ -63,11 +60,11 @@ allObjectTypes =
     ]
 
 
-createAversHandle :: IO Avers.Handle
-createAversHandle = do
+createAversHandle :: Config -> IO Avers.Handle
+createAversHandle config = do
     bsc  <- createBlobStorageConfig
 
-    eH <- newHandle $ Avers.Config (cRethinkDB config) bsc allObjectTypes (\_ _ -> return ())
+    eH <- newHandle $ Avers.Config (_cRethinkDB config) bsc allObjectTypes (\_ _ -> return ())
     h <- case eH of
         Left e -> error $ show e
         Right h -> return h
@@ -79,8 +76,8 @@ createAversHandle = do
 
     return h
 
-bootstrapAdminAccount:: Avers.Handle -> IO ()
-bootstrapAdminAccount h = do
+bootstrapAdminAccount:: Config -> Avers.Handle -> IO ()
+bootstrapAdminAccount config h = do
     adminAccounts <- evalAvers h $ do
         runQueryCollect $
             R.Filter (hasAccess "admin") $
@@ -90,7 +87,7 @@ bootstrapAdminAccount h = do
         Right accounts -> if V.length accounts /= 0
             then pure ()
             else do
-                res <- evalAvers h createAdminAccount
+                res <- evalAvers h (createAdminAccount config)
                 void $ case res of
                     Left e -> error $ show e
                     Right _ -> return $ Right ()
@@ -122,10 +119,12 @@ mkCorsPolicy req = Just $ simpleCorsResourcePolicy
     headers = requestHeaders req
     origin = fromMaybe "localhost" $ lookup "Origin" headers
 
+mainInfo :: ProgramInfo Config
+mainInfo = programInfo "Config" pConfig defaultConfig
 
 main :: IO ()
-main = do
-    h <- createAversHandle
-    bootstrapAdminAccount h
+main = runWithConfiguration mainInfo $ \config -> do
+    h <- createAversHandle config
+    bootstrapAdminAccount config h
 
-    run (cPort config) (app (cPassport config) h)
+    run (_cPort config) (app (_cPassport config) h)

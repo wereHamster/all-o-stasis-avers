@@ -14,11 +14,13 @@ dependencies:
   - avers-server
   - base
   - bytestring
+  - configuration-tools
   - containers
   - cookie
   - directory
   - either
   - http-conduit
+  - lens
   - mime-mail
   - mtl
   - network-uri

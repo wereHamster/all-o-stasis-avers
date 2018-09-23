@@ -337,7 +337,7 @@ serveLocalAPI pc aversH =
         -- it therefore must be configurable.
         let mail = passportConfirmationEmail
                 pc reqEmail (unObjId passportId) securityCode confirmationToken
-        case pcSendProvider pc of
+        case _pcSendProvider pc of
             PCSPTerminal -> liftIO $ do
                 putStrLn "\n\n-------------------------"
                 putStrLn $ show mail
@@ -416,7 +416,7 @@ serveLocalAPI pc aversH =
         -- Apparently this is how you do a 30x redirect in Servant…
         -- TODO: Domain must be configurable.
         throwError $ err301
-            { errHeaders = [("Location", T.encodeUtf8 (pcAppDomain pc) <> "/email-confirmed")]
+            { errHeaders = [("Location", T.encodeUtf8 (_pcAppDomain pc) <> "/email-confirmed")]
             }
 
     -- This request blocks until the Passport either becomes valid or expires.

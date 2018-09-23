@@ -7,7 +7,7 @@ module Storage.Objects.Account
     , createAdminAccount
     ) where
 
-import Avers
+import Avers hiding (Config)
 import Config
 
 import Control.Monad.State
@@ -36,10 +36,10 @@ accountsView = View
     , viewIndices           = []
     }
 
-adminAccount :: Account
-adminAccount = Account "admin" Admin (Just (cAdminAccountEmail config)) (Just "")
+adminAccount :: Config -> Account
+adminAccount config = Account "admin" Admin (Just (_cAdminAccountEmail config)) (Just "")
 
-createAdminAccount :: Avers ()
-createAdminAccount = do
-    accId <- Avers.createObject accountObjectType rootObjId adminAccount
+createAdminAccount :: Config -> Avers ()
+createAdminAccount config = do
+    accId <- Avers.createObject accountObjectType rootObjId (adminAccount config)
     updateSecret (SecretId (unObjId accId)) "admin"
