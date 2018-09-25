@@ -3,4 +3,5 @@ set -e
 cd "$(dirname "$0")/.."
 
 
+rm *.cabal
 stack build --only-dependencies
