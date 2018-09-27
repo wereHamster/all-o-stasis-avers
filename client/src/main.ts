@@ -15,10 +15,13 @@ import {emailConfirmedView} from './Views/EmailConfirmed'
 import {statsView} from './Views/Stats'
 
 const mkApp = (): App => {
+    const isSecure = window.location.protocol === "https:"
+    const wsProtocol = isSecure ? "wss:" : "ws:"
+
     const aversH = new Avers.Handle({
         apiHost: config.apiHost,
         fetch: window.fetch.bind(window),
-        createWebSocket: path => new WebSocket('ws:' + config.apiHost + path),
+        createWebSocket: path => new WebSocket(wsProtocol + config.apiHost + path),
         now: window.performance.now.bind(window.performance),
         infoTable,
     })
