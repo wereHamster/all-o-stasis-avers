@@ -14,7 +14,7 @@ import {Site} from './Components/Site'
 
 export function
 accountGravatarUrl(email: string) {
-    return 'http://www.gravatar.com/avatar/' + Md5.hashStr(email)
+    return 'https://www.gravatar.com/avatar/' + Md5.hashStr(email)
 }
 
 // only admins can edit all accounts with the exception of users
