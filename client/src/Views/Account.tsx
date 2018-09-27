@@ -1,170 +1,175 @@
-import * as Avers from 'avers'
-import * as React from 'react'
-import styled from 'styled-components'
-import {Md5} from 'ts-md5/dist/md5'
+import * as Avers from "avers";
+import * as React from "react";
+import styled from "styled-components";
+import { Md5 } from "ts-md5/dist/md5";
 
-import {role} from '../actions'
-import {App} from '../app'
-import {Account, roles, setterMonthlyStats} from '../storage'
+import { role } from "../actions";
+import { App } from "../app";
+import { Account, roles } from "../storage";
 
-import {useTypeface, heading28, copy16} from '../Materials/Typefaces'
+import { useTypeface, heading18 } from "../Materials/Typefaces";
 
-import {DropDownInput} from './Components/DropdownInput'
-import {Site} from './Components/Site'
+import { DropDownInput } from "./Components/DropdownInput";
+import { Site } from "./Components/Site";
+import { Input } from "../Components/Input";
 
-export function
-accountGravatarUrl(email: string) {
-    return 'https://www.gravatar.com/avatar/' + Md5.hashStr(email)
+export function accountGravatarUrl(email: string) {
+  return "https://www.gravatar.com/avatar/" + Md5.hashStr(email);
 }
 
 // only admins can edit all accounts with the exception of users
 // changing their own accounts
 export const accountView = (accountId: string) => (app: App) => {
-    return Avers.lookupEditable<Account>(app.data.aversH, accountId).fmap(accountE => {
-        const canEdit = (role(app) === 'admin' || accountId === app.data.session.objId)
-        return (
-          <Site app={app}>
-              { canEdit ? AccountView({ app, accountE }) : accountRep(accountE) }
-          </Site>
-        )
-    }).get(<Site app={app} />)
-}
-
+  return Avers.lookupEditable<Account>(app.data.aversH, accountId)
+    .fmap(accountE => {
+      const canEdit = role(app) === "admin" || accountId === app.data.session.objId;
+      return <Site app={app}>{canEdit ? <AccountView app={app} accountE={accountE} /> : accountRep(accountE)}</Site>;
+    })
+    .get(<Site app={app} />);
+};
 
 // ----------------------------------------------------------------------------
 
 // A simple account representation for non-owned and non-admin views.
-function
-accountRep(account: Avers.Editable<Account>): JSX.Element {
-    return (
-      <Avatar>
-        <img src={accountGravatarUrl(account.content.email)}/>
-        <Name>{account.content.name}</Name>
-        <p className='about'>
-          {account.content.role}
-        </p>
-      </Avatar>
-    )
+function accountRep(account: Avers.Editable<Account>): JSX.Element {
+  return (
+    <Avatar>
+      <img src={accountGravatarUrl(account.content.email)} />
+      <Name>{account.content.name}</Name>
+      <p className="about">{account.content.role}</p>
+    </Avatar>
+  );
 }
-
 
 // Render all fields as editables.
 export interface AccountViewProps {
-    app: App
-    accountE: Avers.Editable<Account>
+  app: App;
+  accountE: Avers.Editable<Account>;
 }
 
-class AccountSpec extends React.Component<AccountViewProps, {}> {
-    changeAccountName = (e: React.FormEvent<any>) => {
-        const value = (e.target as HTMLInputElement).value
-        this.props.accountE.content.name = value
+export class AccountView extends React.Component<AccountViewProps, {}> {
+  render() {
+    const { app, accountE } = this.props;
+
+    return (
+      <Root>
+        <Header accountE={accountE} />
+        <Editor app={app} accountE={accountE} />
+      </Root>
+    );
+  }
+}
+
+class Header extends React.Component<{ accountE: Avers.Editable<Account> }> {
+  render() {
+    const { accountE } = this.props;
+
+    return (
+      <Avatar>
+        <img src={accountGravatarUrl(accountE.content.email)} />
+        <Name>{accountE.content.name}</Name>
+      </Avatar>
+    );
+  }
+}
+
+class Editor extends React.Component<{ app: App; accountE: Avers.Editable<Account> }> {
+  changeAccountName = (e: React.FormEvent<HTMLInputElement>) => {
+    this.props.accountE.content.name = e.currentTarget.value;
+  };
+
+  render() {
+    const { app, accountE } = this.props;
+
+    const account = accountE.content;
+
+    function onClick(e) {
+      e.stopPropagation();
     }
 
-    render() {
-        const {accountE} = this.props
-
-        return (
-          <Root>
-            {this.accountHeader(accountE)}
-            {this.accountDetailsEditor(accountE)}
-          </Root>
-        )
-    }
-
-    accountHeader(accountE: Avers.Editable<Account>): JSX.Element {
-        return (
-          <Avatar>
-            <img src={accountGravatarUrl(accountE.content.email)}/>
-            <Name>{accountE.content.name}</Name>
-            <Email>{accountE.content.email}</Email>
-          </Avatar>
-        )
-    }
-
-    accountAdminFields(accountE: Avers.Editable<Account>): JSX.Element {
-        const account = accountE.content
-        return (
-          <div className='form-row'>
-            <div className='label'>Role</div>
-            <div className='content'>
-              <DropDownInput object={account} field='role' options={roles()}></DropDownInput>
+    return (
+      <div>
+        <Form>
+          <Field>
+            <FieldLabel>Your Name</FieldLabel>
+            <FieldDescription>
+              Please enter your full name, or a display name you are comfortable with.
+            </FieldDescription>
+            <div className="content">
+              <Input
+                className="wide"
+                type="text"
+                value={account.name}
+                onChange={this.changeAccountName}
+                onClick={onClick}
+              />
             </div>
-          </div>
-        )
-    }
-
-    accountDetailsEditor(accountE: Avers.Editable<Account>): JSX.Element {
-        const account = accountE.content
-
-        function onClick(e) {
-            e.stopPropagation()
-        }
-
-        return (
-          <div className='account-detail-editor'>
-            <div className='form'>
-              <div className='form-row'>
-                <div className='label'>Name</div>
-                <div className='content'>
-                  <input className='wide' type='text' value={account.name}
-                         onChange={this.changeAccountName} onClick={onClick}></input>
-                </div>
+          </Field>
+          {role(app) === "admin" && (
+            <Field>
+              <FieldLabel>Role</FieldLabel>
+              <FieldDescription>
+                …
+              </FieldDescription>
+              <div className="content">
+                <DropDownInput object={account} field="role" options={roles()} />
               </div>
-              {role(this.props.app) === 'admin' && this.accountAdminFields(accountE)}
-            </div>
-
-            <div>
-                <h2>Stats for 09.2017</h2>
-                <div>
-                    {Avers.staticValue(this.props.app.data.aversH, setterMonthlyStats(this.props.app.data.aversH, accountE.objectId, 2017, 9)).fmap(sms => (
-                        <div>{Object.keys(sms).map(grade => (
-                            <div>{grade}: {sms[grade]}</div>
-                        ))}</div>
-                    )).get(<div/>)}
-                </div>
-            </div>
-          </div>
-        )
-    }
+            </Field>
+          )}
+        </Form>
+      </div>
+    );
+  }
 }
-
-const AccountView = React.createFactory(AccountSpec)
-
-
 
 // ----------------------------------------------------------------------------
 
-const Root = styled.div`
-`
-
-const Name = styled.div`
-    ${useTypeface(heading28)}
-    text-align: center;
-    margin-top: 0.7rem;
-
-`
-
-const Email = styled.div`
-    ${useTypeface(copy16)}
-    text-align: center;
-    margin-top: 0.2rem;
-    margin-bottom: 0.2rem;
-
-`
+const Root = styled.div``;
 
 const Avatar = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 4rem;
+  display: flex;
+  align-items: center;
+  padding: 8px 20px 20px;
 
-    .about {
-        max-width: 30rem;
-        font-size: 1.2rem;
-    }
+  img {
+    border-radius: 50%;
+    height: 32px;
+    width: 32px;
+    margin-right: 4px;
+  }
+`;
 
-    img {
-        border: 1px solid #999;
-        border-radius: 50%;
-    }
-`
+const Name = styled.div`
+  ${useTypeface(heading18)};
+`;
+
+const Form = styled.div`
+  padding: 0 20px;
+`;
+
+const Field = styled.div`
+    position: relative;
+    border-radius: 5px;
+    border 1px solid rgb(234, 234, 234);
+    background-color: white;
+    padding: 20px;
+    margin-bottom: 20px;
+
+    max-width: 600px;
+`;
+
+const FieldLabel = styled.div`
+  color: rgb(0, 0, 0);
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1;
+  margin: 0px 0px 14px;
+`;
+
+const FieldDescription = styled.div`
+  color: rgb(0, 0, 0);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  margin: 0px 0px 14px;
+`;
