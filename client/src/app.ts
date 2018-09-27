@@ -10,9 +10,11 @@ import configObject from './config'
 
 export class Config {
     apiHost!: string
+    secure!: boolean
 }
 
-Avers.definePrimitive(Config, 'apiHost', '//localhost:8000')
+Avers.definePrimitive(Config, 'apiHost', 'localhost:8000')
+Avers.definePrimitive(Config, 'secure', false)
 
 export const config = Avers.mk<Config>(Config, configObject)
 
