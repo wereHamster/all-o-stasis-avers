@@ -69,7 +69,7 @@ class Home extends React.Component<{app: App}, {}> {
             if (date === null) {
                 return {
                     boulders: boulders.concat([
-                        <BoulderSeparator key={`separator-${createdAt}`}>{format(createdAt, 'DD. MMMM')}</BoulderSeparator>,
+                        <BoulderSeparator key={`separator-${createdAt}`}>{format(createdAt, 'dd. MMMM')}</BoulderSeparator>,
                         <BoulderCard key={objectId} app={app} boulderE={boulder} />,
                     ]),
                     date: createdAt,
@@ -82,7 +82,7 @@ class Home extends React.Component<{app: App}, {}> {
             } else {
                 return {
                     boulders: boulders.concat([
-                        <BoulderSeparator key={`separator-${createdAt}`}>{format(createdAt, 'DD. MMMM')}</BoulderSeparator>,
+                        <BoulderSeparator key={`separator-${createdAt}`}>{format(createdAt, 'dd. MMMM')}</BoulderSeparator>,
                         <BoulderCard key={objectId} app={app} boulderE={boulder} />,
                     ]),
                     date: createdAt,
