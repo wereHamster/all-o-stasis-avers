@@ -68,11 +68,13 @@ aosAuthorization = Avers.Server.Authorizations
     , lookupBlobContentAuthz = \_ _ -> [pure AllowR]
     }
 
+{-
 -- | True if the object is a boulder
 objectIsBoulder :: ObjId -> Avers Bool
 objectIsBoulder objId = do
     obj <- lookupObject objId
     return ((objectType obj) == "boulder")
+-}
 
 -- | True if the session is an admin.
 sessionIsAdmin :: Session -> Avers Bool
@@ -96,6 +98,7 @@ sessionIsSetter session = do
 
     elem sessionId <$> (pure $ map ObjId $ V.toList setters)
 
+{-
 -- | True if the session is in setter list of boulder.
 sessionIsBoulderSetter :: Session -> ObjId -> Avers Bool
 sessionIsBoulderSetter session _objId = do
@@ -106,4 +109,4 @@ sessionIsBoulderSetter session _objId = do
             viewTable accountsView
 
     elem sessionId <$> (pure $ map ObjId $ V.toList setters)
-
+-}

@@ -8,7 +8,6 @@ module PassportConfirmationEmail
 import           Data.Text (Text)
 import qualified Data.Text as T
 import qualified Data.Text.Lazy as LT
-import           Data.Monoid
 
 import           Network.Mail.Mime
 

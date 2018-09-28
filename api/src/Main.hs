@@ -9,6 +9,7 @@ module Main (main) where
 import           Control.Monad.State
 
 import           Data.Text (Text)
+import qualified Data.Text as T
 import           Data.Maybe
 import           Data.ByteString.Lazy (ByteString)
 import           Data.Proxy
@@ -64,7 +65,11 @@ createAversHandle :: Config -> IO Avers.Handle
 createAversHandle config = do
     bsc  <- createBlobStorageConfig
 
-    eH <- newHandle $ Avers.Config (_cRethinkDB config) bsc allObjectTypes (\_ _ -> return ())
+    dbURI <- case parseRelativeReference (T.unpack $ _cRethinkDB config) of
+        Nothing -> error "createAversHandle: bad RethinkDB URI"
+        Just uri -> pure uri
+
+    eH <- newHandle $ Avers.Config dbURI bsc allObjectTypes (\_ _ -> return ())
     h <- case eH of
         Left e -> error $ show e
         Right h -> return h

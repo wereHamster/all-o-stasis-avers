@@ -15,14 +15,13 @@ import PassportAuth
 import Network.URI
 import qualified Data.Yaml as Y
 import Data.Yaml (FromJSON(..))
-import Data.Maybe
 import Control.Lens
 import Configuration.Utils
 
 data Config = Config
     { _cPort :: Int
     , _cAdminAccountEmail :: Text
-    , _cRethinkDB :: URI
+    , _cRethinkDB :: Text
     , _cPassport :: PassportConfig
     }
 
@@ -34,10 +33,7 @@ defaultConfig = Config
 
     , _cAdminAccountEmail = "admin@boulder.app"
 
-    -- TODO: Find a way to parse the URL at compile time.
-    , _cRethinkDB = case parseRelativeReference "//localhost/allostasis" of
-        Nothing -> error "defaultConfig"
-        Just x -> x
+    , _cRethinkDB = "//localhost/allostasis"
 
     , _cPassport = PassportConfig
         { _pcRealm = "Boulder App"
@@ -50,9 +46,6 @@ defaultConfig = Config
 
 pConfig :: MParser Config
 pConfig = pure id
-
-instance FromJSON URI where
-    parseJSON s = (fromJust . parseRelativeReference) <$> parseJSON s
 
 instance FromJSON (Config -> Config) where
     parseJSON = withObject "Config" $ \o -> id
