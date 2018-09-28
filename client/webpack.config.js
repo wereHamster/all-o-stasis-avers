@@ -26,7 +26,7 @@ module.exports = {
       {
         test: /\.jsx?$/,
         include: /node_modules/,
-        exclude: /(@babel\/standalone|react|react-dom)/,
+        exclude: /(@babel\/standalone|react|react-dom|date-fns)/,
         loader: "babel-loader"
       },
       {
@@ -61,19 +61,19 @@ module.exports = {
     splitChunks: {
       cacheGroups: {
         vendor: {
-          test: /[\\/]node_modules[\\/]/,
+          test: /node_modules/,
           name: "vendor",
           chunks: "initial",
           minChunks: 1
         },
         vega: {
-          test: /[\\/]node_modules[\\/].*vega/,
+          test: /vega/,
           name: "vega",
           chunks: "async",
           minChunks: 1
         },
         catalog: {
-          test: /[\\/]node_modules[\\/]/,
+          test: /node_modules/,
           name: "catalog",
           chunks: "async",
           minChunks: 2
