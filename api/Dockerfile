@@ -9,6 +9,8 @@ ADD package.yaml .
 RUN stack install --only-dependencies
 
 ADD . /src
+ARG REVISION
+RUN echo $REVISION > GIT-REVISION-FILE
 RUN stack install && cp $(stack path --local-bin)/all-o-stasis-api /usr/bin/
 
 FROM haskell
