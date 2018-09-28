@@ -1,6 +1,6 @@
 import * as Avers from 'avers'
 import * as React from 'react'
-import VegaLite from 'react-vega-lite'
+import Loadable from "react-loadable";
 
 import {Boulder, grades} from '../../storage'
 
@@ -11,6 +11,12 @@ export interface GradeBalanceProps {
     height: number
     width: number
 }
+
+const AsyncVegaLite: React.ComponentType<any> = Loadable({
+    loader: () => import("react-vega-lite"),
+    render: (VegaLite, props) => <VegaLite {...props} />,
+    loading: () => <div />
+})
 
 export class GradeBalance extends React.Component<GradeBalanceProps, {}> {
     spec = {
@@ -48,7 +54,7 @@ export class GradeBalance extends React.Component<GradeBalanceProps, {}> {
 
     render(): JSX.Element {
         return (
-            <VegaLite spec={this.spec} data={this.prepareData()} />
+            <AsyncVegaLite spec={this.spec} data={this.prepareData()} />
         )
     }
 }

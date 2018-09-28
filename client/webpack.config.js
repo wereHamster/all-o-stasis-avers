@@ -66,6 +66,12 @@ module.exports = {
           chunks: "initial",
           minChunks: 1
         },
+        vega: {
+          test: /[\\/]node_modules[\\/].*vega/,
+          name: "vega",
+          chunks: "async",
+          minChunks: 1
+        },
         catalog: {
           test: /[\\/]node_modules[\\/]/,
           name: "catalog",
