@@ -1,6 +1,5 @@
 import * as Avers from 'avers'
 import DatePicker from 'react-datepicker'
-import moment from 'moment'
 import * as React from 'react'
 import styled from 'styled-components'
 
@@ -28,8 +27,8 @@ BoulderDetailsEditor({app, boulderE}: {app: App, boulderE: Avers.Editable<Boulde
         resetBoulderCollections(app);
     }
 
-    function getSetDate(): moment.Moment {
-        const initialDate = moment.unix(boulder.setDate / 1000.)
+    function getSetDate(): Date {
+        const initialDate = new Date(boulder.setDate / 1000.)
         return initialDate
     }
 
@@ -97,7 +96,7 @@ BoulderDetailsEditor({app, boulderE}: {app: App, boulderE: Avers.Editable<Boulde
                 <SectionLabel>The boulder was removed on</SectionLabel>
                 <div style={{display: 'flex'}}>
                   <DatePicker
-                    selected={moment.unix(boulder.removed / 1000.)}
+                    selected={new Date(boulder.removed / 1000.)}
                     onChange={changeRemovedDate}
                   />
                   <DangerButton onClick={clearRemoved}>Put back on wall</DangerButton>

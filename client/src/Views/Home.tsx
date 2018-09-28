@@ -6,8 +6,8 @@ module Home
 
 import * as Avers from 'avers'
 import * as React from 'react'
-import moment from 'moment'
 import styled from 'styled-components'
+import { format } from 'date-fns'
 
 import {App} from '../app'
 import {Boulder} from '../storage'
@@ -69,7 +69,7 @@ class Home extends React.Component<{app: App}, {}> {
             if (date === null) {
                 return {
                     boulders: boulders.concat([
-                        <BoulderSeparator key={`separator-${createdAt}`}>{moment(createdAt).format('DD. MMMM')}</BoulderSeparator>,
+                        <BoulderSeparator key={`separator-${createdAt}`}>{format(createdAt, 'DD. MMMM')}</BoulderSeparator>,
                         <BoulderCard key={objectId} app={app} boulderE={boulder} />,
                     ]),
                     date: createdAt,
@@ -82,7 +82,7 @@ class Home extends React.Component<{app: App}, {}> {
             } else {
                 return {
                     boulders: boulders.concat([
-                        <BoulderSeparator key={`separator-${createdAt}`}>{moment(createdAt).format('DD. MMMM')}</BoulderSeparator>,
+                        <BoulderSeparator key={`separator-${createdAt}`}>{format(createdAt, 'DD. MMMM')}</BoulderSeparator>,
                         <BoulderCard key={objectId} app={app} boulderE={boulder} />,
                     ]),
                     date: createdAt,
