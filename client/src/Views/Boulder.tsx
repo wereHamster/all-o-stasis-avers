@@ -1,7 +1,8 @@
 import * as Avers from 'avers'
-import DatePicker from 'react-datepicker'
+import DayPickerInput from 'react-day-picker/DayPickerInput';
 import * as React from 'react'
 import styled from 'styled-components'
+import { format } from 'date-fns'
 
 import {role, resetBoulderCollections} from '../actions'
 import {App, navigateToFn} from '../app'
@@ -28,7 +29,7 @@ BoulderDetailsEditor({app, boulderE}: {app: App, boulderE: Avers.Editable<Boulde
     }
 
     function getSetDate(): Date {
-        const initialDate = new Date(boulder.setDate / 1000.)
+        const initialDate = new Date(boulder.setDate)
         return initialDate
     }
 
@@ -86,7 +87,7 @@ BoulderDetailsEditor({app, boulderE}: {app: App, boulderE: Avers.Editable<Boulde
         </div>
 
         <Section>Set Date</Section>
-        <DatePicker selected={getSetDate()} onChange={changeSetDate} />
+        <DayPickerInput value={getSetDate()} formatDate={date => format(date, "YYYY-MM-DD")} onDayChange={changeSetDate} />
 
         <Section>Danger Zone</Section>
         {(() => {
@@ -95,9 +96,9 @@ BoulderDetailsEditor({app, boulderE}: {app: App, boulderE: Avers.Editable<Boulde
               <div>
                 <SectionLabel>The boulder was removed on</SectionLabel>
                 <div style={{display: 'flex'}}>
-                  <DatePicker
-                    selected={new Date(boulder.removed / 1000.)}
-                    onChange={changeRemovedDate}
+                  <DayPickerInput
+                    value={new Date(boulder.removed)}
+                    onDayChange={changeRemovedDate}
                   />
                   <DangerButton onClick={clearRemoved}>Put back on wall</DangerButton>
                 </div>
