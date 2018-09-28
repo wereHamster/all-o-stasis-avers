@@ -7,7 +7,7 @@ import { text } from "../Materials/Colors";
 import { createBoulder, role } from "../actions";
 import { App, navigateToFn } from "../app";
 
-import logo from "!!url-loader!../../assets/logo.svg";
+import logo from "!!file-loader!../../assets/logo.svg";
 
 export const NavBar = ({ app }: { app: App }) => (
   <Root>
