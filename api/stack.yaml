@@ -1,6 +1,7 @@
-resolver: lts-9.0
+resolver: lts-12.10
 packages:
 - .
 extra-deps:
+- avers-0.0.17.1
 - avers-api-0.1.0
 - avers-server-0.1.0
