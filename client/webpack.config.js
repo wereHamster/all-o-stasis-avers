@@ -38,7 +38,7 @@ module.exports = {
       },
       {
         test: /\.md$/,
-        loaders: [require.resolve("catalog/loader"), "raw-loader"]
+        loaders: ["@catalog/loader", "raw-loader"]
       },
       {
         test: /\.svg$/,
