@@ -1,6 +1,6 @@
 import * as React from "react";
 import Loadable from "react-loadable";
-import { Theme } from "catalog";
+import { Theme } from "@catalog/core";
 
 import * as C from "../Materials/Colors";
 
@@ -11,7 +11,7 @@ const theme: Partial<Theme> = {
 };
 
 const LoadableCatalog = Loadable({
-  loader: () => import("catalog"),
+  loader: () => import("@catalog/core"),
   render({ Catalog, pageLoader }) {
     const pages = [
       {

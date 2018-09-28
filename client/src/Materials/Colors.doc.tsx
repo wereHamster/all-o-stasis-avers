@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { markdown, ColorSpecimen, ColorPaletteSpecimen } from "catalog";
+import { markdown, ColorSpecimen, ColorPaletteSpecimen } from "@catalog/core";
 
 import * as C from "./Colors";
 

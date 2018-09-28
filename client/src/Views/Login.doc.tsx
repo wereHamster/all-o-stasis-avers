@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import {markdown, ReactSpecimen} from 'catalog'
+import {markdown, ReactSpecimen} from '@catalog/core'
 
 import {Form, AwaitingConfirmation} from './Login'
 

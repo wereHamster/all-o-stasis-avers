@@ -1,7 +1,7 @@
 import Computation from 'computation'
 import * as React from 'react'
 
-import {markdown, ReactSpecimen} from 'catalog'
+import {markdown, ReactSpecimen} from '@catalog/core'
 
 import {parseBoulderStat} from '../../../storage'
 
