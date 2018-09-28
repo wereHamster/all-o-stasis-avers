@@ -26,6 +26,7 @@ module.exports = {
       {
         test: /\.jsx?$/,
         include: /node_modules/,
+        exclude: /(@babel\/standalone|react|react-dom)/,
         loader: "babel-loader"
       },
       {
