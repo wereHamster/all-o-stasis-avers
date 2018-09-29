@@ -64,7 +64,7 @@ module.exports = {
           test: /node_modules/,
           name: "vendor",
           chunks: "initial",
-          minChunks: 1
+          minChunks: 3
         },
         vega: {
           test: /vega/,
