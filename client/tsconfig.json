@@ -8,7 +8,6 @@
         "noImplicitAny": false,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
-        "removeComments": true,
         "preserveConstEnums": true,
         "suppressImplicitAnyIndexErrors": true,
         "allowSyntheticDefaultImports": true,
