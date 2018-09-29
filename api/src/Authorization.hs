@@ -46,8 +46,27 @@ aosAuthorization = Avers.Server.Authorizations
             return $ hasCreated || isAdm
         ]
 --}
-    , patchObjectAuthz = \cred objId _ops ->
-        [ sufficient $ do
+    , patchObjectAuthz = \cred objId ops ->
+        [ do
+            obj <- lookupObject objId
+            case objectType obj of
+                "account" -> do
+                    -- The patch set is being applied to an "account" object.
+                    -- When any of the operations touches the "role" field, only allow
+                    -- if the user is an admin.
+                    let isRestrictedOperation = \op -> case op of Set{..} -> opPath == "role"; _ -> False
+                    if not (any isRestrictedOperation ops)
+                        then pure ContinueR
+                        else do
+                            session <- case cred of
+                                CredAnonymous -> throwError NotAuthorized
+                                CredSessionId sId -> lookupSession sId
+                            isAdmin <- sessionIsAdmin session
+                            if isAdmin
+                                then pure AllowR
+                                else pure RejectR
+                _ -> pure ContinueR
+        , sufficient $ do
             session <- case cred of
                 CredAnonymous -> throwError NotAuthorized
                 CredSessionId sId -> lookupSession sId
@@ -55,12 +74,6 @@ aosAuthorization = Avers.Server.Authorizations
             hasCreated <- sessionCreatedObject session objId
             isAdm <- sessionIsAdmin session
             return $ isObj || hasCreated || isAdm
-        --, sufficient $ do
-        --    oper <- case ops of
-        --        Set{..} -> opPath /= "role"         -- only admins can patch the 'role' field
-        --        _       -> False
-        --    return oper
-        -- setters can patch objects they own or are setters
         ]
     , deleteObjectAuthz = \_ _ -> [pure RejectR]
     , uploadBlobAuthz = \_ _ -> [pure AllowR]

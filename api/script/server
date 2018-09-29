@@ -5,4 +5,4 @@ cd "$(dirname "$0")/.."
 
 git rev-parse HEAD > GIT-REVISION-FILE
 stack build
-stack exec all-o-stasis-api -- -c config/local.yaml
+stack exec all-o-stasis-api -- --config-file config/local.yaml
