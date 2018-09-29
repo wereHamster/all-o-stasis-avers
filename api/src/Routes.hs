@@ -46,6 +46,7 @@ import Servant.API hiding (Patch)
 import Servant.Server
 
 import Web.Cookie
+import Network.Gravatar
 
 import Queries
 import Revision
@@ -120,6 +121,11 @@ data BoulderStat = BoulderStat
     , bsGrade :: BoulderGrade
     }
 
+data PublicProfile = PublicProfile
+    { ppName :: Text
+    , ppAvatar :: Maybe Text
+    }
+
 type LocalAPI
     -- server the git revsion sha
     = "revision"
@@ -156,6 +162,10 @@ type LocalAPI
     :<|> "stats" :> "boulders"
         :> Get '[JSON] [BoulderStat]
 
+    :<|> "public-profile"
+        :> Capture "accountId" ObjId
+        :> Get '[JSON] PublicProfile
+
     :<|> PassportAPI
 
 
@@ -169,6 +179,7 @@ serveLocalAPI pc aversH =
     :<|> serveSignup
     :<|> serveSetterMonthlyStats
     :<|> serveBouldersStats
+    :<|> servePublicProfile
     :<|> servePassportAPI
 
   where
@@ -302,6 +313,19 @@ serveLocalAPI pc aversH =
 
         pure $ map toBoulderStat $ V.toList allBoulders
 
+    servePublicProfile objId = do
+        Account{..} <- reqAvers2 aversH $ do
+            Snapshot{..} <- lookupLatestSnapshot (BaseObjectId objId)
+            case parseValueAs accountObjectType snapshotContent of
+                Left e  -> throwError e
+                Right x -> pure x
+
+        pure $ PublicProfile
+            { ppName = fromMaybe (unObjId objId) accountName
+            , ppAvatar = case accountEmail of
+                Nothing -> Nothing
+                Just email -> Just $ T.pack $ gravatar def email
+            }
 
     serveCreatePassport CreatePassportBody{..} = do
         -- 1. Lookup account by email. If no such account exists, create a new one.
@@ -477,3 +501,4 @@ $(deriveJSON (deriveJSONOptions "req")  ''CreatePassportBody)
 $(deriveJSON (deriveJSONOptions "_res") ''CreatePassportResponse)
 
 $(deriveJSON (deriveJSONOptions "bs") ''BoulderStat)
+$(deriveJSON (deriveJSONOptions "pp") ''PublicProfile)

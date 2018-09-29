@@ -19,6 +19,7 @@ dependencies:
   - cookie
   - directory
   - either
+  - gravatar
   - http-conduit
   - lens
   - mime-mail
@@ -36,11 +37,11 @@ dependencies:
   - transformers
   - unordered-containers
   - vector
-  - yaml
   - wai
   - wai-cors
   - wai-extra
   - warp
+  - yaml
 
 executable:
   main: Main.hs
