@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import {Account} from '../../../storage'
 import {App} from '../../../app'
-import {accountGravatarUrl} from '../../Account'
+import {accountAvatar} from '../../Account'
 
 import {text, lightGrey} from '../../../Materials/Colors'
 import {useTypeface, copy14} from '../../../Materials/Typefaces'
@@ -25,13 +25,14 @@ export const SetterSelector = ({app, selectedSetters, clear, toggle}: SetterSele
         return Avers.lookupContent<Account>(app.data.aversH, accountId).fmap(account => (
             <Setter
                 key={accountId}
+                app={app}
                 accountId={accountId}
                 account={account}
                 toggle={toggle}
                 isSelected={selectedSetters.length === 0 || selectedSetters.indexOf(accountId) !== -1}
             />
         ))
-        .get(<Setter key={accountId} accountId={accountId} account={undefined} toggle={toggle} isSelected={false} />)
+        .get(<Setter key={accountId} app={app} accountId={accountId} account={undefined} toggle={toggle} isSelected={false} />)
     })
 
     return (
@@ -49,9 +50,9 @@ export const SetterSelector = ({app, selectedSetters, clear, toggle}: SetterSele
 }
 
 const placeholderImageSrc = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAAAAACoWZBhAAAAF0lEQVQI12P4BAI/QICBFCaYBPNJYQIAkUZftTbC4sIAAAAASUVORK5CYII='
-const Setter = ({accountId, account, toggle, isSelected}) => (
+const Setter = ({app, accountId, account, toggle, isSelected}) => (
     <SetterC onClick={() => toggle(accountId)}>
-        <SetterImage isSelected={isSelected} src={account ? accountGravatarUrl(account.email) : placeholderImageSrc} />
+        <SetterImage isSelected={isSelected} src={accountAvatar(app.data.aversH, accountId).get(placeholderImageSrc)} />
         <SetterName isSelected={isSelected}>{(account && account.name !== '') ? account.name : accountId.slice(0, 7)}</SetterName>
     </SetterC>
 )

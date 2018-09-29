@@ -2,7 +2,7 @@ import * as Avers from "avers";
 import * as React from "react";
 import styled from "styled-components";
 
-import { accountGravatarUrl } from "../Views/Account";
+import { accountAvatar } from "../Views/Account";
 import { App, navigateToFn } from "../app";
 import { Account, setterMonthlyStats } from "../storage";
 
@@ -20,7 +20,7 @@ export const SetterBlock = ({ app, accountId, account }: SetterCardProps) => (
     <Top>
       <Avatar
         onClick={navigateToFn("/account/" + accountId)}
-        src={account ? accountGravatarUrl(account.email) : placeholderImageSrc}
+        src={accountAvatar(app.data.aversH, accountId).get(placeholderImageSrc)}
       />
       <div>
         <Name>{account && account.name !== "" ? account.name : accountId.slice(0, 5)}</Name>

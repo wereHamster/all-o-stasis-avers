@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import {App} from '../../app'
 import {Account, Boulder} from '../../storage'
-import {accountGravatarUrl} from '../Account'
+import {accountAvatar} from '../Account'
 
 import {text} from '../../Materials/Colors'
 import {useTypeface, copy16, copy16Bold} from '../../Materials/Typefaces'
@@ -48,7 +48,7 @@ padding: 40px 0 12px;
 const Setter = ({app, setterId}) => {
     return Avers.lookupContent<Account>(app.data.aversH, setterId).fmap(account => (
         <SetterContainer>
-            <SetterImage src={accountGravatarUrl(account.email)} />
+            <SetterImage src={accountAvatar(app.data.aversH, setterId).get("")} />
             <SetterName>{(account.name !== '') ? account.name : setterId.slice(0, 2)}</SetterName>
         </SetterContainer>
     )).get(<div>{setterId}</div>)

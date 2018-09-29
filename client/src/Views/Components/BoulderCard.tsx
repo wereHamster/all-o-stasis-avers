@@ -2,9 +2,9 @@ import * as Avers from 'avers'
 import * as React from 'react'
 import styled from 'styled-components'
 
-import {accountGravatarUrl} from '../Account'
+import {accountAvatar} from '../Account'
 import {App, navigateTo} from '../../app'
-import {Account, Boulder, prettyPrintSector} from '../../storage'
+import {Boulder, prettyPrintSector} from '../../storage'
 
 import {useTypeface, copy16} from '../../Materials/Typefaces'
 
@@ -41,7 +41,7 @@ export class BoulderCard extends React.Component<BoulderCardProps> {
 
 const placeholderImageSrc = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAAAAACoWZBhAAAAF0lEQVQI12P4BAI/QICBFCaYBPNJYQIAkUZftTbC4sIAAAAASUVORK5CYII='
 const BoulderCardSetter = ({app, setterId}: {app: App, setterId: string}) => (
-    <Setter src={Avers.lookupContent<Account>(app.data.aversH, setterId).fmap(account => accountGravatarUrl(account.email)).get(placeholderImageSrc)} />
+    <Setter src={accountAvatar(app.data.aversH, setterId).get(placeholderImageSrc)} />
 )
 
 

@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { role, resetBoulderCollections } from "../actions";
 import { App, navigateToFn } from "../app";
 import { Account, Boulder } from "../storage";
-import { accountGravatarUrl } from "./Account";
+import { accountAvatar } from "./Account";
 
 import { text, darkGrey, lightGrey, primary } from "../Materials/Colors";
 import { useTypeface, copy16, copy16Bold, copy14 } from "../Materials/Typefaces";
@@ -205,7 +205,7 @@ const Setter = ({ app, setterId, onClick }) => {
           onClick(setterId);
         }}
       >
-        <SetterImage src={accountGravatarUrl(account.email)} />
+        <SetterImage src={accountAvatar(app.data.aversH, setterId).get("")} />
         <SetterName>{account.name !== "" ? account.name : setterId.slice(0, 2)}</SetterName>
       </SetterContainer>
     ))

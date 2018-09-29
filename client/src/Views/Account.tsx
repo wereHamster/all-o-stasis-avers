@@ -1,11 +1,11 @@
 import * as Avers from "avers";
 import * as React from "react";
 import styled from "styled-components";
-import { Md5 } from "ts-md5/dist/md5";
+import Computation from "computation";
 
 import { role } from "../actions";
 import { App } from "../app";
-import { Account, roles } from "../storage";
+import { Account, roles, publicProfile } from "../storage";
 
 import { useTypeface, heading18 } from "../Materials/Typefaces";
 
@@ -13,8 +13,8 @@ import { DropDownInput } from "./Components/DropdownInput";
 import { Site } from "./Components/Site";
 import { Input } from "../Components/Input";
 
-export function accountGravatarUrl(email: string) {
-  return "https://www.gravatar.com/avatar/" + Md5.hashStr(email);
+export const accountAvatar = (aversH: Avers.Handle, accountId: string): Computation<string> => {
+  return Avers.staticValue(aversH, publicProfile(aversH, accountId)).fmap(({ avatar }) => avatar)
 }
 
 // only admins can edit all accounts with the exception of users
@@ -23,7 +23,7 @@ export default (accountId: string) => ({ app }: { app: App }) => {
   return Avers.lookupEditable<Account>(app.data.aversH, accountId)
     .fmap(accountE => {
       const canEdit = role(app) === "admin" || accountId === app.data.session.objId;
-      return <Site app={app}>{canEdit ? <AccountView app={app} accountE={accountE} /> : accountRep(accountE)}</Site>;
+      return <Site app={app}>{canEdit ? <AccountView app={app} accountE={accountE} /> : accountRep(app.data.aversH, accountE)}</Site>;
     })
     .get(<Site app={app} />);
 };
@@ -31,10 +31,10 @@ export default (accountId: string) => ({ app }: { app: App }) => {
 // ----------------------------------------------------------------------------
 
 // A simple account representation for non-owned and non-admin views.
-function accountRep(account: Avers.Editable<Account>): JSX.Element {
+function accountRep(aversH: Avers.Handle, account: Avers.Editable<Account>): JSX.Element {
   return (
     <Avatar>
-      <img src={accountGravatarUrl(account.content.email)} />
+      <img src={accountAvatar(aversH, account.objectId).get("")} />
       <Name>{account.content.name}</Name>
       <p className="about">{account.content.role}</p>
     </Avatar>
@@ -53,20 +53,20 @@ export class AccountView extends React.Component<AccountViewProps, {}> {
 
     return (
       <Root>
-        <Header accountE={accountE} />
+        <Header app={app} accountE={accountE} />
         <Editor app={app} accountE={accountE} />
       </Root>
     );
   }
 }
 
-class Header extends React.Component<{ accountE: Avers.Editable<Account> }> {
+class Header extends React.Component<{ app: App, accountE: Avers.Editable<Account> }> {
   render() {
-    const { accountE } = this.props;
+    const { app, accountE } = this.props;
 
     return (
       <Avatar>
-        <img src={accountGravatarUrl(accountE.content.email)} />
+        <img src={accountAvatar(app.data.aversH, accountE.objectId).get("")} />
         <Name>{accountE.content.name}</Name>
       </Avatar>
     );

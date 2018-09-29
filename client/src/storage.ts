@@ -93,3 +93,17 @@ export const boulderStats = (aversH: Avers.Handle): Avers.Static<BoulderStat[]> 
 
     return new Avers.Static<BoulderStat[]>(aosNS, `boulderStats`, fetch)
 }
+
+export interface PublicProfile {
+    name: string;
+    avatar: string;
+}
+
+export const publicProfile = (aversH: Avers.Handle, accountId: string): Avers.Static<PublicProfile> => {
+    const fetch = async () => {
+        const res = await aversH.config.fetch(`${aversH.config.apiHost}/public-profile/${accountId}`);
+        return res.json();
+    };
+
+    return new Avers.Static<PublicProfile>(aosNS, `publicProfile/${accountId}`, fetch)
+}

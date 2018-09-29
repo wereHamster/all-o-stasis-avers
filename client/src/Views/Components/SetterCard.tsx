@@ -1,7 +1,7 @@
 import * as React from 'react'
 import styled from 'styled-components'
 
-import {accountGravatarUrl} from '../Account'
+import {accountAvatar} from '../Account'
 import {App, navigateToFn} from '../../app'
 import {Account} from '../../storage'
 
@@ -11,10 +11,10 @@ export interface SetterCardProps {
     account: void | Account
 }
 
-export const SetterCard = ({accountId, account}: SetterCardProps) => (
+export const SetterCard = ({app, accountId, account}: SetterCardProps) => (
     <Setter>
         <div onClick={navigateToFn('/account/' + accountId)}>
-            <img src={account ? accountGravatarUrl(account.email) : placeholderImageSrc}/>
+            <img src={accountAvatar(app.data.aversH, accountId).get(placeholderImageSrc)}/>
             <div>{(account && account.name !== '') ? account.name : accountId.slice(0, 2)}</div>
         </div>
     </Setter>
