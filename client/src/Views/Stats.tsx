@@ -11,7 +11,7 @@ import {Visualization} from './Components/Stats/Visualization'
 
 
 
-export const statsView = (app: App) => (
+export const statsView = ({ app }: { app: App }) => (
     <StatsPage app={app} />
 )
 

@@ -10,7 +10,7 @@ import { Button } from "../Components/Button";
 import { Input } from "../Components/Input";
 import { Site } from "./Components/Site";
 
-export const loginView = () => (app: App) => {
+export const loginView = ({ app }: { app: App }) => {
   return <LoginView app={app} />;
 };
 

@@ -11,7 +11,7 @@ import {GradeBalance} from './Components/GradeBalance'
 import {Site} from './Components/Site'
 
 export function
-sectorView(app: App) {
+sectorView({ app }: { app: App }) {
     if (role(app) === 'user') {
         return (
             <Site app={app} />

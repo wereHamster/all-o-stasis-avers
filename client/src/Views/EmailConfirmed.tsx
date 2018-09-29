@@ -8,7 +8,7 @@ import {App} from '../app'
 import {Site} from './Components/Site'
 
 export function
-emailConfirmedView(app: App) {
+emailConfirmedView({ app }: { app: App }) {
   return (
     <Site app={app}>
       <Root>

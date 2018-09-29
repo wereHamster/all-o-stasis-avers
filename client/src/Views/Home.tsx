@@ -21,7 +21,7 @@ import {BoulderId24} from './Components/BoulderId'
 import { Input } from '../Components/Input';
 
 export function
-homeView(app: App) {
+homeView({ app }: { app: App }) {
     return <Home app={app} />
 }
 

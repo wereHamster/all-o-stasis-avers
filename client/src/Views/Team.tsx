@@ -8,7 +8,7 @@ import { Account } from "../storage";
 import { Site } from "./Components/Site";
 import { SetterBlock } from "../Components/SetterBlock";
 
-export function teamView(app: App) {
+export function teamView({ app }: { app: App }) {
   const setters = app.data.adminAccountCollection.ids.get([]).map(accountId => {
     const accountC = Avers.lookupContent<Account>(app.data.aversH, accountId);
     return accountC

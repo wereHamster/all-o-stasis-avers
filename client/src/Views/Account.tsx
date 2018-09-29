@@ -19,7 +19,7 @@ export function accountGravatarUrl(email: string) {
 
 // only admins can edit all accounts with the exception of users
 // changing their own accounts
-export const accountView = (accountId: string) => (app: App) => {
+export const accountView = (accountId: string) => ({ app }: { app: App }) => {
   return Avers.lookupEditable<Account>(app.data.aversH, accountId)
     .fmap(accountE => {
       const canEdit = role(app) === "admin" || accountId === app.data.session.objId;

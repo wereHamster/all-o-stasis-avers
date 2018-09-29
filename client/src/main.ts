@@ -79,7 +79,7 @@ function setupRoutes(app: App) {
     })
 
     page('/login', () => {
-        loadView(app, loginView())
+        loadView(app, loginView)
     })
 
     page('/sector', () => {

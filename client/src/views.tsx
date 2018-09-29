@@ -13,7 +13,7 @@ export function loadingView() {
   );
 }
 
-export function notFoundView(app: App) {
+export function notFoundView({ app }: { app: App }) {
   return (
     <Site app={app}>
       <div className="login">

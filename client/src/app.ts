@@ -25,7 +25,7 @@ export class App {
     constructor(
         public containerElement: Element,
         public data: Data,
-        public mkViewFn: (app: App) => React.ReactElement<{}>,
+        public viewComponent: React.ComponentType<{ app: App }>
     ) {}
 }
 
@@ -76,13 +76,13 @@ export class Data {
 export function
 refresh(app: App): void {
     requestAnimationFrame(() => {
-        ReactDOM.render(app.mkViewFn(app), app.containerElement)
+        ReactDOM.render(React.createElement(app.viewComponent, { app }), app.containerElement)
     })
 }
 
 export function
-loadView(app: App, mkViewFn: (app: App) => React.ReactElement<{}>): void {
-    app.mkViewFn = mkViewFn
+loadView(app: App, viewComponent: React.ComponentType<{ app: App }>): void {
+    app.viewComponent = viewComponent
     refresh(app)
 }
 

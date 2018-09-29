@@ -120,7 +120,7 @@ function BoulderDetailsEditor({ app, boulderE }: { app: App; boulderE: Avers.Edi
   );
 }
 
-export const boulderView = (boulderId: string) => (app: App) => {
+export const boulderView = (boulderId: string) => ({ app }: { app: App }) => {
   return Avers.lookupEditable<Boulder>(app.data.aversH, boulderId)
     .fmap(boulderE => {
       const boulderRep =
