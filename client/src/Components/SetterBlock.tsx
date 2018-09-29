@@ -43,6 +43,7 @@ export const SetterBlock = ({ app, accountId, account }: SetterCardProps) => (
               {Object.keys(sms).map(grade => {
                 return (
                   <div
+                    key={grade}
                     style={{
                       position: "relative",
                       width: 60,

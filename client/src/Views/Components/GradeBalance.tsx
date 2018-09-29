@@ -14,7 +14,7 @@ export interface GradeBalanceProps {
 
 const AsyncVegaLite: React.ComponentType<any> = Loadable({
     loader: () => import("react-vega-lite"),
-    render: (VegaLite, props) => <VegaLite {...props} />,
+    render: (VegaLite, props) => <VegaLite.default {...props} />,
     loading: () => <div />
 })
 
