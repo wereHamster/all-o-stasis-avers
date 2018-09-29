@@ -1,9 +1,3 @@
-/*
-module Home
-( homeView
-) where
-*/
-
 import * as Avers from 'avers'
 import * as React from 'react'
 import styled from 'styled-components'
@@ -20,12 +14,7 @@ import {Site} from './Components/Site'
 import {BoulderId24} from './Components/BoulderId'
 import { Input } from '../Components/Input';
 
-export function
-homeView({ app }: { app: App }) {
-    return <Home app={app} />
-}
-
-class Home extends React.Component<{app: App}, {}> {
+export default class extends React.Component<{app: App}, {}> {
     state = {
         search: '',
         grades: [] as string[],

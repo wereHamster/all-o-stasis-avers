@@ -7,7 +7,7 @@ import {App} from '../app'
 
 import {Site} from './Components/Site'
 
-export function
+export default function
 emailConfirmedView({ app }: { app: App }) {
   return (
     <Site app={app}>

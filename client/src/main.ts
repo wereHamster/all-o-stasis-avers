@@ -66,52 +66,52 @@ const main = () => {
 
 function setupRoutes(app: App) {
     page('/', async () => {
-        const { homeView } = await import(/* webpackChunkName: "home" */ "./Views/Home")
-        loadView(app, homeView)
+        const m = await import(/* webpackChunkName: "home" */ "./Views/Home")
+        loadView(app, m.default)
     })
 
     page('/login', async () => {
-        const { loginView } = await import(/* webpackChunkName: "login" */ "./Views/Login")
-        loadView(app, loginView)
+        const m = await import(/* webpackChunkName: "login" */ "./Views/Login")
+        loadView(app, m.default)
     })
 
     page('/sector', async () => {
-        const { sectorView } = await import(/* webpackChunkName: "sector" */ "./Views/Sector")
-        loadView(app, sectorView)
+        const m = await import(/* webpackChunkName: "sector" */ "./Views/Sector")
+        loadView(app, m.default)
     })
 
     page('/stats', async () => {
-        const { statsView } = await import(/* webpackChunkName: "stats" */ "./Views/Stats")
-        loadView(app, statsView)
+        const m = await import(/* webpackChunkName: "stats" */ "./Views/Stats")
+        loadView(app, m.default)
     })
 
     page('/boulder/:boulderId', async ctx => {
-        const { boulderView } = await import(/* webpackChunkName: "boulder" */ "./Views/Boulder")
-        loadView(app, boulderView(ctx.params.boulderId))
+        const m = await import(/* webpackChunkName: "boulder" */ "./Views/Boulder")
+        loadView(app, m.default(ctx.params.boulderId))
     })
 
     page('/account/:accountId', async ctx => {
-        const { accountView } = await import(/* webpackChunkName: "account" */ "./Views/Account")
-        loadView(app, accountView(ctx.params.accountId))
+        const m = await import(/* webpackChunkName: "account" */ "./Views/Account")
+        loadView(app, m.default(ctx.params.accountId))
     })
 
     page('/team', async () => {
-        const { teamView } = await import(/* webpackChunkName: "team" */ "./Views/Team")
-        loadView(app, teamView)
+        const m = await import(/* webpackChunkName: "team" */ "./Views/Team")
+        loadView(app, m.default)
     })
 
     page('/email-confirmed', async () => {
-        const { emailConfirmedView } = await import(/* webpackChunkName: "email-confirmed" */ "./Views/EmailConfirmed")
-        loadView(app, emailConfirmedView)
+        const m = await import(/* webpackChunkName: "email-confirmed" */ "./Views/EmailConfirmed")
+        loadView(app, m.default)
     })
 
     page('/_catalog', async () => {
-        const { catalogView } = await import(/* webpackChunkName: "catalog" */ './Views/Catalog');
-        loadView(app, catalogView)
+        const m = await import(/* webpackChunkName: "catalog" */ './Views/Catalog');
+        loadView(app, m.default)
     })
     page('/_catalog/*', async () => {
-        const { catalogView } = await import(/* webpackChunkName: "catalog" */ './Views/Catalog');
-        loadView(app, catalogView)
+        const m = await import(/* webpackChunkName: "catalog" */ './Views/Catalog');
+        loadView(app, m.default)
     })
 
     page('/loading', () => {

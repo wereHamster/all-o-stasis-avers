@@ -9,12 +9,6 @@ import {SectorSelector} from './Components/Stats/SectorSelector'
 import {SetterSelector} from './Components/Stats/SetterSelector'
 import {Visualization} from './Components/Stats/Visualization'
 
-
-
-export const statsView = ({ app }: { app: App }) => (
-    <StatsPage app={app} />
-)
-
 interface StatsPageProps {
     app: App
 }
@@ -24,7 +18,7 @@ interface StatsPageState {
     selectedSetters: string[] // ObjId[]
 }
 
-class StatsPage extends React.Component<StatsPageProps, StatsPageState> {
+export default class extends React.Component<StatsPageProps, StatsPageState> {
     state: StatsPageState = {
         sectors: [],
         selectedSetters: [],

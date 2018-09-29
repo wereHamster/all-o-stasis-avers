@@ -10,10 +10,6 @@ import { Button } from "../Components/Button";
 import { Input } from "../Components/Input";
 import { Site } from "./Components/Site";
 
-export const loginView = ({ app }: { app: App }) => {
-  return <LoginView app={app} />;
-};
-
 interface LoginState {
   email: string;
 
@@ -23,7 +19,7 @@ interface LoginState {
   awaitPassportConfirmationPromise: void | Promise<any>;
 }
 
-class LoginView extends React.Component<{ app: App }, LoginState> {
+export default class extends React.Component<{ app: App }, LoginState> {
   state: LoginState = {
     email: "",
 

@@ -89,6 +89,6 @@ const pages = [
   }
 ];
 
-export function catalogView() {
-  return <Catalog useBrowserHistory basePath="/_catalog" title="all-o-stasis" theme={theme} pages={pages} />;
-}
+export default () => (
+  <Catalog useBrowserHistory basePath="/_catalog" title="all-o-stasis" theme={theme} pages={pages} />
+);

@@ -10,7 +10,7 @@ import {useTypeface, heading28} from '../Materials/Typefaces'
 import {GradeBalance} from './Components/GradeBalance'
 import {Site} from './Components/Site'
 
-export function
+export default function
 sectorView({ app }: { app: App }) {
     if (role(app) === 'user') {
         return (
