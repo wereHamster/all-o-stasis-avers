@@ -42,7 +42,6 @@
     "react-vega-lite": "^2.0.2",
     "styled-components": "^3.4.6",
     "svg-react-loader": "^0.4.5",
-    "ts-md5": "^1.2.4",
     "tslint": "^5.11.0",
     "tslint-config-prettier": "^1.15.0",
     "typescript": "^3.1.1",
