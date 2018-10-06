@@ -60,9 +60,9 @@ export default class extends React.Component<{ app: App }> {
 }
 
 const Root = styled.div`
-  margin: 0 24px;
+  margin: 24px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  grid-gap: 30px 30px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-gap: 24px;
   justify-items: stretch;
 `;

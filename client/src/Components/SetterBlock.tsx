@@ -4,10 +4,10 @@ import styled from "styled-components";
 
 import { accountAvatar } from "../Views/Account";
 import { App, navigateToFn } from "../app";
-import { Account, setterMonthlyStats } from "../storage";
+import { Account, grades, Boulder } from "../storage";
 
 import { useTypeface, heading28, copy14 } from "../Materials/Typefaces";
-import { gradeBackgroundColor, text } from "../Materials/Colors";
+import { gradeBackgroundColor, text, gradeBorderColor } from "../Materials/Colors";
 
 export interface SetterCardProps {
   app: App;
@@ -15,59 +15,71 @@ export interface SetterCardProps {
   account: undefined | Account;
 }
 
-export const SetterBlock = ({ app, accountId, account }: SetterCardProps) => (
-  <Root>
-    <Top>
-      <Avatar
-        onClick={navigateToFn("/account/" + accountId)}
-        src={accountAvatar(app.data.aversH, accountId).get(placeholderImageSrc)}
-      />
-      <div>
-        <Name>{account && account.name !== "" ? account.name : accountId.slice(0, 5)}</Name>
-        {/* <Tagline>Bewertet eigene Boulder gelegentlich zu leicht</Tagline> */}
-      </div>
-    </Top>
-    <Bottom>
-      {Avers.staticValue(
-        app.data.aversH,
-        setterMonthlyStats(app.data.aversH, accountId, new Date().getUTCFullYear(), new Date().getUTCMonth() + 1)
-      )
-        .fmap(sms => {
-          const max = Math.max(...Object.keys(sms).map(grade => sms[grade]));
-          const sum = Object.keys(sms)
-            .map(grade => sms[grade])
-            .reduce((a, n) => a + n, 0);
+export class SetterBlock extends React.Component<SetterCardProps> {
+  render() {
+    const { app, accountId, account } = this.props;
 
-          return (
-            <BoulderFrequencyDistribution>
-              {Object.keys(sms).map(grade => {
-                return (
-                  <div
-                    key={grade}
-                    style={{
-                      position: "relative",
-                      width: 60,
-                      height: (40 * sms[grade]) / max,
-                      background: gradeBackgroundColor(grade.toLowerCase())
-                    }}
-                  >
-                    <Percentage>{Math.round((100 * sms[grade]) / sum)}%</Percentage>
-                  </div>
-                );
-              })}
-            </BoulderFrequencyDistribution>
-          );
-        })
-        .get(<BoulderFrequencyDistribution />)}
-    </Bottom>
-  </Root>
-);
+    const gradeDistribution = new Map<string, number>();
+    grades().forEach(grade => {
+      app.data.activeBouldersCollection.ids.get([]).forEach(boulderId => {
+        const boulder = Avers.lookupContent<Boulder>(app.data.aversH, boulderId).get(undefined as any);
+        if (boulder && boulder.grade === grade && boulder.setter.some(x => x === accountId)) {
+          gradeDistribution.set(grade, (gradeDistribution.get(grade) || 0) + 1);
+        }
+      });
+    });
+    const max = Math.max(...gradeDistribution.values());
+    const sum = Array.from(gradeDistribution.values()).reduce((a, c) => a + c, 0)
+
+    return (
+      <Root>
+        <Top>
+          <Avatar
+            onClick={navigateToFn("/account/" + accountId)}
+            src={accountAvatar(app.data.aversH, accountId).get(placeholderImageSrc)}
+          />
+          <div>
+            <Name>{account && account.name !== "" ? account.name : accountId.slice(0, 5)}</Name>
+            <Tagline>Hat {sum} boulder an der wand</Tagline>
+          </div>
+        </Top>
+        <Bottom>
+          <BoulderFrequencyDistribution>
+            {grades().map(grade => {
+              return (
+                <div
+                  key={grade}
+                  style={{
+                    position: "relative",
+                    height: (40 * (gradeDistribution.get(grade) || 0)) / max,
+                    background: gradeBackgroundColor(grade.toLowerCase()),
+                    border: `1px solid ${gradeBorderColor(grade.toLowerCase())}`,
+                    margin: '0 2px'
+                  }}
+                >
+                  <Percentage>{gradeDistribution.get(grade) || 0}</Percentage>
+                </div>
+              );
+            })}
+          </BoulderFrequencyDistribution>
+        </Bottom>
+      </Root>
+    );
+  }
+}
 
 const placeholderImageSrc =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAAAAACoWZBhAAAAF0lEQVQI12P4BAI/QICBFCaYBPNJYQIAkUZftTbC4sIAAAAASUVORK5CYII=";
 
 const Root = styled.div`
-  margin: 40px 0;
+  background: white;
+  padding: 24px;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.16s;
+
+  &:hover {
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
+  }
 `;
 
 const Top = styled.div`
@@ -92,18 +104,20 @@ const Name = styled.div`
   color: ${text};
 `;
 
-/*
 const Tagline = styled.div`
   ${useTypeface(copy14)};
   color: #222222bb;
 `;
-*/
 
 const BoulderFrequencyDistribution = styled.div`
   display: flex;
   align-items: flex-end;
   height: 60px;
   margin-bottom: 20px;
+
+  & > div {
+    flex: 1;
+  }
 `;
 
 const Percentage = styled.div`
