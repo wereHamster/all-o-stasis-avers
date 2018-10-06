@@ -54,7 +54,9 @@ module.exports = {
       inject: true,
       template: "assets/index.html"
     }),
-    new Visualizer()
+    new Visualizer({
+      filename: "_stats.html"
+    })
   ],
 
   optimization: {
