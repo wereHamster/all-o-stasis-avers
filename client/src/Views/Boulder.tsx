@@ -91,7 +91,7 @@ function BoulderDetailsEditor({ app, boulderE }: { app: App; boulderE: Avers.Edi
 
       <Section>Set Date</Section>
       <DayPickerWrapper>
-        <DayPicker fixedWeeks selectedDays={[getSetDate()]} onDayClick={changeSetDate} />
+        <DayPicker fixedWeeks initialMonth={getSetDate()} selectedDays={[getSetDate()]} onDayClick={changeSetDate} />
       </DayPickerWrapper>
 
       <Section>Danger Zone</Section>
@@ -102,7 +102,12 @@ function BoulderDetailsEditor({ app, boulderE }: { app: App; boulderE: Avers.Edi
               <SectionLabel>The boulder was removed on</SectionLabel>
               <div>
                 <DayPickerWrapper>
-                  <DayPicker fixedWeeks selectedDays={[new Date(boulder.removed)]} onDayClick={changeRemovedDate} />
+                  <DayPicker
+                    fixedWeeks
+                    initialMonth={new Date(boulder.removed)}
+                    selectedDays={[new Date(boulder.removed)]}
+                    onDayClick={changeRemovedDate}
+                  />
                 </DayPickerWrapper>
                 <DangerButton onClick={clearRemoved}>Put back on wall</DangerButton>
               </div>
