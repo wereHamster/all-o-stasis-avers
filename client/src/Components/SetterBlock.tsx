@@ -7,7 +7,7 @@ import { App, navigateToFn } from "../app";
 import { Account, grades, Boulder } from "../storage";
 
 import { useTypeface, heading28, copy14 } from "../Materials/Typefaces";
-import { gradeBackgroundColor, text, gradeBorderColor } from "../Materials/Colors";
+import { gradeBackgroundColor, text } from "../Materials/Colors";
 
 export interface SetterCardProps {
   app: App;
@@ -53,7 +53,6 @@ export class SetterBlock extends React.Component<SetterCardProps> {
                     position: "relative",
                     height: (40 * (gradeDistribution.get(grade) || 0)) / max,
                     background: gradeBackgroundColor(grade.toLowerCase()),
-                    border: `1px solid ${gradeBorderColor(grade.toLowerCase())}`,
                     margin: '0 2px'
                   }}
                 >
@@ -114,6 +113,9 @@ const BoulderFrequencyDistribution = styled.div`
   align-items: flex-end;
   height: 60px;
   margin-bottom: 20px;
+  padding-bottom: 1px;
+
+  box-shadow: 0 1px 0 0 rgba(0,0,0,.2);
 
   & > div {
     flex: 1;

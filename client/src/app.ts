@@ -22,6 +22,8 @@ export class App {
 
     createBoulderPromise: void | Promise<string> = undefined
 
+    refreshId: undefined | number = undefined
+
     constructor(
         public containerElement: Element,
         public data: Data,
@@ -75,9 +77,12 @@ export class Data {
 
 export function
 refresh(app: App): void {
-    requestAnimationFrame(() => {
-        ReactDOM.render(React.createElement(app.viewComponent, { app }), app.containerElement)
-    })
+    if (app.refreshId === undefined) {
+        app.refreshId = requestAnimationFrame(() => {
+            app.refreshId = undefined;
+            ReactDOM.render(React.createElement(app.viewComponent, { app }), app.containerElement);
+        });
+    }
 }
 
 export function
