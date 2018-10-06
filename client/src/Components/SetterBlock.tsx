@@ -18,12 +18,12 @@ export class SetterBlock extends React.Component<SetterCardProps> {
   render() {
     const { app, accountId } = this.props;
 
-    const profile = Avers.staticValue(app.data.aversH, publicProfile(app.data.aversH, accountId)).get(undefined as any);
+    const profile = Avers.staticValue(app.data.aversH, publicProfile(app.data.aversH, accountId)).get(undefined);
 
     const gradeDistribution = new Map<string, number>();
     grades().forEach(grade => {
-      app.data.activeBouldersCollection.ids.get([]).forEach(boulderId => {
-        const boulder = Avers.lookupContent<Boulder>(app.data.aversH, boulderId).get(undefined as any);
+      app.data.activeBouldersCollection.ids.get<string[]>([]).forEach(boulderId => {
+        const boulder = Avers.lookupContent<Boulder>(app.data.aversH, boulderId).get(undefined);
         if (boulder && boulder.grade === grade && boulder.setter.some(x => x === accountId)) {
           gradeDistribution.set(grade, (gradeDistribution.get(grade) || 0) + 1);
         }

@@ -43,11 +43,12 @@ export default class extends React.Component<{ app: App }, State> {
     const { search, grades } = this.state;
 
     const editableBoulders = app.data.activeBouldersCollection.ids
-      .get([])
-      .map(boulderId => Avers.lookupEditable<Boulder>(app.data.aversH, boulderId).get(null as any))
-      .filter(x => x !== null)
+      .get<string[]>([])
+      .map(boulderId => Avers.lookupEditable<Boulder>(app.data.aversH, boulderId).get(null))
       .filter(x => {
-        if (search === "" && grades.length === 0) {
+        if (x === null) {
+          return false;
+        } else if (search === "" && grades.length === 0) {
           return true;
         } else {
           return grades.indexOf(x.content.grade) !== -1 && (search === "" || +search === x.content.gradeNr);
@@ -58,6 +59,10 @@ export default class extends React.Component<{ app: App }, State> {
     // headings in between two cards when the day they were created at changes.
     const res = editableBoulders.reduce(
       ({ boulders, date }, boulder) => {
+        if (!boulder) {
+          return { boulders, date };
+        }
+
         const objectId = boulder.objectId;
         const createdAt = new Date(boulder.content.setDate);
 

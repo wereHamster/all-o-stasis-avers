@@ -12,7 +12,7 @@ export default class extends React.Component<{ app: App }> {
     return (
       <Site app={app}>
         <Root>
-          {activeSetters(app).get([]).map(accountId => (
+          {activeSetters(app).get<string[]>([]).map(accountId => (
             <SetterBlock key={accountId} app={app} accountId={accountId} />
           ))}
         </Root>

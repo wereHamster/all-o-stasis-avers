@@ -24,7 +24,7 @@ ${
     <SetterCard
         app={app}
         accountId={setter1Id}
-        account={Avers.lookupContent<Account>(aversH, setter1Id).get(undefined as any)}
+        account={Avers.lookupContent<Account>(aversH, setter1Id).get(undefined)}
     />
 </ReactSpecimen>
 }
