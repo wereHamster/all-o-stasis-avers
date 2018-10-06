@@ -7,6 +7,7 @@ import {Account, Boulder} from './storage'
 import page from 'page'
 
 import configObject from './config'
+import Computation from 'computation';
 
 export class Config {
     apiHost!: string
@@ -100,3 +101,35 @@ export function
 navigateToFn(p: string) {
     return () => { navigateTo(p) }
 }
+
+export const activeSetters = (app: App): Computation<Array<{ accountId: string; account: Account }>> =>
+    Computation.liftA2(
+        app.data.activeBouldersCollection.ids,
+        app.data.adminAccountCollection.ids,
+        (activeBoulderIds, adminAccountsIds) => {
+          const accounts: Array<{ accountId: string; account: Account }> = [];
+
+          const activeSetterIds = new Set<string>();
+          activeBoulderIds.forEach(boulderId => {
+            Avers.lookupContent<Boulder>(app.data.aversH, boulderId)
+              .fmap(boulder => {
+                boulder.setter.forEach(setterId => {
+                  activeSetterIds.add(setterId);
+                });
+              })
+              .get(undefined);
+          });
+
+          adminAccountsIds.forEach(accountId => {
+            if (activeSetterIds.has(accountId)) {
+              Avers.lookupContent<Account>(app.data.aversH, accountId)
+                .fmap(account => {
+                  accounts.push({ accountId, account });
+                })
+                .get(undefined);
+            }
+          });
+
+          return accounts;
+        }
+      );
