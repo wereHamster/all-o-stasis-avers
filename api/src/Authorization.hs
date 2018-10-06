@@ -20,8 +20,8 @@ import           Storage.Objects.Account
 
 aosAuthorization :: Avers.Server.Authorizations
 aosAuthorization = Avers.Server.Authorizations
-    { createObjectAuthz = \cred objId ->
-        [ sufficient $ return (objId == "account")
+    { createObjectAuthz = \cred objType ->
+        [ sufficient $ return (objType == "account")
         , sufficient $ do
             session <- case cred of
                 CredAnonymous -> throwError NotAuthorized
@@ -31,11 +31,8 @@ aosAuthorization = Avers.Server.Authorizations
             return $ isSet || isAdm
         , pure RejectR
         ]
-    , lookupObjectAuthz = \_ _ -> [pure AllowR] -- we need to allow CredAnonymous to lookup Account objects
-{--
     , lookupObjectAuthz = \cred objId ->
-        [ pure AllowR
-        , sufficient $ do
+        [ sufficient $ do
             objectIsBoulder objId
         , sufficient $ do
             session <- case cred of
@@ -45,7 +42,6 @@ aosAuthorization = Avers.Server.Authorizations
             isAdm <- sessionIsAdmin session
             return $ hasCreated || isAdm
         ]
---}
     , patchObjectAuthz = \cred objId ops ->
         [ do
             obj <- lookupObject objId
@@ -81,13 +77,11 @@ aosAuthorization = Avers.Server.Authorizations
     , lookupBlobContentAuthz = \_ _ -> [pure AllowR]
     }
 
-{-
 -- | True if the object is a boulder
 objectIsBoulder :: ObjId -> Avers Bool
 objectIsBoulder objId = do
     obj <- lookupObject objId
     return ((objectType obj) == "boulder")
--}
 
 -- | True if the session is an admin.
 sessionIsAdmin :: Session -> Avers Bool
