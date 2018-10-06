@@ -3,7 +3,7 @@ import * as React from 'react'
 import styled from 'styled-components'
 
 import {Account} from '../../../storage'
-import {App} from '../../../app'
+import {App, activeSetters} from '../../../app'
 import {accountAvatar} from '../../Account'
 
 import {text, lightGrey} from '../../../Materials/Colors'
@@ -21,7 +21,7 @@ export interface SetterSelectorProps {
 }
 
 export const SetterSelector = ({app, selectedSetters, clear, toggle}: SetterSelectorProps) => {
-    const setters = app.data.adminAccountCollection.ids.get([]).map(accountId => {
+    const setters = activeSetters(app).get([]).map(({accountId}) => {
         return Avers.lookupContent<Account>(app.data.aversH, accountId).fmap(account => (
             <Setter
                 key={accountId}
