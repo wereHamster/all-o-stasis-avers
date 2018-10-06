@@ -12,8 +12,8 @@ export default class extends React.Component<{ app: App }> {
     return (
       <Site app={app}>
         <Root>
-          {activeSetters(app).get([]).map(({ accountId, account }) => (
-            <SetterBlock key={accountId} app={app} accountId={accountId} account={account} />
+          {activeSetters(app).get([]).map(accountId => (
+            <SetterBlock key={accountId} app={app} accountId={accountId} />
           ))}
         </Root>
       </Site>

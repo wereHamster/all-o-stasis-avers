@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 import { accountAvatar } from "../Views/Account";
 import { App, navigateToFn } from "../app";
-import { Account, grades, Boulder } from "../storage";
+import { grades, Boulder, publicProfile } from "../storage";
 
 import { useTypeface, heading28, copy14 } from "../Materials/Typefaces";
 import { gradeBackgroundColor, text } from "../Materials/Colors";
@@ -12,12 +12,13 @@ import { gradeBackgroundColor, text } from "../Materials/Colors";
 export interface SetterCardProps {
   app: App;
   accountId: string;
-  account: undefined | Account;
 }
 
 export class SetterBlock extends React.Component<SetterCardProps> {
   render() {
-    const { app, accountId, account } = this.props;
+    const { app, accountId } = this.props;
+
+    const profile = Avers.staticValue(app.data.aversH, publicProfile(app.data.aversH, accountId)).get(undefined as any);
 
     const gradeDistribution = new Map<string, number>();
     grades().forEach(grade => {
@@ -39,7 +40,7 @@ export class SetterBlock extends React.Component<SetterCardProps> {
             src={accountAvatar(app.data.aversH, accountId).get(placeholderImageSrc)}
           />
           <div>
-            <Name>{account && account.name !== "" ? account.name : accountId.slice(0, 5)}</Name>
+            <Name>{profile && profile.name !== "" ? profile.name : accountId.slice(0, 5)}</Name>
             <Tagline>Hat {sum} boulder an der wand</Tagline>
           </div>
         </Top>
