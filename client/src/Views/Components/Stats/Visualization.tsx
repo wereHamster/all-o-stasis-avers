@@ -1,8 +1,9 @@
 import * as React from "react";
 import Measure from "react-measure";
 import { Motion, spring } from "react-motion";
+import styled from "styled-components";
 
-import { scaleTime, scaleLinear, scaleOrdinal } from "d3-scale";
+import { scaleTime, scaleLinear, scaleOrdinal, ScaleLinear } from "d3-scale";
 import { stack, area, line, curveLinear } from "d3-shape";
 import { select } from "d3-selection";
 import { axisBottom } from "d3-axis";
@@ -10,6 +11,7 @@ import { axisBottom } from "d3-axis";
 import { BoulderStat, grades } from "../../../storage";
 
 import { yellow100, green100, orange100, blue100, red100 } from "../../../Materials/Colors";
+import { useTypeface, copy14, copy14Bold } from "../../../Materials/Typefaces";
 
 const curve = curveLinear;
 
@@ -42,6 +44,13 @@ const VisualizationRenderer = ({ bssC, sectors, selectedSetters, bounds }) => {
   if (!bounds.height) {
     return <div />;
   }
+
+  const padding = {
+    top: 8,
+    left: 16,
+    right: 60,
+    bottom: 50
+  };
 
   const events = bssC.get([]);
 
@@ -88,8 +97,8 @@ const VisualizationRenderer = ({ bssC, sectors, selectedSetters, bounds }) => {
       .filter(x => x.date !== undefined);
   })();
 
-  const xScale = scaleTime().range([0, bounds.width]);
-  const yScale = scaleLinear().range([bounds.height - 40, 0]);
+  const xScale = scaleTime().range([0, bounds.width - padding.left - padding.right]);
+  const yScale = scaleLinear().range([bounds.height - padding.top - padding.bottom, 0]);
   const colorScale = scaleOrdinal([yellow100, green100, orange100, blue100, red100, "#FFFFFF"]);
 
   const skeys = grades();
@@ -99,28 +108,61 @@ const VisualizationRenderer = ({ bssC, sectors, selectedSetters, bounds }) => {
 
   colorScale.domain(skeys);
 
-  const areaGenerator = area()
+  const areaGenerator = area<any>()
     .curve(curve)
     .x(d => xScale(d.data.date))
     .y0(d => yScale(d[0]))
     .y1(d => yScale(d[1]));
 
+  const lineGenerator = line<any>()
+    .curve(curve)
+    .x(d => xScale(d.data.date))
+    .y(d => yScale(d[1]));
+
   const data = s(values);
 
+  const last = (xs: any[]) => xs[xs.length - 1]
+
   xScale.domain([new Date(Date.now() - 4 * 30 * 24 * 60 * 60 * 1000), new Date(Date.now())]);
-  yScale.domain([0, 300]);
+  yScale.domain([0, Math.ceil(last(last(data))[1] * 1.2)]);
+
+  data.forEach(d => {
+    last(d).data.date = new Date(Date.now());
+  })
 
   return (
     <svg width={bounds.width} height={bounds.height} style={{ display: "block" }}>
-      <g transform={`translate(0,0)`}>
+      <g transform={`translate(${padding.left},${padding.top})`}>
         {data.map((d, i) => (
           <Area key={i} index={i} colorScale={colorScale} data={d} a={areaGenerator} />
+        ))}
+        {data.map((d, i) => (
+          <path key={i} fill="none" stroke={colorScale(d as any)} strokeWidth={2} d={lineGenerator(d) || undefined} />
         ))}
 
         <TotalLine xScale={xScale} yScale={yScale} data={data} />
 
+        {data.map((d, i) => (
+          <g key={i}>
+            {d.map((v, j) => (
+              <circle
+                key={j}
+                r={2.5}
+                cx={xScale(v.data.date)}
+                cy={yScale(v[1])}
+                strokeWidth={2}
+                stroke={i === data.length - 1 ? "#222222" : colorScale(d as any)}
+                fill={"#F6F6F6"}
+              />
+            ))}
+          </g>
+        ))}
+
+        <GridLines width={bounds.width - padding.left - padding.right} yScale={yScale} />
+        <GridLabels width={bounds.width - padding.left - padding.right} yScale={yScale} />
+
         <g
-          transform={`translate(0,${bounds.height - 20})`}
+          transform={`translate(0,${bounds.height - padding.bottom + 10})`}
           ref={el => {
             if (el) {
               select(el).call(axisBottom(xScale));
@@ -153,12 +195,12 @@ const Area = ({ index, colorScale, data, a }) => {
     <Motion defaultStyle={defaultStyle} style={style}>
       {interpolatingStyle => {
         const dt = data.map((d, i) => {
-          const x: any = [interpolatingStyle[`v0_${i}`], interpolatingStyle[`v1_${i}`]];
+          const x: any = [defaultStyle[`v0_${i}`], defaultStyle[`v1_${i}`]];
           x.data = d.data;
           return x;
         });
 
-        return <path fill={colorScale(grades()[index])} d={a(dt)} />;
+        return <path fill={colorScale(grades()[index])} fillOpacity={0.15} d={a(dt)} />;
       }}
     </Motion>
   );
@@ -188,10 +230,93 @@ const TotalLine = ({ xScale, yScale, data }) => {
   return (
     <Motion defaultStyle={defaultStyle} style={style}>
       {interpolatingStyle => {
-        const dt = total.map((d, i) => [d.data.date, interpolatingStyle[`v${i}`]]);
+        const dt = total.map((d, i) => [d.data.date, defaultStyle[`v${i}`]]);
 
-        return <path fill="none" stroke="#222222" strokeWidth={2} d={lineGenerator(dt)} />;
+        return <path fill="none" stroke="#222222" strokeWidth={2} d={lineGenerator(dt) || undefined} />;
       }}
     </Motion>
   );
 };
+
+interface GridProps {
+  width: number;
+  yScale: ScaleLinear<number, number>;
+}
+
+class GridLines extends React.PureComponent<GridProps> {
+  render() {
+    const { width, yScale } = this.props;
+    const ticks = yScale.ticks(5);
+
+    return (
+      <g data-n="grid-lines">
+        {ticks.map((tick, i) => Math.round(tick) === tick && (
+          <g data-n="grid-line" transform={`translate(0, ${yScale(tick)})`} key={i}>
+            <line
+              x1={0}
+              x2={width}
+              strokeWidth={tick === 0 ? 2 : 1}
+              stroke={tick === 0 ? "#666" : "#666"}
+              strokeOpacity={tick === 0 ? 1 : 0.2}
+            />
+          </g>
+        ))}
+      </g>
+    );
+  }
+}
+
+class GridLabels extends React.PureComponent<GridProps> {
+  render() {
+    const { width, yScale } = this.props;
+    const ticks = yScale.ticks(5);
+
+    return (
+      <g data-n="grid-labels">
+        {ticks.map((tick, i) => {
+          if (Math.round(tick) !== tick) {
+            return null;
+          }
+
+          const text = "" + tick;
+
+          return (
+            <g data-n="grid-label" transform={`translate(${width}, ${yScale(tick)})`} key={i}>
+              {React.createElement(
+                tick === 0 ? ZeroGridLabel : GridLabel,
+                {
+                  dy: -4,
+                  dx: -5,
+                  textAnchor: "end",
+                  fill: "none",
+                  stroke: "#F6F6F6",
+                  strokeWidth: 3
+                },
+                text
+              )}
+              {React.createElement(
+                tick === 0 ? ZeroGridLabel : GridLabel,
+                {
+                  dy: -4,
+                  dx: -5,
+                  textAnchor: "end"
+                },
+                text
+              )}
+            </g>
+          );
+        })}
+      </g>
+    );
+  }
+}
+
+const GridLabel = styled.text`
+  ${useTypeface(copy14)};
+  fill: #666;
+`;
+
+const ZeroGridLabel = styled.text`
+  ${useTypeface(copy14Bold)};
+  fill: #666;
+`;

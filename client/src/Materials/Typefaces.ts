@@ -77,3 +77,11 @@ export const copy14: Typeface = {
     fontWeight: 'normal',
     lineHeight: '1.6',
 }
+
+
+export const copy14Bold: Typeface = {
+    fontFamily: copyFontFamily,
+    fontSize: '14px',
+    fontWeight: 'bold',
+    lineHeight: '1.6',
+}
