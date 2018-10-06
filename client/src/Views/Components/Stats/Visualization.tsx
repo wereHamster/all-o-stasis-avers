@@ -193,7 +193,7 @@ const Area = ({ index, colorScale, data, a }) => {
 
   return (
     <Motion defaultStyle={defaultStyle} style={style}>
-      {interpolatingStyle => {
+      {() => {
         const dt = data.map((d, i) => {
           const x: any = [defaultStyle[`v0_${i}`], defaultStyle[`v1_${i}`]];
           x.data = d.data;
@@ -229,7 +229,7 @@ const TotalLine = ({ xScale, yScale, data }) => {
 
   return (
     <Motion defaultStyle={defaultStyle} style={style}>
-      {interpolatingStyle => {
+      {() => {
         const dt = total.map((d, i) => [d.data.date, defaultStyle[`v${i}`]]);
 
         return <path fill="none" stroke="#222222" strokeWidth={2} d={lineGenerator(dt) || undefined} />;
