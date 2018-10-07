@@ -69,18 +69,6 @@ module.exports = {
           chunks: "initial",
           minChunks: 3
         },
-        vega: {
-          test: /vega/,
-          name: "vega",
-          chunks: "async",
-          minChunks: 1
-        },
-        catalog: {
-          test: /node_modules/,
-          name: "catalog",
-          chunks: "async",
-          minChunks: 2
-        }
       }
     }
   },
