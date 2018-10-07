@@ -14,4 +14,4 @@
 [[headers]]
   for = "*.js"
   [headers.values]
-    Cache-Control = "immutable"
+    Cache-Control = "public, max-age=365000000, immutable"
