@@ -4,12 +4,11 @@ import * as React from "react";
 import styled from "styled-components";
 
 import { role, resetBoulderCollections } from "../actions";
-import { App, navigateToFn } from "../app";
+import { App } from "../app";
 import { Account, Boulder } from "../storage";
-import { accountAvatar } from "./Account";
 
-import { text, darkGrey, lightGrey, primary } from "../Materials/Colors";
-import { useTypeface, copy16, copy16Bold, copy14 } from "../Materials/Typefaces";
+import { text, darkGrey, primary, secondary, darkSecondary } from "../Materials/Colors";
+import { useTypeface, copy16Bold, copy14 } from "../Materials/Typefaces";
 
 import { NumberInput } from "./Components/NumberInput";
 import { Site } from "./Components/Site";
@@ -17,6 +16,7 @@ import { BoulderDetails } from "./Components/BoulderDetails";
 import { BoulderId } from "./Components/BoulderId";
 import { SectorPicker } from "./Components/SectorPicker";
 import { Button } from "../Components/Button";
+import { BoulderSetterCard } from "./Components/BoulderSetterCard";
 
 function BoulderDetailsEditor({ app, boulderE }: { app: App; boulderE: Avers.Editable<Boulder> }) {
   const boulder = boulderE.content;
@@ -66,6 +66,14 @@ function BoulderDetailsEditor({ app, boulderE }: { app: App; boulderE: Avers.Edi
         </div>
       </div>
 
+      <Section>Setters</Section>
+      <div>
+        {boulder.setter.map((setterId, index) => (
+          <BoulderSetterCard key={index} app={app} setterId={setterId} onClick={removeSetter} />
+        ))}
+        <AddSetter app={app} addSetter={addSetter} />
+      </div>
+
       <Section>Grade</Section>
       <div>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -79,14 +87,6 @@ function BoulderDetailsEditor({ app, boulderE }: { app: App; boulderE: Avers.Edi
         <div style={{ marginTop: 12 }}>
           <NumberInput object={boulder} field="gradeNr" />
         </div>
-      </div>
-
-      <Section>Setters</Section>
-      <div style={{ display: "flex" }}>
-        {boulder.setter.map((setterId, index) => (
-          <Setter key={index} app={app} setterId={setterId} onClick={removeSetter} />
-        ))}
-        <AddSetter app={app} addSetter={addSetter} />
       </div>
 
       <Section>Set Date</Section>
@@ -138,25 +138,11 @@ export default (boulderId: string) => ({ app }: { app: App }) => {
       return (
         <Site app={app}>
           <div className="boulder">
-            <div style={{ padding: "40px 20px 20px" }}>
-              <Back onClick={navigateToFn("/")} style={{ display: "flex", alignItems: "center" }}>
-                <BackIcon viewBox="0 0 50 40" height="14">
-                  <path
-                    d="M20 4L4 20L20 36M4 20L46 20"
-                    fill="transparent"
-                    stroke="currentColor"
-                    strokeWidth="5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </BackIcon>
-
-                <BackText>Back to all boulders</BackText>
-              </Back>
-            </div>
-            <div style={{ display: "flex", padding: 24 }}>
+            <div style={{ margin: 24 }}>
               <BoulderId grade={boulderE.content.grade}>{boulderE.content.gradeNr}</BoulderId>
-              <div style={{ paddingLeft: 24 }}>{boulderRep}</div>
+            </div>
+            <div style={{ margin: 24, display: "flex" }}>
+              <div style={{ width: "400px", flex: "0 1 400px" }}>{boulderRep}</div>
             </div>
           </div>
         </Site>
@@ -202,46 +188,13 @@ const Cross = () => (
 
 // ----------------------------------------------------------------------------
 
-const Setter = ({ app, setterId, onClick }) => {
-  return Avers.lookupContent<Account>(app.data.aversH, setterId)
-    .fmap(account => (
-      <SetterContainer
-        onClick={() => {
-          onClick(setterId);
-        }}
-      >
-        <SetterImage src={accountAvatar(app.data.aversH, setterId).get("")} />
-        <SetterName>{account.name !== "" ? account.name : setterId.slice(0, 2)}</SetterName>
-      </SetterContainer>
-    ))
-    .get(<div>{setterId}</div>);
-};
-
-const SetterContainer = styled.div`
-  margin-right: 8px;
-  cursor: pointer;
-`;
-
-const SetterImage = styled.img`
-  display: block;
-  width: 60px;
-  height: 60px;
-`;
-
-const SetterName = styled.div`
-${useTypeface(copy16)}
-color: ${text};
-text-align: center;
-`;
-
-// ----------------------------------------------------------------------------
-
 class AddSetter extends React.Component<any, any> {
   state = {
     isOpen: false
   };
 
-  open = () => {
+  open = ev => {
+    ev.preventDefault();
     this.setState({ isOpen: true });
   };
   close = () => {
@@ -255,9 +208,9 @@ class AddSetter extends React.Component<any, any> {
   render() {
     return (
       <AddSetterContainer>
-        <svg width="60" height="60" onClick={this.open}>
-          <path d="M10 30 h40 M30 10 v40" />
-        </svg>
+        <a href="#" onClick={this.open}>
+          Add setter
+        </a>
         {this.state.isOpen && <SetterPicker app={this.props.app} dismiss={this.close} addSetter={this.addSetter} />}
       </AddSetterContainer>
     );
@@ -265,18 +218,18 @@ class AddSetter extends React.Component<any, any> {
 }
 
 const AddSetterContainer = styled.div`
-  width: 60px;
-  height: 60px;
+  ${useTypeface(copy14)};
   cursor: pointer;
 
-  & svg path {
-    stroke: ${lightGrey};
-    stroke-width: 6;
-    stroke-linecap: round;
-    transition: fill 0.12s;
+  & a {
+    color: ${secondary};
+    text-decoration: none;
+    transition: all .16s;
   }
-  &:hover svg path {
-    stroke: ${text};
+
+  & a:hover {
+    color: ${darkSecondary};
+    text-decoration: underline;
   }
 `;
 
@@ -302,14 +255,15 @@ class SetterPicker extends React.Component<any> {
       const accountC = Avers.lookupContent<Account>(app.data.aversH, accountId);
       return accountC
         .fmap(() => (
-          <Setter
-            key={index}
-            app={app}
-            setterId={accountId}
-            onClick={() => {
-              addSetter(accountId);
-            }}
-          />
+          <div key={index} style={{ marginRight: 8 }}>
+            <BoulderSetterCard
+              app={app}
+              setterId={accountId}
+              onClick={() => {
+                addSetter(accountId);
+              }}
+            />
+          </div>
         ))
         .get(<div />);
     });
@@ -363,28 +317,6 @@ padding: 0 0 4px;
 const DangerButton = styled(Button)``;
 
 // ----------------------------------------------------------------------------
-
-const Back = styled.div`
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-
-  color: ${darkGrey};
-  transition: color 0.12s;
-
-  &:hover {
-    color: ${text};
-  }
-`;
-
-const BackIcon = styled.svg`
-  display: block;
-  margin-right: 8px;
-`;
-
-const BackText = styled.div`
-  ${useTypeface(copy16)} line-height: 1;
-`;
 
 const DayPickerWrapper = styled.div`
   & .DayPicker {
