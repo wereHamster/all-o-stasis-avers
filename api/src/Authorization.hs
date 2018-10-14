@@ -16,6 +16,7 @@ import           Prelude
 
 import           Queries
 import           Storage.Objects.Account
+import           Storage.Objects.Boulder
 
 
 aosAuthorization :: Avers.Server.Authorizations
@@ -59,7 +60,28 @@ aosAuthorization = Avers.Server.Authorizations
                     if not (any isRestrictedOperation ops)
                         then pure ContinueR
                         else pure RejectR
+
+                "boulder" -> do
+                    -- Allow only when the user is in the setters list of the boulder.
+                    session <- case cred of
+                        CredAnonymous -> throwError NotAuthorized
+                        CredSessionId sId -> lookupSession sId
+                    let sessionId = sessionObjId session
+
+                    -- User who created the boulder can always edit it, even if he or she
+                    -- is no longer one of the setters.
+                    hasCreated <- sessionCreatedObject session objId
+
+                    -- If the user is setter then allow.
+                    boulder <- objectContent (BaseObjectId objId)
+                    let isSet = sessionId `elem` boulderSetter boulder
+
+                    if hasCreated || isSet
+                        then pure ContinueR
+                        else pure RejectR
+
                 _ -> pure ContinueR
+
         , sufficient $ do
             session <- case cred of
                 CredAnonymous -> throwError NotAuthorized
