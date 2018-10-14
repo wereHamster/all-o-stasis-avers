@@ -37,7 +37,7 @@ const HomeItem = () => (
 
 const TeamItem = () => (
   <Item isActive={window.location.pathname === "/team"} onClick={navigateToFn("/team")}>
-    Setters
+    Team
   </Item>
 );
 
