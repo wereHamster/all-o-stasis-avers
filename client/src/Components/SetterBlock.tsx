@@ -37,7 +37,7 @@ export class SetterBlock extends React.Component<SetterCardProps> {
         <Top>
           <Avatar
             onClick={navigateToFn("/account/" + accountId)}
-            src={accountAvatar(app.data.aversH, accountId).get(placeholderImageSrc)}
+            src={accountAvatar(app.data.aversH, accountId)}
           />
           <div>
             <Name>{profile && profile.name !== "" ? profile.name : accountId.slice(0, 5)}</Name>
@@ -67,9 +67,6 @@ export class SetterBlock extends React.Component<SetterCardProps> {
     );
   }
 }
-
-const placeholderImageSrc =
-  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAAAAACoWZBhAAAAF0lEQVQI12P4BAI/QICBFCaYBPNJYQIAkUZftTbC4sIAAAAASUVORK5CYII=";
 
 const Root = styled.div`
   background: white;

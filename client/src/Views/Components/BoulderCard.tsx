@@ -39,9 +39,8 @@ export class BoulderCard extends React.Component<BoulderCardProps> {
     }
 }
 
-const placeholderImageSrc = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAAAAACoWZBhAAAAF0lEQVQI12P4BAI/QICBFCaYBPNJYQIAkUZftTbC4sIAAAAASUVORK5CYII='
 const BoulderCardSetter = ({app, setterId}: {app: App, setterId: string}) => (
-    <Setter src={accountAvatar(app.data.aversH, setterId).get(placeholderImageSrc)} />
+    <Setter src={accountAvatar(app.data.aversH, setterId)} />
 )
 
 

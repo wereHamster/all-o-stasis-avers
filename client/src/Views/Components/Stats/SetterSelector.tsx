@@ -49,10 +49,9 @@ export const SetterSelector = ({app, selectedSetters, clear, toggle}: SetterSele
     )
 }
 
-const placeholderImageSrc = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAAAAACoWZBhAAAAF0lEQVQI12P4BAI/QICBFCaYBPNJYQIAkUZftTbC4sIAAAAASUVORK5CYII='
 const Setter = ({app, accountId, account, toggle, isSelected}) => (
     <SetterC onClick={() => toggle(accountId)}>
-        <SetterImage isSelected={isSelected} src={accountAvatar(app.data.aversH, accountId).get(placeholderImageSrc)} />
+        <SetterImage isSelected={isSelected} src={accountAvatar(app.data.aversH, accountId)} />
         <SetterName isSelected={isSelected}>{(account && account.name !== '') ? account.name : accountId.slice(0, 7)}</SetterName>
     </SetterC>
 )

@@ -14,13 +14,11 @@ export interface SetterCardProps {
 export const SetterCard = ({app, accountId, account}: SetterCardProps) => (
     <Setter>
         <div onClick={navigateToFn('/account/' + accountId)}>
-            <img src={accountAvatar(app.data.aversH, accountId).get(placeholderImageSrc)}/>
+            <img src={accountAvatar(app.data.aversH, accountId)}/>
             <div>{(account && account.name !== '') ? account.name : accountId.slice(0, 2)}</div>
         </div>
     </Setter>
 )
-
-const placeholderImageSrc = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAAAAACoWZBhAAAAF0lEQVQI12P4BAI/QICBFCaYBPNJYQIAkUZftTbC4sIAAAAASUVORK5CYII='
 
 const Setter = styled.div`
     display: flex;

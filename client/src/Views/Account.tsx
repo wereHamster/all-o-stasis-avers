@@ -1,7 +1,6 @@
 import * as Avers from "avers";
 import * as React from "react";
 import styled from "styled-components";
-import Computation from "computation";
 
 import { role } from "../actions";
 import { App } from "../app";
@@ -13,9 +12,14 @@ import { DropDownInput } from "./Components/DropdownInput";
 import { Site } from "./Components/Site";
 import { Input } from "../Components/Input";
 
-export const accountAvatar = (aversH: Avers.Handle, accountId: string): Computation<string> => {
-  return Avers.staticValue(aversH, publicProfile(aversH, accountId)).fmap(({ avatar }) => avatar)
-}
+export const accountAvatar = (aversH: Avers.Handle, accountId: string): string => {
+  const placeholderImageSrc =
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAAAAACoWZBhAAAAF0lEQVQI12P4BAI/QICBFCaYBPNJYQIAkUZftTbC4sIAAAAASUVORK5CYII=";
+
+  return Avers.staticValue(aversH, publicProfile(aversH, accountId))
+    .fmap(({ avatar }) => avatar)
+    .get(placeholderImageSrc);
+};
 
 // only admins can edit all accounts with the exception of users
 // changing their own accounts
@@ -23,7 +27,11 @@ export default (accountId: string) => ({ app }: { app: App }) => {
   return Avers.lookupEditable<Account>(app.data.aversH, accountId)
     .fmap(accountE => {
       const canEdit = role(app) === "admin" || accountId === app.data.session.objId;
-      return <Site app={app}>{canEdit ? <AccountView app={app} accountE={accountE} /> : accountRep(app.data.aversH, accountE)}</Site>;
+      return (
+        <Site app={app}>
+          {canEdit ? <AccountView app={app} accountE={accountE} /> : accountRep(app.data.aversH, accountE)}
+        </Site>
+      );
     })
     .get(<Site app={app} />);
 };
@@ -34,7 +42,7 @@ export default (accountId: string) => ({ app }: { app: App }) => {
 function accountRep(aversH: Avers.Handle, account: Avers.Editable<Account>): JSX.Element {
   return (
     <Avatar>
-      <img src={accountAvatar(aversH, account.objectId).get("")} />
+      <img src={accountAvatar(aversH, account.objectId)} />
       <Name>{account.content.name}</Name>
       <p className="about">{account.content.role}</p>
     </Avatar>
@@ -60,13 +68,13 @@ export class AccountView extends React.Component<AccountViewProps, {}> {
   }
 }
 
-class Header extends React.Component<{ app: App, accountE: Avers.Editable<Account> }> {
+class Header extends React.Component<{ app: App; accountE: Avers.Editable<Account> }> {
   render() {
     const { app, accountE } = this.props;
 
     return (
       <Avatar>
-        <img src={accountAvatar(app.data.aversH, accountE.objectId).get("")} />
+        <img src={accountAvatar(app.data.aversH, accountE.objectId)} />
         <Name>{accountE.content.name}</Name>
       </Avatar>
     );
@@ -108,9 +116,7 @@ class Editor extends React.Component<{ app: App; accountE: Avers.Editable<Accoun
           {role(app) === "admin" && (
             <Field>
               <FieldLabel>Role</FieldLabel>
-              <FieldDescription>
-                …
-              </FieldDescription>
+              <FieldDescription>…</FieldDescription>
               <div className="content">
                 <DropDownInput object={account} field="role" options={roles} />
               </div>

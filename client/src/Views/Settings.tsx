@@ -11,37 +11,30 @@ import { Site } from "./Components/Site";
 import { Input } from "../Components/Input";
 import { accountAvatar } from "./Account";
 
-export default ({ app }: { app: App }) => {
-  const accountId = app.data.session.objId;
-  if (accountId) {
-    return Avers.lookupEditable<Account>(app.data.aversH, accountId)
-      .fmap(accountE => (
-        <Site app={app}>
-          <Settings app={app} accountE={accountE} />
-        </Site>
-      ))
-      .get(<Site app={app} />);
-  } else {
-    return <Site app={app} />;
-  }
-};
+export default ({ app }: { app: App }) => (
+  <Site app={app}>
+    <Settings app={app} accountId={app.data.session.objId} />
+  </Site>
+);
 
-// Render all fields as editables.
 export interface SettingsProps {
   app: App;
-  accountE: Avers.Editable<Account>;
+  accountId: undefined | string;
 }
 
-export class Settings extends React.Component<SettingsProps, {}> {
+export class Settings extends React.Component<SettingsProps> {
   render() {
-    const { app, accountE } = this.props;
+    const { app, accountId } = this.props;
+    const accountE = Avers.lookupEditable<Account>(app.data.aversH, accountId || "").get(undefined);
 
-    return (
-      <Root>
-        <Header app={app} accountE={accountE} />
-        <Editor app={app} accountE={accountE} />
-      </Root>
-    );
+    if (accountE) {
+      return (
+        <Root>
+          <Header app={app} accountE={accountE} />
+          <Editor app={app} accountE={accountE} />
+        </Root>
+      );
+    }
   }
 }
 
@@ -51,7 +44,7 @@ class Header extends React.Component<{ app: App; accountE: Avers.Editable<Accoun
 
     return (
       <Avatar>
-        <img src={accountAvatar(app.data.aversH, accountE.objectId).get("")} />
+        <img src={accountAvatar(app.data.aversH, accountE.objectId)} />
         <Name>{accountE.content.name}</Name>
       </Avatar>
     );
