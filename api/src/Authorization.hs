@@ -43,7 +43,12 @@ aosAuthorization = Avers.Server.Authorizations
             return $ hasCreated || isAdm
         ]
     , patchObjectAuthz = \cred objId ops ->
-        [ do
+        [ sufficient $ do
+            session <- case cred of
+                CredAnonymous -> throwError NotAuthorized
+                CredSessionId sId -> lookupSession sId
+            sessionIsAdmin session
+        , do
             obj <- lookupObject objId
             case objectType obj of
                 "account" -> do
@@ -53,14 +58,7 @@ aosAuthorization = Avers.Server.Authorizations
                     let isRestrictedOperation = \op -> case op of Set{..} -> opPath == "role"; _ -> False
                     if not (any isRestrictedOperation ops)
                         then pure ContinueR
-                        else do
-                            session <- case cred of
-                                CredAnonymous -> throwError NotAuthorized
-                                CredSessionId sId -> lookupSession sId
-                            isAdmin <- sessionIsAdmin session
-                            if isAdmin
-                                then pure AllowR
-                                else pure RejectR
+                        else pure RejectR
                 _ -> pure ContinueR
         , sufficient $ do
             session <- case cred of
