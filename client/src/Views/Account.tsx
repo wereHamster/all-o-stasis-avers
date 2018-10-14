@@ -112,7 +112,7 @@ class Editor extends React.Component<{ app: App; accountE: Avers.Editable<Accoun
                 …
               </FieldDescription>
               <div className="content">
-                <DropDownInput object={account} field="role" options={roles()} />
+                <DropDownInput object={account} field="role" options={roles} />
               </div>
             </Field>
           )}

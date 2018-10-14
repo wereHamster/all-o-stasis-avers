@@ -21,7 +21,7 @@ export class SetterBlock extends React.Component<SetterCardProps> {
     const profile = Avers.staticValue(app.data.aversH, publicProfile(app.data.aversH, accountId)).get(undefined);
 
     const gradeDistribution = new Map<string, number>();
-    grades().forEach(grade => {
+    grades.forEach(grade => {
       app.data.activeBouldersCollection.ids.get<string[]>([]).forEach(boulderId => {
         const boulder = Avers.lookupContent<Boulder>(app.data.aversH, boulderId).get(undefined);
         if (boulder && boulder.grade === grade && boulder.setter.some(x => x === accountId)) {
@@ -46,7 +46,7 @@ export class SetterBlock extends React.Component<SetterCardProps> {
         </Top>
         <Bottom>
           <BoulderFrequencyDistribution>
-            {grades().map(grade => {
+            {grades.map(grade => {
               return (
                 <div
                   key={grade}

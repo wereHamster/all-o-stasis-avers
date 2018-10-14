@@ -40,7 +40,7 @@ interface SectorState {
 class Sector extends React.Component<SectorProps, SectorState> {
     constructor(props) {
         super(props)
-        this.state = {sectorName: sectors()[0]}
+        this.state = {sectorName: sectors[0]}
     }
 
     removeAllBoulders = () => {
@@ -69,7 +69,7 @@ class Sector extends React.Component<SectorProps, SectorState> {
                 </SectorView>
 
                 <SectorView>
-                <SectorHeader sectorNames={sectors()} numBoulders={boulders.length} sectorName={this.state.sectorName} onChange={this.onChange} removeAllBoulders={this.removeAllSectorBoulders} />
+                <SectorHeader sectorNames={sectors} numBoulders={boulders.length} sectorName={this.state.sectorName} onChange={this.onChange} removeAllBoulders={this.removeAllSectorBoulders} />
                 <Stats>
                     <GradeBalance boulders={boulders} height={300} width={300} />
                 </Stats>

@@ -43,11 +43,11 @@ export class GradeBalance extends React.Component<GradeBalanceProps, {}> {
 
     prepareData() {
         const data: {values: Array<{grade: string, count: number}>} = { values: [] }
-        grades().forEach( gradeName => {
+        grades.forEach( gradeName => {
             data.values.push({grade: gradeName, count: 0})
         })
         this.props.boulders.map( boulder => {
-            data.values[grades().indexOf(boulder.content.grade)].count++
+            data.values[grades.indexOf(boulder.content.grade)].count++
         })
         return data
     }

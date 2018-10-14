@@ -83,7 +83,7 @@ const VisualizationRenderer = ({ bssC, sectors, selectedSetters, bounds }) => {
       {
         values: [] as any,
         date: undefined as any,
-        acc: grades().reduce((o, grade) => ({ ...o, [grade]: 0 }), {})
+        acc: grades.reduce((o, grade) => ({ ...o, [grade]: 0 }), {})
       }
     );
 
@@ -101,7 +101,7 @@ const VisualizationRenderer = ({ bssC, sectors, selectedSetters, bounds }) => {
   const yScale = scaleLinear().range([bounds.height - padding.top - padding.bottom, 0]);
   const colorScale = scaleOrdinal([yellow100, green100, orange100, blue100, red100, "#FFFFFF"]);
 
-  const skeys = grades();
+  const skeys = grades;
   const s = stack()
     .keys(skeys)
     .value((d, key) => d[key] || 0);
@@ -200,7 +200,7 @@ const Area = ({ index, colorScale, data, a }) => {
           return x;
         });
 
-        return <path fill={colorScale(grades()[index])} fillOpacity={0.15} d={a(dt)} />;
+        return <path fill={colorScale(grades[index])} fillOpacity={0.15} d={a(dt)} />;
       }}
     </Motion>
   );

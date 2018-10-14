@@ -1,109 +1,112 @@
-import * as Avers from 'avers'
+import * as Avers from "avers";
 
-export class Account
-    { login  !: string
-      role   !: string
-      email  !: string
-      name   !: string
-    }
-Avers.definePrimitive(Account, 'login', '')
-Avers.definePrimitive(Account, 'role',  'user')
-Avers.definePrimitive(Account, 'email', '')
-Avers.definePrimitive(Account, 'name',  '')
+export class Account {
+  login!: string;
+  role!: string;
+  email!: string;
+  name!: string;
+}
+Avers.definePrimitive(Account, "login", "");
+Avers.definePrimitive(Account, "role", "user");
+Avers.definePrimitive(Account, "email", "");
+Avers.definePrimitive(Account, "name", "");
 
-
-export class Boulder
-    { setter     !: string[]
-      sector     !: string
-      grade      !: string
-      gradeNr    !: number
-      setDate    !: number
-      removed    !: number
-      name       !: string
-    }
-
-Avers.definePrimitive(Boulder, 'setter',   [])
-Avers.definePrimitive(Boulder, 'sector',   'spektrumone')
-Avers.definePrimitive(Boulder, 'grade',    'yellow')
-Avers.definePrimitive(Boulder, 'gradeNr',  0)
-Avers.definePrimitive(Boulder, 'setDate',  0)
-Avers.definePrimitive(Boulder, 'removed',  0)
-Avers.definePrimitive(Boulder, 'name',     '')
-
-export function
-roles(): string[] {
-    return ['user', 'setter', 'admin']
+export class Boulder {
+  setter!: string[];
+  sector!: string;
+  grade!: string;
+  gradeNr!: number;
+  setDate!: number;
+  removed!: number;
+  name!: string;
 }
 
-export function
-grades(): string[] {
-    return ['yellow', 'green', 'orange', 'blue', 'red', 'white']
-}
+Avers.definePrimitive(Boulder, "setter", []);
+Avers.definePrimitive(Boulder, "sector", "spektrumone");
+Avers.definePrimitive(Boulder, "grade", "yellow");
+Avers.definePrimitive(Boulder, "gradeNr", 0);
+Avers.definePrimitive(Boulder, "setDate", 0);
+Avers.definePrimitive(Boulder, "removed", 0);
+Avers.definePrimitive(Boulder, "name", "");
 
-export function
-sectors(): string[] {
-    return ['starship', 'bigboss', 'dune', 'klagemauer', 'kurswand',
-         'spektrumone', 'spektrumtwo', 'spektrumthree', 'spektrumfour']
-}
+export const roles: string[] = ["user", "setter", "admin"];
+export const grades: string[] = ["yellow", "green", "orange", "blue", "red", "white"];
+export const sectors = [
+  "starship",
+  "bigboss",
+  "dune",
+  "klagemauer",
+  "kurswand",
+  "spektrumone",
+  "spektrumtwo",
+  "spektrumthree",
+  "spektrumfour"
+];
 
 // FIXME
-export function
-prettyPrintSector(sectorName: string): string {
-    return sectorName
-        .replace(/one/i, ' 1')
-        .replace(/two/i, ' 2')
-        .replace(/three/i, ' 3')
-        .replace(/four/i, ' 4')
+export function prettyPrintSector(sectorName: string): string {
+  return sectorName
+    .replace(/one/i, " 1")
+    .replace(/two/i, " 2")
+    .replace(/three/i, " 3")
+    .replace(/four/i, " 4");
 }
-
 
 export interface SetterMonthlyStats {
-    Yellow?: number
-    Green?: number
-    Orange?: number
-    Blue?: number
-    Red?: number
-    White?: number
+  Yellow?: number;
+  Green?: number;
+  Orange?: number;
+  Blue?: number;
+  Red?: number;
+  White?: number;
 }
 
-const aosNS = Symbol('all-o-stasis')
-export const setterMonthlyStats = (aversH: Avers.Handle, setterId: string, year: number, month: number): Avers.Static<SetterMonthlyStats> => {
-    const fetch = () => aversH.config.fetch(`${aversH.config.apiHost}/stats/${setterId}/${year}/${month}`).then(res => res.json())
-    return new Avers.Static<SetterMonthlyStats>(aosNS, `${setterId}-${year}-${month}`, fetch)
-}
+const aosNS = Symbol("all-o-stasis");
+export const setterMonthlyStats = (
+  aversH: Avers.Handle,
+  setterId: string,
+  year: number,
+  month: number
+): Avers.Static<SetterMonthlyStats> => {
+  const fetch = () =>
+    aversH.config.fetch(`${aversH.config.apiHost}/stats/${setterId}/${year}/${month}`).then(res => res.json());
+  return new Avers.Static<SetterMonthlyStats>(aosNS, `${setterId}-${year}-${month}`, fetch);
+};
 
 export interface BoulderStat {
-    setOn: Date
-    removedOn: void | Date
-    setters: string[]
-    sector: string
-    grade: string
+  setOn: Date;
+  removedOn: void | Date;
+  setters: string[];
+  sector: string;
+  grade: string;
 }
 
 export const parseBoulderStat = (json: any): BoulderStat => ({
-    ...json,
-    setOn: new Date(Date.parse(json.setOn)),
-    removedOn: json.removedOn ? new Date(Date.parse(json.removedOn)) : undefined,
-})
+  ...json,
+  setOn: new Date(Date.parse(json.setOn)),
+  removedOn: json.removedOn ? new Date(Date.parse(json.removedOn)) : undefined
+});
 
 export const boulderStats = (aversH: Avers.Handle): Avers.Static<BoulderStat[]> => {
-    const fetch = () => aversH.config.fetch(`${aversH.config.apiHost}/stats/boulders`)
-        .then(res => res.json())
-        .then(bss => bss.map(parseBoulderStat))
+  const fetch = () =>
+    aversH.config
+      .fetch(`${aversH.config.apiHost}/stats/boulders`)
+      .then(res => res.json())
+      .then(bss => bss.map(parseBoulderStat));
 
-    return new Avers.Static<BoulderStat[]>(aosNS, `boulderStats`, fetch)
-}
+  return new Avers.Static<BoulderStat[]>(aosNS, `boulderStats`, fetch);
+};
 
 export interface PublicProfile {
-    name: string;
-    avatar: string;
+  name: string;
+  avatar: string;
 }
 
 export const publicProfile = (aversH: Avers.Handle, accountId: string): Avers.Static<PublicProfile> => {
-    const fetch = async () => {
-        const res = await aversH.config.fetch(`${aversH.config.apiHost}/public-profile/${accountId}`);
-        return res.json();
-    };
+  const fetch = async () => {
+    const res = await aversH.config.fetch(`${aversH.config.apiHost}/public-profile/${accountId}`);
+    return res.json();
+  };
 
-    return new Avers.Static<PublicProfile>(aosNS, `publicProfile/${accountId}`, fetch)
-}
+  return new Avers.Static<PublicProfile>(aosNS, `publicProfile/${accountId}`, fetch);
+};

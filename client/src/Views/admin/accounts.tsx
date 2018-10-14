@@ -25,7 +25,7 @@ export default ({ app }: { app: App }) => (
                 <tr key={accountId}>
                   <td>{accountE.content.email}</td>
                   <td>
-                    <DropDownInput object={accountE.content} field="role" options={roles()} />
+                    <DropDownInput object={accountE.content} field="role" options={roles} />
                   </td>
                 </tr>
               ))
