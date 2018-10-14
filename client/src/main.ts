@@ -105,6 +105,11 @@ function setupRoutes(app: App) {
     loadView(app, m.default);
   });
 
+  page("/admin/accounts", async () => {
+    const m = await import(/* webpackChunkName: "admin/accounts" */ "./Views/admin/accounts");
+    loadView(app, m.default);
+  });
+
   page("/_catalog", async () => {
     const m = await import(/* webpackChunkName: "catalog" */ "./Views/Catalog");
     loadView(app, m.default);
