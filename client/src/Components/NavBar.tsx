@@ -67,10 +67,10 @@ const CreateBoulder = ({ app }: { app: App }) => (
   </Item>
 );
 
-const AccountSettings = ({ app }: { app: App }) => (
-  <Item onClick={navigateToFn("/account/" + app.data.session.objId)}>
+const AccountSettings = ({  }: { app: App }) => (
+  <Item onClick={navigateToFn("/settings")}>
     <i className="settings icon" />
-    Account Settings
+    Settings
   </Item>
 );
 

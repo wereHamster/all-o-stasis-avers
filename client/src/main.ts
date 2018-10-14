@@ -100,6 +100,11 @@ function setupRoutes(app: App) {
     loadView(app, m.default);
   });
 
+  page("/settings", async () => {
+    const m = await import(/* webpackChunkName: "settings" */ "./Views/Settings");
+    loadView(app, m.default);
+  });
+
   page("/_catalog", async () => {
     const m = await import(/* webpackChunkName: "catalog" */ "./Views/Catalog");
     loadView(app, m.default);
