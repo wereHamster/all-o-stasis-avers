@@ -49,7 +49,9 @@ function BoulderDetailsEditor({ app, boulderE }: { app: App; boulderE: Avers.Edi
   }
 
   function removeSetter(accountId) {
-    boulder.setter = boulder.setter.filter(x => x !== accountId);
+    if (confirm(`Are you sure you want to remove the setter?`)) {
+      boulder.setter = boulder.setter.filter(x => x !== accountId);
+    }
   }
 
   return (
