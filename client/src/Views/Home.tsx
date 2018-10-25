@@ -75,7 +75,7 @@ export default class extends React.Component<{ app: App }, State> {
       ) {
         lastGroup.boulders.push(boulder);
       } else {
-        lastGroup.boulders.sort((a, b) => gradeCompare(a.content.grade, b.content.grade))
+        lastGroup.boulders.sort((a, b) => gradeCompare(a.content.grade, b.content.grade));
         groups.push({ date: createdAt, boulders: [boulder] });
       }
     });
@@ -118,16 +118,14 @@ export default class extends React.Component<{ app: App }, State> {
         </BoulderFilter>
 
         <Boulders>
-          {groups.map(({ date, boulders }) => {
-            return (
-              <React.Fragment key={date.toISOString()}>
-                <BoulderSeparator key={`separator-${date.toISOString()}`}>{format(date, "dd. MMMM")}</BoulderSeparator>,
-                {boulders.map(boulder => (
-                  <BoulderCard key={boulder.objectId} app={app} boulderE={boulder} />
-                ))}
-              </React.Fragment>
-            );
-          })}
+          {groups.map(({ date, boulders }) => (
+            <React.Fragment key={date.toISOString()}>
+              <BoulderSeparator key={`separator-${date.toISOString()}`}>{format(date, "dd. MMMM")}</BoulderSeparator>
+              {boulders.map(boulder => (
+                <BoulderCard key={boulder.objectId} app={app} boulderE={boulder} />
+              ))}
+            </React.Fragment>
+          ))}
         </Boulders>
       </Site>
     );
