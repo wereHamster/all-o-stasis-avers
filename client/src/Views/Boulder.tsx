@@ -139,13 +139,9 @@ export default (boulderId: string) => ({ app }: { app: App }) => {
 
       return (
         <Site app={app}>
-          <div className="boulder">
-            <div style={{ margin: 24 }}>
-              <BoulderId grade={boulderE.content.grade}>{boulderE.content.gradeNr}</BoulderId>
-            </div>
-            <div style={{ margin: 24, display: "flex" }}>
-              <div style={{ width: "400px", flex: "0 1 400px" }}>{boulderRep}</div>
-            </div>
+          <Header app={app} boulder={boulderE.content} />
+          <div style={{ margin: 24, display: "flex" }}>
+            <div style={{ width: "400px", flex: "0 1 400px" }}>{boulderRep}</div>
           </div>
         </Site>
       );
@@ -156,6 +152,18 @@ export default (boulderId: string) => ({ app }: { app: App }) => {
       </Site>
     );
 };
+
+class Header extends React.Component<{ app: App; boulder: Boulder }> {
+  render() {
+    const { boulder } = this.props;
+
+    return (
+      <div style={{ margin: 24, display: "flex" }}>
+        <BoulderId grade={boulder.grade}>{boulder.gradeNr}</BoulderId>
+      </div>
+    );
+  }
+}
 
 // ----------------------------------------------------------------------------
 
@@ -226,7 +234,7 @@ const AddSetterContainer = styled.div`
   & a {
     color: ${secondary};
     text-decoration: none;
-    transition: all .16s;
+    transition: all 0.16s;
   }
 
   & a:hover {
