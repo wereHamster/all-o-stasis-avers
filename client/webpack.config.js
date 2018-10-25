@@ -9,6 +9,10 @@ module.exports = {
     main: ["./src/main.ts"]
   },
 
+  node: {
+    fs: "empty"
+  },
+
   output: {
     publicPath: "/",
     path: __dirname + "/dist",
