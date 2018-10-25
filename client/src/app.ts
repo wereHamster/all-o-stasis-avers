@@ -12,10 +12,12 @@ import Computation from "computation";
 export class Config {
   apiHost!: string;
   secure!: boolean;
+  adminEmail!: string;
 }
 
 Avers.definePrimitive(Config, "apiHost", "localhost:8000");
 Avers.definePrimitive(Config, "secure", false);
+Avers.definePrimitive(Config, "adminEmail", "admin@boulder.app");
 
 export const config = Avers.mk<Config>(Config, configObject);
 

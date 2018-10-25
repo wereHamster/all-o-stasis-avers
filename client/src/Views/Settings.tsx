@@ -2,7 +2,7 @@ import * as Avers from "avers";
 import * as React from "react";
 import styled from "styled-components";
 
-import { App } from "../app";
+import { App, config } from "../app";
 import { Account } from "../storage";
 
 import * as C from "../Materials/Colors";
@@ -113,9 +113,6 @@ class Editor extends React.Component<{ app: App; accountE: Avers.Editable<Accoun
 }
 
 const requestPermissionsHref = (account: Account) => {
-  // TODO: Make the email address configurable.
-  const email = "admin@boulder.app";
-
   const subject = `Please make me a setter`;
   const body = `Hi admin,\n\nI'm ${
     account.email
@@ -123,7 +120,7 @@ const requestPermissionsHref = (account: Account) => {
     window.location.origin
   }/admin/accounts and give me the 'setter' role.\n\nThank you.`;
 
-  return `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  return `mailto:${config.adminEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 };
 
 // ----------------------------------------------------------------------------

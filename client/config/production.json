@@ -1,4 +1,5 @@
 {
   "apiHost": "api.iff.io",
-  "secure": true
+  "secure": true,
+  "adminEmail": "admin@boulder.app"
 }
