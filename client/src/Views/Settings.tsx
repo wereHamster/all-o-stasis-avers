@@ -100,8 +100,8 @@ class Editor extends React.Component<{ app: App; accountE: Avers.Editable<Accoun
               Your role is: <span style={{ color: C.darkPrimary }}>{account.role}</span>.
               {account.role !== "setter" && (
                 <p>
-                  If you are setter and would like to get permissions to manage your own boulders please contact the{" "}
-                  <a href={requestPermissionsHref(account)}>admin</a>.
+                  If you are setter and would like to get permissions to manage your own boulders please send{" "}
+                  <a href={requestPermissionsHref(account)}>this email</a> to the admins.
                 </p>
               )}
             </FieldDescription>
@@ -114,13 +114,17 @@ class Editor extends React.Component<{ app: App; accountE: Avers.Editable<Accoun
 
 const requestPermissionsHref = (account: Account) => {
   // TODO: Make the email address configurable.
-  const email = 'admin@boulder.app';
+  const email = "admin@boulder.app";
 
-  const subject = `Please make me a setter`
-  const body = `Hi admin,\n\nI'm ${account.email} and am requesting permissions to manage my own boulders.\nPlease head over to ${window.location.origin}/admin/accounts and give me the 'setter' role.\n\nThank you.`;
+  const subject = `Please make me a setter`;
+  const body = `Hi admin,\n\nI'm ${
+    account.email
+  } and am requesting permissions to manage my own boulders.\nPlease head over to ${
+    window.location.origin
+  }/admin/accounts and give me the 'setter' role.\n\nThank you.`;
 
   return `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-}
+};
 
 // ----------------------------------------------------------------------------
 
