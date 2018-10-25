@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { App } from "../app";
 import { Account } from "../storage";
 
+import * as C from "../Materials/Colors";
 import { useTypeface, heading18 } from "../Materials/Typefaces";
 
 import { Site } from "./Components/Site";
@@ -68,11 +69,19 @@ class Editor extends React.Component<{ app: App; accountE: Avers.Editable<Accoun
       <div>
         <Form>
           <Field>
+            <FieldLabel>Email</FieldLabel>
+            <FieldDescription>The email address can not be changed at this time. If you'd like to change it please contact the admins.</FieldDescription>
+            <FieldContent>
+              <span style={{ color: C.darkPrimary }}>{account.email}</span>
+            </FieldContent>
+          </Field>
+
+          <Field>
             <FieldLabel>Your Name</FieldLabel>
             <FieldDescription>
               Please enter your full name, or a display name you are comfortable with.
             </FieldDescription>
-            <div className="content">
+            <FieldContent>
               <Input
                 className="wide"
                 type="text"
@@ -80,7 +89,7 @@ class Editor extends React.Component<{ app: App; accountE: Avers.Editable<Accoun
                 onChange={this.changeAccountName}
                 onClick={onClick}
               />
-            </div>
+            </FieldContent>
           </Field>
         </Form>
       </div>
@@ -139,3 +148,5 @@ const FieldDescription = styled.div`
   line-height: 1.5;
   margin: 0px 0px 14px;
 `;
+
+const FieldContent = styled.div``;
