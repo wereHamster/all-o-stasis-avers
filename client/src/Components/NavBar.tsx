@@ -22,7 +22,6 @@ export const NavBar = ({ app }: { app: App }) => (
 
     <FlexItem />
 
-    {role(app) !== "user" && <CreateBoulder app={app} />}
     {app.data.session.objId ? <AccountSettings app={app} /> : <SignInItem />}
   </Root>
 );
@@ -60,13 +59,6 @@ const SignInItem = () => (
   </Item>
 );
 
-const CreateBoulder = ({ app }: { app: App }) => (
-  <Item onClick={createNewBoulder(app)}>
-    <i className="plus square outlined icon" />
-    Boulder
-  </Item>
-);
-
 const AccountSettings = ({  }: { app: App }) => (
   <Item onClick={navigateToFn("/settings")}>
     <i className="settings icon" />
@@ -90,13 +82,6 @@ function doSignOutF(app: App) {
     }
 }
 */
-
-function createNewBoulder(app: App) {
-  return e => {
-    e.stopPropagation();
-    createBoulder(app);
-  };
-}
 
 const Root = styled.div`
   display: flex;
