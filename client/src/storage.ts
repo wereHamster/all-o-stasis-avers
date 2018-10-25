@@ -43,6 +43,8 @@ export const sectors = [
   "spektrumfour"
 ];
 
+export const gradeCompare = (a: string, b: string) => grades.indexOf(a) - grades.indexOf(b);
+
 // FIXME
 export function prettyPrintSector(sectorName: string): string {
   return sectorName

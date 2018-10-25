@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { format } from "date-fns";
 
 import { App } from "../app";
-import { Boulder } from "../storage";
+import { Boulder, gradeCompare } from "../storage";
 
 import { text } from "../Materials/Colors";
 import { useTypeface, copy16Bold } from "../Materials/Typefaces";
@@ -57,42 +57,28 @@ export default class extends React.Component<{ app: App }, State> {
         }
       });
 
-    // Go through the list, render each boulder with <BoulderCard> and insert
-    // headings in between two cards when the day they were created at changes.
-    const res = editableBoulders.reduce(
-      ({ boulders, date }, boulder) => {
-        if (!boulder) {
-          return { boulders, date };
-        }
+    const groups = [] as Array<{ date: Date; boulders: Array<Avers.Editable<Boulder>> }>;
 
-        const objectId = boulder.objectId;
-        const createdAt = new Date(boulder.content.setDate);
+    editableBoulders.forEach(boulder => {
+      if (!boulder) {
+        return;
+      }
 
-        if (date === null) {
-          return {
-            boulders: boulders.concat([
-              <BoulderSeparator key={`separator-${createdAt}`}>{format(createdAt, "dd. MMMM")}</BoulderSeparator>,
-              <BoulderCard key={objectId} app={app} boulderE={boulder} />
-            ]),
-            date: createdAt
-          };
-        } else if (date.getMonth() === createdAt.getMonth() && date.getDate() === createdAt.getDate()) {
-          return {
-            boulders: boulders.concat([<BoulderCard key={objectId} app={app} boulderE={boulder} />]),
-            date: createdAt
-          };
-        } else {
-          return {
-            boulders: boulders.concat([
-              <BoulderSeparator key={`separator-${createdAt}`}>{format(createdAt, "dd. MMMM")}</BoulderSeparator>,
-              <BoulderCard key={objectId} app={app} boulderE={boulder} />
-            ]),
-            date: createdAt
-          };
-        }
-      },
-      { boulders: [] as JSX.Element[], date: null as null | Date }
-    );
+      const createdAt = new Date(boulder.content.setDate);
+      const lastGroup = groups[groups.length - 1];
+
+      if (lastGroup === undefined) {
+        groups.push({ date: createdAt, boulders: [boulder] });
+      } else if (
+        lastGroup.date.getMonth() === createdAt.getMonth() &&
+        lastGroup.date.getDate() === createdAt.getDate()
+      ) {
+        lastGroup.boulders.push(boulder);
+      } else {
+        lastGroup.boulders.sort((a, b) => gradeCompare(a.content.grade, b.content.grade))
+        groups.push({ date: createdAt, boulders: [boulder] });
+      }
+    });
 
     return (
       <Site app={app}>
@@ -131,7 +117,18 @@ export default class extends React.Component<{ app: App }, State> {
           </div>
         </BoulderFilter>
 
-        <Boulders>{res.boulders}</Boulders>
+        <Boulders>
+          {groups.map(({ date, boulders }) => {
+            return (
+              <React.Fragment key={date.toISOString()}>
+                <BoulderSeparator key={`separator-${date.toISOString()}`}>{format(date, "dd. MMMM")}</BoulderSeparator>,
+                {boulders.map(boulder => (
+                  <BoulderCard key={boulder.objectId} app={app} boulderE={boulder} />
+                ))}
+              </React.Fragment>
+            );
+          })}
+        </Boulders>
       </Site>
     );
   }
