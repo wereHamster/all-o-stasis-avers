@@ -69,17 +69,27 @@ const Card: any = styled.div`
         width: calc(100% / 2);
     }
 
-    @media (min-width: 720px) {
+    @media (min-width: 560px) {
         padding: 16px 24px;
         width: calc(100% / 3);
     }
 
-    @media (min-width: 960px) {
+    @media (min-width: 720px) {
+        padding: 16px 24px;
         width: calc(100% / 4);
     }
 
-    @media (min-width: 1200px) {
+    @media (min-width: 960px) {
+        padding: 24px;
         width: calc(100% / 5);
+    }
+
+    @media (min-width: 1080px) {
+        width: calc(100% / 6);
+    }
+
+    @media (min-width: 1200px) {
+        width: calc(100% / 7);
     }
 `
 

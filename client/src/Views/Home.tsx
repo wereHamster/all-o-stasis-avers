@@ -13,6 +13,8 @@ import { BoulderCard } from "./Components/BoulderCard";
 import { Site } from "./Components/Site";
 import { BoulderId24 } from "./Components/BoulderId";
 import { Input } from "../Components/Input";
+import { Button } from "../Components/Button";
+import { createBoulder } from "../actions";
 
 interface State {
   search: string;
@@ -25,7 +27,7 @@ export default class extends React.Component<{ app: App }, State> {
     grades: []
   };
 
-  chaneSearch = (ev): void => {
+  changeSearch = (ev): void => {
     this.setState({ search: ev.target.value });
   };
 
@@ -95,20 +97,40 @@ export default class extends React.Component<{ app: App }, State> {
     return (
       <Site app={app}>
         <BoulderFilter>
-          <BoulderFilterHeader>Filters</BoulderFilterHeader>
-          <div style={{ display: "flex", marginRight: 20 }}>
-            <BoulderGradeToggleButton grade="yellow" grades={grades} onToggle={this.toggleGrade} />
-            <BoulderGradeToggleButton grade="green" grades={grades} onToggle={this.toggleGrade} />
-            <BoulderGradeToggleButton grade="orange" grades={grades} onToggle={this.toggleGrade} />
-            <BoulderGradeToggleButton grade="blue" grades={grades} onToggle={this.toggleGrade} />
-            <BoulderGradeToggleButton grade="red" grades={grades} onToggle={this.toggleGrade} />
-            <BoulderGradeToggleButton grade="white" grades={grades} onToggle={this.toggleGrade} />
+          <div style={{ marginRight: 32 }}>
+            <BoulderFilterHeader>Filter</BoulderFilterHeader>
+            <div style={{ display: "flex" }}>
+              <BoulderGradeToggleButton grade="yellow" grades={grades} onToggle={this.toggleGrade} />
+              <BoulderGradeToggleButton grade="green" grades={grades} onToggle={this.toggleGrade} />
+              <BoulderGradeToggleButton grade="orange" grades={grades} onToggle={this.toggleGrade} />
+              <BoulderGradeToggleButton grade="blue" grades={grades} onToggle={this.toggleGrade} />
+              <BoulderGradeToggleButton grade="red" grades={grades} onToggle={this.toggleGrade} />
+              <BoulderGradeToggleButton grade="white" grades={grades} onToggle={this.toggleGrade} />
+            </div>
           </div>
 
-          <div style={{ width: 200, maxWidth: 200 }}>
-            <Input placeholder="Grade Nr." value={search} onChange={this.chaneSearch} />
+          <div style={{ marginRight: 32 }}>
+            <BoulderFilterHeader>Search</BoulderFilterHeader>
+            <div style={{ width: 200, maxWidth: 200 }}>
+              <Input placeholder="Grade Nr." value={search} onChange={this.changeSearch} />
+            </div>
+          </div>
+
+          <div style={{ marginRight: 32 }}>
+            <BoulderFilterHeader>Actions</BoulderFilterHeader>
+            <div>
+              <Button
+                onClick={e => {
+                  e.stopPropagation();
+                  createBoulder(app);
+                }}
+              >
+                Create new boulder
+              </Button>
+            </div>
           </div>
         </BoulderFilter>
+
         <Boulders>{res.boulders}</Boulders>
       </Site>
     );
@@ -128,7 +150,7 @@ const BoulderGradeToggleButton = ({ grade, grades, onToggle }) => (
 // ----------------------------------------------------------------------------
 const BoulderFilter = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   padding: 20px 16px 12px;
   @media (min-width: 600px) {
     padding: 20px 24px 20px;
@@ -141,8 +163,8 @@ const BoulderFilterHeader = styled.div`
 `;
 
 const BoulderGradeToggle = styled.div`
-  margin-right: 4px;
   cursor: pointer;
+  margin: 8px 4px 8px 0;
 `;
 
 const Boulders = styled.div`

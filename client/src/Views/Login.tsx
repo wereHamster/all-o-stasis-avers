@@ -149,9 +149,11 @@ export const Form = ({ email, onChangeEmail, doLogin, isSubmitting }) => (
     <H1>Authenticate</H1>
     <P>To sign up or log in, fill in your email address below:</P>
     <Input type="text" placeholder="you@domain.com" value={email} onChange={onChangeEmail} disabled={isSubmitting} />
-    <Button onClick={doLogin} disabled={isSubmitting || email.length === 0}>
-      LOGIN
-    </Button>
+    <div style={{ marginTop: 12 }}>
+      <Button onClick={doLogin} disabled={isSubmitting || email.length === 0}>
+        LOGIN
+      </Button>
+    </div>
   </form>
 );
 

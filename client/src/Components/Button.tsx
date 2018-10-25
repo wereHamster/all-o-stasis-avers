@@ -14,7 +14,7 @@ export const Button = styled.button`
   outline: none;
 
   height: 40px;
-  margin-top: 10px;
+  padding: 0 12px;
 
   transition: all 0.16s;
 

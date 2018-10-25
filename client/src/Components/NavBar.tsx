@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useTypeface, copy14 } from "../Materials/Typefaces";
 import { text } from "../Materials/Colors";
 
-import { createBoulder, role } from "../actions";
+import { role } from "../actions";
 import { App, navigateToFn } from "../app";
 
 import logo from "!!file-loader!../../assets/logo.svg";
