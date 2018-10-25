@@ -69,8 +69,10 @@ class Editor extends React.Component<{ app: App; accountE: Avers.Editable<Accoun
       <div>
         <Form>
           <Field>
-            <FieldLabel>Email</FieldLabel>
-            <FieldDescription>The email address can not be changed at this time. If you'd like to change it please contact the admins.</FieldDescription>
+            <FieldLabel>Your Email</FieldLabel>
+            <FieldDescription>
+              The email address can not be changed at this time. If you'd like to change it please contact the admins.
+            </FieldDescription>
             <FieldContent>
               <span style={{ color: C.darkPrimary }}>{account.email}</span>
             </FieldContent>
@@ -91,10 +93,33 @@ class Editor extends React.Component<{ app: App; accountE: Avers.Editable<Accoun
               />
             </FieldContent>
           </Field>
+
+          <Field>
+            <FieldLabel>Permissions</FieldLabel>
+            <FieldDescription>
+              Your role is: <span style={{ color: C.darkPrimary }}>{account.role}</span>.
+              {account.role !== "setter" && (
+                <p>
+                  If you are setter and would like to get permissions to manage your own boulders please contact the{" "}
+                  <a href={requestPermissionsHref(account)}>admin</a>.
+                </p>
+              )}
+            </FieldDescription>
+          </Field>
         </Form>
       </div>
     );
   }
+}
+
+const requestPermissionsHref = (account: Account) => {
+  // TODO: Make the email address configurable.
+  const email = 'admin@boulder.app';
+
+  const subject = `Please make me a setter`
+  const body = `Hi admin,\n\nI'm ${account.email} and am requesting permissions to manage my own boulders.\nPlease head over to ${window.location.origin}/admin/accounts and give me the 'setter' role.\n\nThank you.`;
+
+  return `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 
 // ----------------------------------------------------------------------------
@@ -146,7 +171,16 @@ const FieldDescription = styled.div`
   font-size: 12px;
   font-weight: 400;
   line-height: 1.5;
-  margin: 0px 0px 14px;
+
+  a {
+    color: ${C.darkPrimary};
+  }
+
+  & > *:last-child {
+    margin-bottom: 0;
+  }
 `;
 
-const FieldContent = styled.div``;
+const FieldContent = styled.div`
+  margin: 14px 0px 0px;
+`;
