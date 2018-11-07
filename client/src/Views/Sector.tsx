@@ -53,17 +53,18 @@ class Sector extends React.Component<SectorProps, SectorState> {
     render() {
         const boulders = sectorBoulders(this.props.app, this.state.sectorName)
         const actBoulders = activeBoulders(this.props.app)
+        const user_role = role(this.props.app)
         return (
             <Views>
                 <SectorView>
-                <TotalHeader numBoulders={actBoulders.length} removeAllBoulders={this.removeAllBoulders} />
+                <TotalHeader user_role={user_role} numBoulders={actBoulders.length} removeAllBoulders={this.removeAllBoulders} />
                 <Stats>
                     <GradeBalance boulders={actBoulders} height={300} width={300} />
                 </Stats>
                 </SectorView>
 
                 <SectorView>
-                <SectorHeader sectorNames={sectors} numBoulders={boulders.length} sectorName={this.state.sectorName} onChange={this.onChange} removeAllBoulders={this.removeAllSectorBoulders} />
+                <SectorHeader user_role={user_role} sectorNames={sectors} numBoulders={boulders.length} sectorName={this.state.sectorName} onChange={this.onChange} removeAllBoulders={this.removeAllSectorBoulders} />
                 <Stats>
                     <GradeBalance boulders={boulders} height={300} width={300} />
                 </Stats>
@@ -93,10 +94,10 @@ interface SectorHeaderProps {
     removeAllBoulders(): void
 }
 
-const TotalHeader = ({numBoulders, removeAllBoulders}: TotalHeaderProps) => (
+const TotalHeader = ({user_role, numBoulders, removeAllBoulders}: TotalHeaderProps) => (
     <Header>
         <Name>Total ({numBoulders})</Name>
-        {role(app) != "user" && (
+        {user_role != "user" && (
             <Actions>
                 <div className='form'>
                     <div className='form-row'>
@@ -110,7 +111,7 @@ const TotalHeader = ({numBoulders, removeAllBoulders}: TotalHeaderProps) => (
     </Header>
 )
 
-const SectorHeader = ({sectorNames, numBoulders, sectorName, onChange, removeAllBoulders}: SectorHeaderProps) => (
+const SectorHeader = ({user_role, sectorNames, numBoulders, sectorName, onChange, removeAllBoulders}: SectorHeaderProps) => (
     <Header>
         <Name>{prettyPrintSector(sectorName)} ({numBoulders})</Name>
         <Actions>
@@ -124,7 +125,7 @@ const SectorHeader = ({sectorNames, numBoulders, sectorName, onChange, removeAll
                         </select>
                     </div>
                 </div>
-                {role(app) != "user" && (
+                {user_role != "user" && (
                     <div className='form-row'>
                         <div className='label'>
                             <div className='button' onClick={removeAllBoulders}>remove all</div>
