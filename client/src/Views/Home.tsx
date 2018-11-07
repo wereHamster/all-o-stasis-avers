@@ -14,7 +14,7 @@ import { Site } from "./Components/Site";
 import { BoulderId24 } from "./Components/BoulderId";
 import { Input } from "../Components/Input";
 import { Button } from "../Components/Button";
-import { createBoulder } from "../actions";
+import { createBoulder, role } from "../actions";
 
 interface State {
   search: string;
