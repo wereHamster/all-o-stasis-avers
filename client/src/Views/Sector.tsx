@@ -80,12 +80,14 @@ class Sector extends React.Component<SectorProps, SectorState> {
 // SectorHeader
 
 interface TotalHeaderProps {
+    user_role: string
     numBoulders: number
 
     removeAllBoulders(): void
 }
 
 interface SectorHeaderProps {
+    user_role: string
     sectorNames: string[]
     numBoulders: number
     sectorName: string
