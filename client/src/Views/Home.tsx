@@ -102,19 +102,21 @@ export default class extends React.Component<{ app: App }, State> {
             </div>
           </div>
 
-          <div style={{ marginRight: 32 }}>
-            <BoulderFilterHeader>Actions</BoulderFilterHeader>
-            <div>
-              <Button
-                onClick={e => {
-                  e.stopPropagation();
-                  createBoulder(app);
-                }}
-              >
-                Create new boulder
-              </Button>
-            </div>
-          </div>
+        {role(app) != "user" && (
+              <div style={{ marginRight: 32, display: 'block' }}>
+                <BoulderFilterHeader>Actions</BoulderFilterHeader>
+                <div>
+                  <Button
+                    onClick={e => {
+                      e.stopPropagation();
+                      createBoulder(app);
+                    }}
+                  >
+                    Create new boulder
+                  </Button>
+                </div>
+              </div>
+            )}
         </BoulderFilter>
 
         <Boulders>
