@@ -12,17 +12,11 @@ import {Site} from './Components/Site'
 
 export default function
 sectorView({ app }: { app: App }) {
-    if (role(app) === 'user') {
-        return (
-            <Site app={app} />
-        )
-    } else {
-        return (
-            <Site app={app}>
-                <Sector app={app} />
-            </Site>
-        )
-    }
+    return (
+        <Site app={app}>
+            <Sector app={app} />
+        </Site>
+    )
 }
 
 
@@ -102,15 +96,17 @@ interface SectorHeaderProps {
 const TotalHeader = ({numBoulders, removeAllBoulders}: TotalHeaderProps) => (
     <Header>
         <Name>Total ({numBoulders})</Name>
-        <Actions>
-            <div className='form'>
-                <div className='form-row'>
-                    <div className='label'>
-                        <div className='button' onClick={removeAllBoulders}>remove all</div>
+        {role(app) != "user" && (
+            <Actions>
+                <div className='form'>
+                    <div className='form-row'>
+                        <div className='label'>
+                            <div className='button' onClick={removeAllBoulders}>remove all</div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </Actions>
+            </Actions>
+        )}
     </Header>
 )
 
@@ -128,11 +124,13 @@ const SectorHeader = ({sectorNames, numBoulders, sectorName, onChange, removeAll
                         </select>
                     </div>
                 </div>
-                <div className='form-row'>
-                    <div className='label'>
-                        <div className='button' onClick={removeAllBoulders}>remove all</div>
+                {role(app) != "user" && (
+                    <div className='form-row'>
+                        <div className='label'>
+                            <div className='button' onClick={removeAllBoulders}>remove all</div>
+                        </div>
                     </div>
-                </div>
+                )}
             </div>
         </Actions>
     </Header>

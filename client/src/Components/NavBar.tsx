@@ -17,7 +17,7 @@ export const NavBar = ({ app }: { app: App }) => (
 
     <HomeItem />
     <TeamItem />
-    {role(app) === "admin" && <SectorItem />}
+    <SectorItem />
     {role(app) === "admin" && <StatsItem />}
 
     <FlexItem />
