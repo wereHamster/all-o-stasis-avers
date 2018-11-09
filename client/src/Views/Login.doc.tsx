@@ -1,54 +1,49 @@
-import * as React from 'react'
+import * as React from "react";
 
-import {markdown, ReactSpecimen} from '@catalog/core'
+import { markdown, ReactSpecimen } from "@catalog/core";
+import { Form, AwaitingConfirmation } from "./Login";
 
-import {Form, AwaitingConfirmation} from './Login'
+const nop = () => {};
 
 export default () => markdown`
 # Form (empty, email entered, submitting)
 
-${
-<ReactSpecimen noSource span={2}>
-    <Form
-        email=''
-        onChangeEmail={() => {}}
-        doLogin={() => {}}
-        isSubmitting={false}
-    />
-</ReactSpecimen>
-}
+${(
+  <ReactSpecimen noSource span={3}>
+    <Form email="" onChangeEmail={nop} doLogin={nop} isSubmitting={false} error={undefined} />
+  </ReactSpecimen>
+)}
 
-${
-<ReactSpecimen noSource span={2}>
-    <Form
-        email='tomas.carnecky@gmail.com'
-        onChangeEmail={() => {}}
-        doLogin={() => {}}
-        isSubmitting={false}
-    />
-</ReactSpecimen>
-}
+${(
+  <ReactSpecimen noSource span={3}>
+    <Form email="tomas.carnecky@gmail.com" onChangeEmail={nop} doLogin={nop} isSubmitting={false} error={undefined} />
+  </ReactSpecimen>
+)}
 
-${
-<ReactSpecimen noSource span={2}>
+${(
+  <ReactSpecimen noSource span={3}>
+    <Form email="tomas.carnecky@gmail.com" onChangeEmail={nop} doLogin={nop} isSubmitting={true} error={undefined} />
+  </ReactSpecimen>
+)}
+
+${(
+  <ReactSpecimen noSource span={3}>
     <Form
-        email='tomas.carnecky@gmail.com'
-        onChangeEmail={() => {}}
-        doLogin={() => {}}
-        isSubmitting={true}
+      email="tomas.carnecky@gmail.com"
+      onChangeEmail={nop}
+      doLogin={nop}
+      isSubmitting={false}
+      error={"Failed to fetch"}
     />
-</ReactSpecimen>
-}
+  </ReactSpecimen>
+)}
+
 
 # AwaitingConfirmation
 
-${
-<ReactSpecimen noSource>
-    <AwaitingConfirmation
-        email='tomas.carnecky@gmail.com'
-        onReset={() => {}}
-        securityCode='Blauer Truthan'
-    />
-</ReactSpecimen>
-}
-`
+${(
+  <ReactSpecimen noSource>
+    <AwaitingConfirmation email="tomas.carnecky@gmail.com" onReset={nop} securityCode="Blauer Truthan" />
+  </ReactSpecimen>
+)}
+`;

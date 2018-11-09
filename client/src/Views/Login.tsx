@@ -3,7 +3,7 @@ import * as React from "react";
 import styled from "styled-components";
 
 import { text, secondary, secondaryText } from "../Materials/Colors";
-import { useTypeface, h1, copy16, copy16Bold } from "../Materials/Typefaces";
+import { useTypeface, h1, copy16, copy16Bold, copy14 } from "../Materials/Typefaces";
 
 import { App, navigateTo } from "../app";
 import { Button } from "../Components/Button";
@@ -13,10 +13,10 @@ import { Site } from "./Components/Site";
 interface LoginState {
   email: string;
 
-  createPassportPromise: void | Promise<any>;
-  createPassportResponse: void | { passportId: string; securityCode: string };
+  createPassportPromise: void | Promise<void>;
+  createPassportResponse: void | Error | { passportId: string; securityCode: string };
 
-  awaitPassportConfirmationPromise: void | Promise<any>;
+  awaitPassportConfirmationPromise: void | Promise<void>;
 }
 
 export default class extends React.Component<{ app: App }, LoginState> {
@@ -68,27 +68,45 @@ export default class extends React.Component<{ app: App }, LoginState> {
     e.stopPropagation();
     e.preventDefault();
 
-    const options: RequestInit = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email })
-    };
+    const createPassportPromise = (async (): Promise<void> => {
+      try {
+        const options: RequestInit = {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email })
+        };
 
-    const createPassportPromise = fetch(apiHost + "/login", options).then(res => {
-      res.json().then(json => {
-        const awaitPassportConfirmationPromise = fetch(apiHost + "/login/verify?passportId=" + json.passportId, {
-          credentials: "include"
-        }).then(() => {
-          Avers.restoreSession(session);
-          navigateTo("/");
-        });
+        const res = await fetch(`${apiHost}/login`, options);
+        const json = await res.json();
+
+        const awaitPassportConfirmationPromise = (async () => {
+          try {
+            await fetch(`${apiHost}/login/verify?passportId=${json.passportId}`);
+            Avers.restoreSession(session);
+            navigateTo("/");
+          } catch (e) {
+            this.setState({
+              createPassportPromise: undefined,
+              createPassportResponse: e,
+              awaitPassportConfirmationPromise: undefined
+            });
+          }
+        })();
+
         this.setState({
           createPassportPromise: undefined,
           createPassportResponse: json,
           awaitPassportConfirmationPromise
         });
-      });
-    });
+      } catch (e) {
+        this.setState({
+          createPassportPromise: undefined,
+          createPassportResponse: e,
+          awaitPassportConfirmationPromise: undefined
+        });
+      }
+    })();
+
     this.setState({ createPassportPromise });
   };
 
@@ -96,7 +114,7 @@ export default class extends React.Component<{ app: App }, LoginState> {
     const { app } = this.props;
     const { email, createPassportPromise, createPassportResponse, awaitPassportConfirmationPromise } = this.state;
 
-    if (!awaitPassportConfirmationPromise) {
+    if (!awaitPassportConfirmationPromise || createPassportResponse instanceof Error) {
       return (
         <Site app={app}>
           <Container>
@@ -105,6 +123,7 @@ export default class extends React.Component<{ app: App }, LoginState> {
               onChangeEmail={this.onChangeEmail}
               doLogin={this.doLogin}
               isSubmitting={createPassportPromise !== undefined}
+              error={createPassportResponse instanceof Error ? createPassportResponse.message : undefined}
             />
           </Container>
         </Site>
@@ -145,7 +164,7 @@ const Container = styled.div`
   }
 `;
 
-export const Form = ({ email, onChangeEmail, doLogin, isSubmitting }) => (
+export const Form = ({ email, onChangeEmail, doLogin, isSubmitting, error }) => (
   <form>
     <H1>Authenticate</H1>
     <P>To sign up or log in, fill in your email address below:</P>
@@ -155,6 +174,15 @@ export const Form = ({ email, onChangeEmail, doLogin, isSubmitting }) => (
         LOGIN
       </Button>
     </div>
+    <FormErrorContainer>
+      {error && (
+        <FormError>
+          Uh oh, the server didn't respond. Try again later.
+          <br />
+          (Error: {error})
+        </FormError>
+      )}
+    </FormErrorContainer>
   </form>
 );
 
@@ -199,4 +227,19 @@ const SecurityCode = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+const FormErrorContainer = styled.div`
+  position: relative;
+  height: 100px;
+`;
+
+const FormError = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  ${useTypeface(copy14)};
+  color: #ff0000;
+  margin-top: 16px;
 `;
