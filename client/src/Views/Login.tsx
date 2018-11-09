@@ -66,14 +66,15 @@ export default class extends React.Component<{ app: App }, LoginState> {
     const { email } = this.state;
 
     e.stopPropagation();
+    e.preventDefault();
 
-    const options = {
+    const options: RequestInit = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email })
     };
 
-    const createPassportPromise = fetch(apiHost + "/login", options as any).then(res => {
+    const createPassportPromise = fetch(apiHost + "/login", options).then(res => {
       res.json().then(json => {
         const awaitPassportConfirmationPromise = fetch(apiHost + "/login/verify?passportId=" + json.passportId, {
           credentials: "include"
