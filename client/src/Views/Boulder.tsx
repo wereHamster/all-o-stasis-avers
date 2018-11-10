@@ -18,6 +18,7 @@ import { SectorPicker } from "./Components/SectorPicker";
 import { Button } from "../Components/Button";
 import { BoulderSetterCard } from "./Components/BoulderSetterCard";
 import { SetterPicker } from "../Components/SetterPicker";
+import { Loader } from "../Components/Loader";
 
 function BoulderDetailsEditor({ app, boulderE }: { app: App; boulderE: Avers.Editable<Boulder> }) {
   const boulder = boulderE.content;
@@ -149,7 +150,7 @@ export default (boulderId: string) => ({ app }: { app: App }) => {
     })
     .get(
       <Site app={app}>
-        <div>Loading…</div>
+        <Loader />
       </Site>
     );
 };
