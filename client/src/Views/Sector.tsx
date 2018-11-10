@@ -9,6 +9,7 @@ import {useTypeface, heading28} from '../Materials/Typefaces'
 
 import {GradeBalance} from './Components/GradeBalance'
 import {Site} from './Components/Site'
+import { Button } from '../Components/Button';
 
 export default function
 sectorView({ app }: { app: App }) {
@@ -104,7 +105,7 @@ const TotalHeader = ({user_role, numBoulders, removeAllBoulders}: TotalHeaderPro
                 <div className='form'>
                     <div className='form-row'>
                         <div className='label'>
-                            <div className='button' onClick={removeAllBoulders}>remove all</div>
+                            <Button onClick={removeAllBoulders}>remove all</Button>
                         </div>
                     </div>
                 </div>
@@ -130,7 +131,7 @@ const SectorHeader = ({user_role, sectorNames, numBoulders, sectorName, onChange
                 {user_role != "user" && (
                     <div className='form-row'>
                         <div className='label'>
-                            <div className='button' onClick={removeAllBoulders}>remove all</div>
+                            <Button onClick={removeAllBoulders}>remove all</Button>
                         </div>
                     </div>
                 )}
