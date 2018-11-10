@@ -4,13 +4,23 @@ import styled from "styled-components";
 
 import { role } from "../actions";
 import { App } from "../app";
-import { Account, roles, publicProfile } from "../storage";
+import { Account, roles, publicProfile, PublicProfile } from "../storage";
 
 import { useTypeface, heading18 } from "../Materials/Typefaces";
 
 import { DropDownInput } from "./Components/DropdownInput";
 import { Site } from "./Components/Site";
 import { Input } from "../Components/Input";
+
+export const accountPublicProfile = (aversH: Avers.Handle, accountId: string): PublicProfile => {
+  const placeholderImageSrc =
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAAAAACoWZBhAAAAF0lEQVQI12P4BAI/QICBFCaYBPNJYQIAkUZftTbC4sIAAAAASUVORK5CYII=";
+
+  return Avers.staticValue(aversH, publicProfile(aversH, accountId)).get({
+    name: accountId.slice(0, 3),
+    avatar: placeholderImageSrc
+  });
+};
 
 export const accountAvatar = (aversH: Avers.Handle, accountId: string): string => {
   const placeholderImageSrc =

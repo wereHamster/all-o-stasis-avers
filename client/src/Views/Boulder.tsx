@@ -17,6 +17,7 @@ import { BoulderId } from "./Components/BoulderId";
 import { SectorPicker } from "./Components/SectorPicker";
 import { Button } from "../Components/Button";
 import { BoulderSetterCard } from "./Components/BoulderSetterCard";
+import { SetterPicker } from "../Components/SetterPicker";
 
 function BoulderDetailsEditor({ app, boulderE }: { app: App; boulderE: Avers.Editable<Boulder> }) {
   const boulder = boulderE.content;
@@ -242,68 +243,6 @@ const AddSetterContainer = styled.div`
     text-decoration: underline;
   }
 `;
-
-// ----------------------------------------------------------------------------
-
-class SetterPicker extends React.Component<any> {
-  onKeyPress = ev => {
-    if (ev.key === "Escape") {
-      this.props.dismiss();
-    }
-  };
-
-  componentDidMount() {
-    window.addEventListener("keyup", this.onKeyPress);
-  }
-  componentWillUnmount() {
-    window.removeEventListener("keyup", this.onKeyPress);
-  }
-
-  render() {
-    const { app, dismiss, addSetter } = this.props;
-    const setters = app.data.adminAccountCollection.ids.get([]).map((accountId, index) => {
-      const accountC = Avers.lookupContent<Account>(app.data.aversH, accountId);
-      return accountC
-        .fmap(() => (
-          <div key={index} style={{ marginRight: 8 }}>
-            <BoulderSetterCard
-              app={app}
-              setterId={accountId}
-              onClick={() => {
-                addSetter(accountId);
-              }}
-            />
-          </div>
-        ))
-        .get(<div />);
-    });
-
-    return (
-      <div
-        style={{
-          position: "fixed",
-          zIndex: 10,
-          top: 0,
-          right: 0,
-          bottom: 0,
-          left: 0,
-          padding: 60,
-          background: "#f1f1f1"
-        }}
-      >
-        <div style={{ position: "fixed", top: 20, right: 20 }} onClick={dismiss}>
-          <svg width="40" height="40">
-            <path d="M10 10 L30 30 M30 10 L10 30" stroke="black" strokeWidth="7" strokeLinecap="round" />
-          </svg>
-        </div>
-
-        <div style={{ textAlign: "center", marginBottom: 60, fontSize: 32 }}>Pick a setter</div>
-
-        <div style={{ display: "flex", flexWrap: "wrap" }}>{setters}</div>
-      </div>
-    );
-  }
-}
 
 // ----------------------------------------------------------------------------
 

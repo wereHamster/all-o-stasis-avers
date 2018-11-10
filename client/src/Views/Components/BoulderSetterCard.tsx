@@ -1,29 +1,31 @@
-import * as Avers from "avers";
 import * as React from "react";
 import styled from "styled-components";
 
 import { App } from "../../app";
-import { PublicProfile, publicProfile } from "../../storage";
 
 import { text } from "../../Materials/Colors";
 import { useTypeface, copy16 } from "../../Materials/Typefaces";
+import { accountPublicProfile } from "../Account";
 
-export class BoulderSetterCard extends React.Component<{ app: App; setterId: string; onClick: (setterId: string) => void }> {
+export class BoulderSetterCard extends React.Component<{
+  app: App;
+  setterId: string;
+  onClick: (setterId: string) => void;
+}> {
   onClick = () => {
     this.props.onClick(this.props.setterId);
   };
 
   render() {
     const { app, setterId } = this.props;
+    const { name, avatar } = accountPublicProfile(app.data.aversH, setterId);
 
-    return Avers.staticValue<PublicProfile>(app.data.aversH, publicProfile(app.data.aversH, setterId))
-      .fmap(({ name, avatar }) => (
-        <SetterContainer onClick={this.onClick}>
-          <SetterImage src={avatar} />
-          <SetterName>{name !== "" ? name : setterId.slice(0, 2)}</SetterName>
-        </SetterContainer>
-      ))
-      .get(<div />);
+    return (
+      <SetterContainer onClick={this.onClick}>
+        <SetterImage src={avatar} />
+        <SetterName>{name}</SetterName>
+      </SetterContainer>
+    );
   }
 }
 
@@ -43,6 +45,7 @@ const SetterContainer = styled.div`
 const SetterImage = styled.img`
   display: block;
   width: 80px;
+  min-height: 80px;
   flex: 0 0 80px;
   align-self: stretch;
   object-fit: cover;
