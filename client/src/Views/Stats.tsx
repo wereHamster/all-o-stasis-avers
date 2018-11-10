@@ -9,6 +9,7 @@ import { Site } from "./Components/Site";
 import { SectorSelector } from "./Components/Stats/SectorSelector";
 import { SetterSelector } from "./Components/Stats/SetterSelector";
 import { Visualization } from "./Components/Stats/Visualization";
+import { Button } from "../Components/Button";
 
 interface StatsPageProps {
   app: App;
@@ -47,14 +48,8 @@ export default class extends React.Component<StatsPageProps, StatsPageState> {
     }
   };
 
-  render() {
-    const {
-      app,
-      app: {
-        data: { aversH }
-      }
-    } = this.props;
-    const { sectors, selectedSetters } = this.state;
+  bssC = () => {
+    const { app } = this.props;
 
     const toEvents = bss =>
       bss
@@ -70,7 +65,19 @@ export default class extends React.Component<StatsPageProps, StatsPageState> {
         .sort((a, b) => +a.date - +b.date)
         .filter(a => a.date.getTime() > 10000);
 
-    const bssC = Avers.staticValue(aversH, boulderStats(aversH)).fmap(toEvents);
+    return Avers.staticValue(app.data.aversH, boulderStats(app.data.aversH)).fmap(toEvents);
+  };
+
+  removeBoulders = () => {
+    // const bss = this.bssC().get(undefined);
+    alert("Not implemented yet")
+  };
+
+  render() {
+    const { app } = this.props;
+    const { sectors, selectedSetters } = this.state;
+
+    const bssC = this.bssC();
 
     return (
       <Site app={app}>
@@ -92,6 +99,13 @@ export default class extends React.Component<StatsPageProps, StatsPageState> {
             </SideContent>
           </Side>
           <Main>
+            <Toolbar>
+              <ToolbarButton>
+                <Button onClick={this.removeBoulders}>
+                  remove selected boulders
+                </Button>
+              </ToolbarButton>
+            </Toolbar>
             <Visualization bssC={bssC} sectors={sectors} selectedSetters={selectedSetters} />
           </Main>
         </Root>
@@ -127,3 +141,12 @@ const Main = styled.div`
   display: flex;
   flex-direction: column;
 `;
+
+const Toolbar = styled.div`
+  flex: 0 0 80px;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 60px;
+`;
+
+const ToolbarButton = styled.div``;

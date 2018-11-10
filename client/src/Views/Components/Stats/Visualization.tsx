@@ -129,7 +129,10 @@ const VisualizationRenderer = ({ bssC, sectors, selectedSetters, bounds }) => {
   yScale.domain([0, Math.ceil(Math.max(...last(data).map(series => series[1])) * 1.2)]);
 
   data.forEach(d => {
-    last(d).data.date = new Date(Date.now());
+    const l = last(d);
+    if (l && l.data) {
+      l.data.date = new Date(Date.now());
+    }
   });
 
   return (
