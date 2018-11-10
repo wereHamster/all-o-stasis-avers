@@ -49,9 +49,9 @@ const VisualizationRenderer = ({ bssC, sectors, selectedSetters, bounds }) => {
 
   const padding = {
     top: 8,
-    left: 16,
+    left: 0,
     right: 60,
-    bottom: 50
+    bottom: 60
   };
 
   const events = bssC.get([]);
@@ -126,7 +126,7 @@ const VisualizationRenderer = ({ bssC, sectors, selectedSetters, bounds }) => {
   const last = (xs: any[]) => xs[xs.length - 1];
 
   xScale.domain([new Date(Date.now() - 4 * 30 * 24 * 60 * 60 * 1000), new Date(Date.now())]);
-  yScale.domain([0, Math.ceil(last(last(data))[1] * 1.2)]);
+  yScale.domain([0, Math.ceil(Math.max(...last(data).map(series => series[1])) * 1.2)]);
 
   data.forEach(d => {
     last(d).data.date = new Date(Date.now());
