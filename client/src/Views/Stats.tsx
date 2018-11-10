@@ -1,5 +1,6 @@
 import * as Avers from "avers";
 import * as React from "react";
+import styled from "styled-components";
 
 import { boulderStats } from "../storage";
 import { App } from "../app";
@@ -57,14 +58,13 @@ export default class extends React.Component<StatsPageProps, StatsPageState> {
 
     const toEvents = bss =>
       bss
-        .map(
-          bs =>
-            bs.removedOn === undefined
-              ? [{ bs, type: "set", date: bs.setOn, setters: bs.setters, sector: bs.sector, grade: bs.grade }]
-              : [
-                  { bs, type: "set", date: bs.setOn, setters: bs.setters, sector: bs.sector, grade: bs.grade },
-                  { bs, type: "removed", date: bs.removedOn, setters: bs.setters, sector: bs.sector, grade: bs.grade }
-                ]
+        .map(bs =>
+          bs.removedOn === undefined
+            ? [{ bs, type: "set", date: bs.setOn, setters: bs.setters, sector: bs.sector, grade: bs.grade }]
+            : [
+                { bs, type: "set", date: bs.setOn, setters: bs.setters, sector: bs.sector, grade: bs.grade },
+                { bs, type: "removed", date: bs.removedOn, setters: bs.setters, sector: bs.sector, grade: bs.grade }
+              ]
         )
         .reduce((a, x) => a.concat(x), [])
         .sort((a, b) => +a.date - +b.date)
@@ -74,26 +74,56 @@ export default class extends React.Component<StatsPageProps, StatsPageState> {
 
     return (
       <Site app={app}>
-        <div style={{ margin: "20px 24px", display: "flex", flex: 1 }}>
-          <div style={{ flex: "0 0 300px", width: "300px" }}>
-            <SectorSelector
-              sectors={sectors}
-              clear={sectors.length === 0 ? undefined : this.clearSectors}
-              toggle={this.toggleSector}
-            />
+        <Root>
+          <Side>
+            <SideContent>
+              <SectorSelector
+                sectors={sectors}
+                clear={sectors.length === 0 ? undefined : this.clearSectors}
+                toggle={this.toggleSector}
+              />
 
-            <SetterSelector
-              app={app}
-              selectedSetters={selectedSetters}
-              clear={selectedSetters.length === 0 ? undefined : this.clearSetters}
-              toggle={this.toggleSetter}
-            />
-          </div>
-          <div style={{ marginLeft: 80, flex: 1, display: "flex", flexDirection: "column" }}>
+              <SetterSelector
+                app={app}
+                selectedSetters={selectedSetters}
+                clear={selectedSetters.length === 0 ? undefined : this.clearSetters}
+                toggle={this.toggleSetter}
+              />
+            </SideContent>
+          </Side>
+          <Main>
             <Visualization bssC={bssC} sectors={sectors} selectedSetters={selectedSetters} />
-          </div>
-        </div>
+          </Main>
+        </Root>
       </Site>
     );
   }
 }
+
+const Root = styled.div`
+  flex: 1;
+  padding: 20px 24px;
+  display: flex;
+`;
+
+const Side = styled.div`
+  flex: 0 0 300px;
+  position: relative;
+`;
+
+const SideContent = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+`;
+
+const Main = styled.div`
+  margin-left: 80px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+`;

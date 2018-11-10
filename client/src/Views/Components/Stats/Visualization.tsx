@@ -26,14 +26,16 @@ const matchSetter = selectedSetters =>
 export const Visualization = ({ bssC, sectors, selectedSetters }) => (
   <Measure bounds>
     {({ measureRef, contentRect }) => (
-      <div ref={measureRef} style={{ flex: 1 }}>
+      <div ref={measureRef} style={{ position: "relative", flex: 1 }}>
         {contentRect.bounds && (
-          <VisualizationRenderer
-            bssC={bssC}
-            bounds={contentRect.bounds}
-            sectors={sectors}
-            selectedSetters={selectedSetters}
-          />
+          <div style={{ position: "absolute" }}>
+            <VisualizationRenderer
+              bssC={bssC}
+              bounds={contentRect.bounds}
+              sectors={sectors}
+              selectedSetters={selectedSetters}
+            />
+          </div>
         )}
       </div>
     )}
@@ -121,14 +123,14 @@ const VisualizationRenderer = ({ bssC, sectors, selectedSetters, bounds }) => {
 
   const data = s(values);
 
-  const last = (xs: any[]) => xs[xs.length - 1]
+  const last = (xs: any[]) => xs[xs.length - 1];
 
   xScale.domain([new Date(Date.now() - 4 * 30 * 24 * 60 * 60 * 1000), new Date(Date.now())]);
   yScale.domain([0, Math.ceil(last(last(data))[1] * 1.2)]);
 
   data.forEach(d => {
     last(d).data.date = new Date(Date.now());
-  })
+  });
 
   return (
     <svg width={bounds.width} height={bounds.height} style={{ display: "block" }}>
@@ -250,17 +252,20 @@ class GridLines extends React.PureComponent<GridProps> {
 
     return (
       <g data-n="grid-lines">
-        {ticks.map((tick, i) => Math.round(tick) === tick && (
-          <g data-n="grid-line" transform={`translate(0, ${yScale(tick)})`} key={i}>
-            <line
-              x1={0}
-              x2={width}
-              strokeWidth={tick === 0 ? 2 : 1}
-              stroke={tick === 0 ? "#666" : "#666"}
-              strokeOpacity={tick === 0 ? 1 : 0.2}
-            />
-          </g>
-        ))}
+        {ticks.map(
+          (tick, i) =>
+            Math.round(tick) === tick && (
+              <g data-n="grid-line" transform={`translate(0, ${yScale(tick)})`} key={i}>
+                <line
+                  x1={0}
+                  x2={width}
+                  strokeWidth={tick === 0 ? 2 : 1}
+                  stroke={tick === 0 ? "#666" : "#666"}
+                  strokeOpacity={tick === 0 ? 1 : 0.2}
+                />
+              </g>
+            )
+        )}
       </g>
     );
   }
