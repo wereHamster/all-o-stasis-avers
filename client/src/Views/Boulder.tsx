@@ -5,7 +5,7 @@ import styled from "styled-components";
 
 import { role, resetBoulderCollections } from "../actions";
 import { App } from "../app";
-import { Account, Boulder } from "../storage";
+import { Boulder } from "../storage";
 
 import { text, darkGrey, primary, secondary, darkSecondary } from "../Materials/Colors";
 import { useTypeface, copy16Bold, copy14 } from "../Materials/Typefaces";

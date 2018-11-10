@@ -1,7 +1,8 @@
 import * as React from "react";
-import Measure from "react-measure";
+import Measure, { BoundingRect } from "react-measure";
 import { Motion, spring } from "react-motion";
 import styled from "styled-components";
+import Computation from "computation";
 
 import { scaleTime, scaleLinear, scaleOrdinal, ScaleLinear } from "d3-scale";
 import { stack, area, line, curveLinear } from "d3-shape";
@@ -15,15 +16,21 @@ import { useTypeface, copy14, copy14Bold } from "../../../Materials/Typefaces";
 
 const curve = curveLinear;
 
-const matchSector = sectors =>
+const matchSector = (sectors: string[]) =>
   sectors.length === 0 ? () => true : (bs: BoulderStat) => sectors.indexOf(bs.sector) !== -1;
 
-const matchSetter = selectedSetters =>
+const matchSetter = (selectedSetters: string[]) =>
   selectedSetters.length === 0
     ? () => true
     : (bs: BoulderStat) => bs.setters.some(setterId => selectedSetters.indexOf(setterId) !== -1);
 
-export const Visualization = ({ bssC, sectors, selectedSetters }) => (
+export interface VisualizationProps {
+  bssC: Computation<any[]>;
+  sectors: string[];
+  selectedSetters: string[];
+}
+
+export const Visualization = ({ bssC, sectors, selectedSetters }: VisualizationProps) => (
   <Measure bounds>
     {({ measureRef, contentRect }) => (
       <div ref={measureRef} style={{ position: "relative", flex: 1 }}>
@@ -42,7 +49,14 @@ export const Visualization = ({ bssC, sectors, selectedSetters }) => (
   </Measure>
 );
 
-const VisualizationRenderer = ({ bssC, sectors, selectedSetters, bounds }) => {
+interface VisualizationRendererProps {
+  bssC: Computation<any[]>;
+  sectors: string[];
+  selectedSetters: string[];
+  bounds: BoundingRect;
+}
+
+const VisualizationRenderer = ({ bssC, sectors, selectedSetters, bounds }: VisualizationRendererProps) => {
   if (!bounds.height) {
     return <div />;
   }
@@ -54,7 +68,7 @@ const VisualizationRenderer = ({ bssC, sectors, selectedSetters, bounds }) => {
     bottom: 60
   };
 
-  const events = bssC.get([]);
+  const events = bssC.get<any[]>([]);
 
   const values = (() => {
     const res = events.reduce(

@@ -2,7 +2,7 @@ import * as Avers from "avers";
 import * as React from "react";
 import styled from "styled-components";
 
-import { boulderStats } from "../storage";
+import { boulderStats, BoulderStat } from "../storage";
 import { App } from "../app";
 
 import { Site } from "./Components/Site";
@@ -51,7 +51,7 @@ export default class extends React.Component<StatsPageProps, StatsPageState> {
   bssC = () => {
     const { app } = this.props;
 
-    const toEvents = bss =>
+    const toEvents = (bss: BoulderStat[]) =>
       bss
         .map(bs =>
           bs.removedOn === undefined
@@ -68,7 +68,7 @@ export default class extends React.Component<StatsPageProps, StatsPageState> {
     return Avers.staticValue(app.data.aversH, boulderStats(app.data.aversH)).fmap(toEvents);
   };
 
-  removeBoulders = () => {
+  removeBoulders = (): void => {
     // const bss = this.bssC().get(undefined);
     alert("Not implemented yet")
   };
