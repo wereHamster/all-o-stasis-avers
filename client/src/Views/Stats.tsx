@@ -10,6 +10,7 @@ import { SectorSelector } from "./Components/Stats/SectorSelector";
 import { SetterSelector } from "./Components/Stats/SetterSelector";
 import { Visualization } from "./Components/Stats/Visualization";
 import { Button } from "../Components/Button";
+import { Section } from "./Components/Stats/Internal";
 
 interface StatsPageProps {
   app: App;
@@ -70,7 +71,7 @@ export default class extends React.Component<StatsPageProps, StatsPageState> {
 
   removeBoulders = (): void => {
     // const bss = this.bssC().get(undefined);
-    alert("Not implemented yet")
+    alert("Not implemented yet");
   };
 
   render() {
@@ -100,11 +101,15 @@ export default class extends React.Component<StatsPageProps, StatsPageState> {
           </Side>
           <Main>
             <Toolbar>
-              <ToolbarButton>
-                <Button onClick={this.removeBoulders}>
-                  remove selected boulders
-                </Button>
-              </ToolbarButton>
+              <div>
+                <Section>Boulders</Section>
+                <div>Sectors: {sectors.length === 0 ? "ALL" : sectors.join(", ")}</div>
+              </div>
+              <div>
+                <ToolbarButton>
+                  <Button onClick={this.removeBoulders}>remove selected boulders</Button>
+                </ToolbarButton>
+              </div>
             </Toolbar>
             <Visualization bssC={bssC} sectors={sectors} selectedSetters={selectedSetters} />
           </Main>
@@ -145,7 +150,7 @@ const Main = styled.div`
 const Toolbar = styled.div`
   flex: 0 0 80px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   padding-right: 60px;
 `;
 
