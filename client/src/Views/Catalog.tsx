@@ -5,8 +5,12 @@ import * as C from "../Materials/Colors";
 
 const theme: Partial<Theme> = {
   brandColor: C.darkSecondary,
+
   pageHeadingBackground: C.darkPrimary,
-  pageHeadingTextColor: C.primaryText
+  pageHeadingTextColor: C.white,
+
+  sidebarColorText: C.primaryText,
+  sidebarColorTextActive: C.darkPrimary
 };
 
 const pages = [
