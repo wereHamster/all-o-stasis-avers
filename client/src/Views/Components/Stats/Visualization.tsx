@@ -161,7 +161,7 @@ const VisualizationRenderer = ({ bssC, sectors, selectedSetters, bounds }: Visua
 
         <TotalLine xScale={xScale} yScale={yScale} data={data} />
 
-        {data.map((d, i) => (
+        {false && data.map((d, i) => (
           <g key={i}>
             {d.map((v, j) => (
               <circle
