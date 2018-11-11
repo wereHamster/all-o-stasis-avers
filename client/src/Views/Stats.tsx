@@ -111,7 +111,14 @@ export default class extends React.Component<StatsPageProps, StatsPageState> {
                 </ToolbarButton>
               </div>
             </Toolbar>
-            <Visualization bssC={bssC} sectors={sectors} selectedSetters={selectedSetters} />
+            <Grid>
+              <GridItem>
+                <Visualization bssC={bssC} sectors={sectors} selectedSetters={selectedSetters} />
+              </GridItem>
+              <GridItem />
+              <GridItem />
+              <GridItem />
+            </Grid>
           </Main>
         </Root>
       </Site>
@@ -128,6 +135,7 @@ const Root = styled.div`
 const Side = styled.div`
   flex: 0 0 300px;
   position: relative;
+  margin-right: 24px;
 `;
 
 const SideContent = styled.div`
@@ -141,17 +149,33 @@ const SideContent = styled.div`
 `;
 
 const Main = styled.div`
-  margin-left: 80px;
   flex: 1;
   display: flex;
   flex-direction: column;
 `;
 
 const Toolbar = styled.div`
-  flex: 0 0 80px;
+  flex: 0 0 120px;
   display: flex;
   justify-content: space-between;
-  padding-right: 60px;
 `;
 
 const ToolbarButton = styled.div``;
+
+const Grid = styled.div`
+  flex: 1;
+  display: grid;
+  grid-template: calc(50% - 12px) calc(50% - 12px) / 1fr 1fr;
+  grid-gap: 24px;
+`;
+
+const GridItem = styled.div`
+  background: white;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.16s;
+  display: flex;
+
+  &:hover {
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
+  }
+`;

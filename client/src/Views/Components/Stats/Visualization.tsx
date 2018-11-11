@@ -62,9 +62,9 @@ const VisualizationRenderer = ({ bssC, sectors, selectedSetters, bounds }: Visua
   }
 
   const padding = {
-    top: 8,
-    left: 0,
-    right: 60,
+    top: 24,
+    left: 24,
+    right: 24,
     bottom: 60
   };
 
