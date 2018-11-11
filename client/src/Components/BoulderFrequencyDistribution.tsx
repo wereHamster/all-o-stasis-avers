@@ -2,10 +2,10 @@ import * as React from "react";
 import styled from "styled-components";
 
 import { useTypeface, copy14 } from "../Materials/Typefaces";
-import { gradeBackgroundColor } from "../Materials/Colors";
+import { gradeBackgroundColor, gradeBorderColor } from "../Materials/Colors";
 
 export interface BoulderFrequencyDistributionProps {
-  data: Array<{ grade: string, count: number }>;
+  data: Array<{ grade: string; count: number }>;
 }
 
 export class BoulderFrequencyDistribution extends React.Component<BoulderFrequencyDistributionProps> {
@@ -20,7 +20,11 @@ export class BoulderFrequencyDistribution extends React.Component<BoulderFrequen
             key={grade}
             style={{
               height: (40 * count) / max,
-              background: gradeBackgroundColor(grade.toLowerCase())
+              background: gradeBackgroundColor(grade.toLowerCase()) + "26",
+              borderWidth: (count > 0 ? 2 : 0),
+              borderStyle: "solid",
+              borderColor: gradeBorderColor(grade.toLowerCase()),
+              borderBottom: "none"
             }}
           >
             <Percentage>{count}</Percentage>
@@ -37,9 +41,8 @@ const Root = styled.div`
   display: flex;
   align-items: flex-end;
 
-  padding-bottom: 1px;
   margin-bottom: 24px;
-  box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.2);
+  border-bottom: 2px solid #666;
 
   & > div {
     flex: 1;
@@ -48,7 +51,10 @@ const Root = styled.div`
 
 const Grade = styled.div`
   position: relative;
-  margin: 0 2px;
+  margin-right: 4px;
+  &:last-child {
+    margin: 0;
+  }
 `;
 
 const Percentage = styled.div`
@@ -59,5 +65,5 @@ const Percentage = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  margin-bottom: -22px;
+  margin-bottom: -28px;
 `;

@@ -65,7 +65,7 @@ const VisualizationRenderer = ({ bssC, sectors, selectedSetters, bounds }: Visua
     top: 24,
     left: 24,
     right: 24,
-    bottom: 60
+    bottom: 48
   };
 
   const events = bssC.get<any[]>([]);
@@ -181,7 +181,7 @@ const VisualizationRenderer = ({ bssC, sectors, selectedSetters, bounds }: Visua
         <GridLabels width={bounds.width - padding.left - padding.right} yScale={yScale} />
 
         <g
-          transform={`translate(0,${bounds.height - padding.bottom + 10})`}
+          transform={`translate(0,${bounds.height - padding.bottom - padding.top + 12})`}
           ref={el => {
             if (el) {
               select(el).call(axisBottom(xScale));
