@@ -2,7 +2,7 @@ import * as Avers from "avers";
 import * as React from "react";
 import styled from "styled-components";
 
-import { boulderStats, BoulderStat } from "../storage";
+import { boulderStats, BoulderStat, gradeCompare } from "../storage";
 import { App } from "../app";
 
 import { Site } from "./Components/Site";
@@ -11,6 +11,9 @@ import { SetterSelector } from "./Components/Stats/SetterSelector";
 import { Visualization } from "./Components/Stats/Visualization";
 import { Button } from "../Components/Button";
 import { Section } from "./Components/Stats/Internal";
+import { BoulderFrequencyDistribution } from "../Components/BoulderFrequencyDistribution";
+import Computation from "computation";
+import { useTypeface, heading20 } from "../Materials/Typefaces";
 
 interface StatsPageProps {
   app: App;
@@ -20,6 +23,24 @@ interface StatsPageState {
   sectors: string[];
   selectedSetters: string[]; // ObjId[]
 }
+
+type EventType = "set" | "removed";
+interface Event {
+  bs: BoulderStat;
+  type: EventType;
+  date: Date;
+  setters: string[];
+  sector: string;
+  grade: string;
+}
+
+const matchSector = (sectors: string[]) =>
+  sectors.length === 0 ? () => true : (bs: BoulderStat) => sectors.indexOf(bs.sector) !== -1;
+
+const matchSetter = (setters: string[]) =>
+  setters.length === 0
+    ? () => true
+    : (bs: BoulderStat) => bs.setters.some(setterId => setters.indexOf(setterId) !== -1);
 
 export default class extends React.Component<StatsPageProps, StatsPageState> {
   state: StatsPageState = {
@@ -49,20 +70,24 @@ export default class extends React.Component<StatsPageProps, StatsPageState> {
     }
   };
 
-  bssC = () => {
+  bssC = (): Computation<Event[]> => {
     const { app } = this.props;
 
     const toEvents = (bss: BoulderStat[]) =>
       bss
-        .map(bs =>
-          bs.removedOn === undefined
-            ? [{ bs, type: "set", date: bs.setOn, setters: bs.setters, sector: bs.sector, grade: bs.grade }]
-            : [
+        .map(
+          (bs: BoulderStat): Event[] => {
+            if (bs.removedOn === undefined) {
+              return [{ bs, type: "set", date: bs.setOn, setters: bs.setters, sector: bs.sector, grade: bs.grade }];
+            } else {
+              return [
                 { bs, type: "set", date: bs.setOn, setters: bs.setters, sector: bs.sector, grade: bs.grade },
                 { bs, type: "removed", date: bs.removedOn, setters: bs.setters, sector: bs.sector, grade: bs.grade }
-              ]
+              ];
+            }
+          }
         )
-        .reduce((a, x) => a.concat(x), [])
+        .reduce<Event[]>((a, x) => a.concat(x), [])
         .sort((a, b) => +a.date - +b.date)
         .filter(a => a.date.getTime() > 10000);
 
@@ -79,6 +104,27 @@ export default class extends React.Component<StatsPageProps, StatsPageState> {
     const { sectors, selectedSetters } = this.state;
 
     const bssC = this.bssC();
+
+    const gradeDistribution = new Map<string, number>();
+    const events = bssC.get<Event[]>([]);
+    events.forEach(ev => {
+      const grade = ev.bs.grade;
+      const count = gradeDistribution.get(grade) || 0;
+      if (matchSector(sectors)(ev.bs) && matchSetter(selectedSetters)(ev.bs)) {
+        if (ev.type === "set") {
+          gradeDistribution.set(grade, count + 1);
+        } else if (ev.type === "removed") {
+          gradeDistribution.set(grade, count - 1);
+        }
+      }
+    });
+
+    const boulderFrequencyDistribution = Array.from(gradeDistribution.entries()).map(([k, v]) => {
+      return { grade: k, count: v };
+    });
+    boulderFrequencyDistribution.sort((a, b) => {
+      return gradeCompare(a.grade, b.grade);
+    });
 
     return (
       <Site app={app}>
@@ -113,9 +159,17 @@ export default class extends React.Component<StatsPageProps, StatsPageState> {
             </Toolbar>
             <Grid>
               <GridItem>
-                <Visualization bssC={bssC} sectors={sectors} selectedSetters={selectedSetters} />
+                <GridItemTitle>History</GridItemTitle>
+                <GridItemContent>
+                  <Visualization bssC={bssC} sectors={sectors} selectedSetters={selectedSetters} />
+                </GridItemContent>
               </GridItem>
-              <GridItem />
+              <GridItem>
+                <GridItemTitle>Boulder Frequency Distribution</GridItemTitle>
+                <GridItemContent style={{ margin: 24 }}>
+                  <BoulderFrequencyDistribution data={boulderFrequencyDistribution} />
+                </GridItemContent>
+              </GridItem>
               <GridItem />
               <GridItem />
             </Grid>
@@ -174,8 +228,15 @@ const GridItem = styled.div`
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.16s;
   display: flex;
+  flex-direction: column;
+`;
 
-  &:hover {
-    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
-  }
+const GridItemTitle = styled.div`
+  ${useTypeface(heading20)};
+  margin: 24px 24px 0;
+`;
+
+const GridItemContent = styled.div`
+  flex: 1;
+  display: flex;
 `;

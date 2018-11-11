@@ -32,12 +32,13 @@ export class BoulderFrequencyDistribution extends React.Component<BoulderFrequen
 }
 
 const Root = styled.div`
+  flex: 1;
+
   display: flex;
   align-items: flex-end;
-  height: 60px;
-  margin-bottom: 20px;
-  padding-bottom: 1px;
 
+  padding-bottom: 1px;
+  margin-bottom: 24px;
   box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.2);
 
   & > div {
