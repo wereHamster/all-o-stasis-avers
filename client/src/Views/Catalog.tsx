@@ -88,6 +88,11 @@ const pages = [
         path: "/components/stats",
         title: "Stats",
         component: pageLoader(() => import("./Components/Stats/Visualization.doc"))
+      },
+      {
+        path: "/components/grade-distribution-chart",
+        title: "GradeDistributionChart",
+        component: pageLoader(() => import("../Components/GradeDistributionChart.doc"))
       }
     ]
   }

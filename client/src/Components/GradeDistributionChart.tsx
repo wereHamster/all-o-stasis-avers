@@ -50,23 +50,21 @@ const Chart = ({ bounds, data }: ChartProps) => {
     .paddingInner(0.2);
 
   const yScale = scaleLinear()
-    .domain([0, max])
+    .domain([0, Math.round(max * 1.2)])
     .range([bounds.height - padding.bottom - padding.top, 0]);
 
   return (
     <svg width={bounds.width} height={bounds.height} style={{ position: "absolute", display: "block" }}>
       <g transform={`translate(${padding.left},${padding.top})`}>
         {data.map(({ grade, count }) => (
-          <rect
+          <Rect
             key={grade}
             x={xScale(grade)}
             y={yScale(count)}
             width={xScale.bandwidth()}
             height={yScale(0) - yScale(count)}
             fill={gradeBackgroundColor(grade.toLowerCase())}
-            fillOpacity={1}
             stroke={gradeBorderColor(grade.toLowerCase())}
-            strokeWidth={2}
           />
         ))}
 
@@ -84,6 +82,15 @@ const Chart = ({ bounds, data }: ChartProps) => {
   );
 };
 
+const Rect = styled.rect`
+  stroke-width: 2;
+  fill-opacity: 0.4;
+  transition: fill-opacity 0.36s;
+
+  &:hover {
+    fill-opacity: 1;
+  }
+`;
 
 const Text = styled.text`
   ${useTypeface(copy14)};
