@@ -11,7 +11,7 @@ import { SetterSelector } from "./Components/Stats/SetterSelector";
 import { Visualization } from "./Components/Stats/Visualization";
 import { Button } from "../Components/Button";
 import { Section } from "./Components/Stats/Internal";
-import { BoulderFrequencyDistribution } from "../Components/BoulderFrequencyDistribution";
+import { GradeDistributionChart } from "../Components/GradeDistributionChart";
 import Computation from "computation";
 import { useTypeface, heading20 } from "../Materials/Typefaces";
 
@@ -167,7 +167,7 @@ export default class extends React.Component<StatsPageProps, StatsPageState> {
               <GridItem>
                 <GridItemTitle>Boulder Frequency Distribution</GridItemTitle>
                 <GridItemContent style={{ margin: 24 }}>
-                  <BoulderFrequencyDistribution data={boulderFrequencyDistribution} />
+                  <GradeDistributionChart data={boulderFrequencyDistribution} />
                 </GridItemContent>
               </GridItem>
               <GridItem />

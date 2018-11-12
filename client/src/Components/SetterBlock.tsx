@@ -8,7 +8,7 @@ import { grades, Boulder, publicProfile } from "../storage";
 
 import { useTypeface, heading28, copy14 } from "../Materials/Typefaces";
 import { text } from "../Materials/Colors";
-import { BoulderFrequencyDistribution } from "./BoulderFrequencyDistribution";
+import { GradeDistributionChart } from "./GradeDistributionChart";
 
 export interface SetterCardProps {
   app: App;
@@ -47,7 +47,7 @@ export class SetterBlock extends React.Component<SetterCardProps> {
           </div>
         </Top>
         <Bottom>
-          <BoulderFrequencyDistribution data={boulderFrequencyDistribution} />
+          <GradeDistributionChart data={boulderFrequencyDistribution} />
         </Bottom>
       </Root>
     );

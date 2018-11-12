@@ -4,11 +4,11 @@ import styled from "styled-components";
 import { useTypeface, copy14 } from "../Materials/Typefaces";
 import { gradeBackgroundColor, gradeBorderColor } from "../Materials/Colors";
 
-export interface BoulderFrequencyDistributionProps {
+export interface GradeDistributionChartProps {
   data: Array<{ grade: string; count: number }>;
 }
 
-export class BoulderFrequencyDistribution extends React.Component<BoulderFrequencyDistributionProps> {
+export class GradeDistributionChart extends React.Component<GradeDistributionChartProps> {
   render() {
     const { data } = this.props;
     const max = Math.max(...data.map(x => x.count));
