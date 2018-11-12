@@ -262,7 +262,7 @@ interface GridProps {
   yScale: ScaleLinear<number, number>;
 }
 
-class GridLines extends React.PureComponent<GridProps> {
+export class GridLines extends React.PureComponent<GridProps> {
   render() {
     const { width, yScale } = this.props;
     const ticks = yScale.ticks(5);
@@ -288,7 +288,7 @@ class GridLines extends React.PureComponent<GridProps> {
   }
 }
 
-class GridLabels extends React.PureComponent<GridProps> {
+export class GridLabels extends React.PureComponent<GridProps> {
   render() {
     const { width, yScale } = this.props;
     const ticks = yScale.ticks(5);

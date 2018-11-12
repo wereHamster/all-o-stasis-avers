@@ -165,12 +165,17 @@ export default class extends React.Component<StatsPageProps, StatsPageState> {
                 </GridItemContent>
               </GridItem>
               <GridItem>
-                <GridItemTitle>Boulder Frequency Distribution</GridItemTitle>
-                <GridItemContent style={{ margin: 24 }}>
+                <GridItemTitle>Grade Distribution</GridItemTitle>
+                <GridItemContent>
                   <GradeDistributionChart data={boulderFrequencyDistribution} />
                 </GridItemContent>
               </GridItem>
-              <GridItem />
+              <GridItem>
+                <GridItemTitle>Sector Distribution</GridItemTitle>
+                <GridItemContent>
+                  <GradeDistributionChart data={boulderFrequencyDistribution} />
+                </GridItemContent>
+              </GridItem>
               <GridItem />
             </Grid>
           </Main>

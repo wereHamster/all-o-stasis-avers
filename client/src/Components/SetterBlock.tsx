@@ -56,7 +56,6 @@ export class SetterBlock extends React.Component<SetterCardProps> {
 
 const Root = styled.div`
   background: white;
-  padding: 24px;
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.16s;
 
@@ -68,10 +67,13 @@ const Root = styled.div`
 const Top = styled.div`
   display: flex;
   flex-direction: row;
+  padding: 24px 24px 0;
 `;
 
 const Bottom = styled.div`
   margin-left: 74px;
+  display: flex;
+  height: 160px;
 `;
 
 const Avatar = styled.img`
