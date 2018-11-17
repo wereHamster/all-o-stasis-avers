@@ -5,8 +5,12 @@ import * as C from "../Materials/Colors";
 
 const theme: Partial<Theme> = {
   brandColor: C.darkSecondary,
+
   pageHeadingBackground: C.darkPrimary,
-  pageHeadingTextColor: C.primaryText
+  pageHeadingTextColor: C.white,
+
+  sidebarColorText: C.primaryText,
+  sidebarColorTextActive: C.darkPrimary
 };
 
 const pages = [
@@ -84,6 +88,11 @@ const pages = [
         path: "/components/stats",
         title: "Stats",
         component: pageLoader(() => import("./Components/Stats/Visualization.doc"))
+      },
+      {
+        path: "/components/grade-distribution-chart",
+        title: "GradeDistributionChart",
+        component: pageLoader(() => import("../Components/GradeDistributionChart.doc"))
       }
     ]
   }

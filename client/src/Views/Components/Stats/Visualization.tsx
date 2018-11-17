@@ -1,7 +1,8 @@
 import * as React from "react";
-import Measure from "react-measure";
+import Measure, { BoundingRect } from "react-measure";
 import { Motion, spring } from "react-motion";
 import styled from "styled-components";
+import Computation from "computation";
 
 import { scaleTime, scaleLinear, scaleOrdinal, ScaleLinear } from "d3-scale";
 import { stack, area, line, curveLinear } from "d3-shape";
@@ -15,44 +16,59 @@ import { useTypeface, copy14, copy14Bold } from "../../../Materials/Typefaces";
 
 const curve = curveLinear;
 
-const matchSector = sectors =>
+const matchSector = (sectors: string[]) =>
   sectors.length === 0 ? () => true : (bs: BoulderStat) => sectors.indexOf(bs.sector) !== -1;
 
-const matchSetter = selectedSetters =>
+const matchSetter = (selectedSetters: string[]) =>
   selectedSetters.length === 0
     ? () => true
     : (bs: BoulderStat) => bs.setters.some(setterId => selectedSetters.indexOf(setterId) !== -1);
 
-export const Visualization = ({ bssC, sectors, selectedSetters }) => (
+export interface VisualizationProps {
+  bssC: Computation<any[]>;
+  sectors: string[];
+  selectedSetters: string[];
+}
+
+export const Visualization = ({ bssC, sectors, selectedSetters }: VisualizationProps) => (
   <Measure bounds>
     {({ measureRef, contentRect }) => (
-      <div ref={measureRef} style={{ flex: 1 }}>
+      <div ref={measureRef} style={{ position: "relative", flex: 1 }}>
         {contentRect.bounds && (
-          <VisualizationRenderer
-            bssC={bssC}
-            bounds={contentRect.bounds}
-            sectors={sectors}
-            selectedSetters={selectedSetters}
-          />
+          <div style={{ position: "absolute" }}>
+            <VisualizationRenderer
+              bssC={bssC}
+              bounds={contentRect.bounds}
+              sectors={sectors}
+              selectedSetters={selectedSetters}
+            />
+          </div>
         )}
       </div>
     )}
   </Measure>
 );
 
-const VisualizationRenderer = ({ bssC, sectors, selectedSetters, bounds }) => {
+interface VisualizationRendererProps {
+  bssC: Computation<any[]>;
+  sectors: string[];
+  selectedSetters: string[];
+  bounds: BoundingRect;
+}
+
+const VisualizationRenderer = ({ bssC, sectors, selectedSetters, bounds }: VisualizationRendererProps) => {
   if (!bounds.height) {
     return <div />;
   }
 
   const padding = {
-    top: 8,
-    left: 16,
-    right: 60,
-    bottom: 50
+    top: 24,
+    left: 24,
+    right: 24,
+    bottom: 48
   };
 
-  const events = bssC.get([]);
+  const events = bssC.get<any[]>([]);
 
   const values = (() => {
     const res = events.reduce(
@@ -121,14 +137,17 @@ const VisualizationRenderer = ({ bssC, sectors, selectedSetters, bounds }) => {
 
   const data = s(values);
 
-  const last = (xs: any[]) => xs[xs.length - 1]
+  const last = (xs: any[]) => xs[xs.length - 1];
 
   xScale.domain([new Date(Date.now() - 4 * 30 * 24 * 60 * 60 * 1000), new Date(Date.now())]);
-  yScale.domain([0, Math.ceil(last(last(data))[1] * 1.2)]);
+  yScale.domain([0, Math.ceil(Math.max(...last(data).map(series => series[1])) * 1.2)]);
 
   data.forEach(d => {
-    last(d).data.date = new Date(Date.now());
-  })
+    const l = last(d);
+    if (l && l.data) {
+      l.data.date = new Date(Date.now());
+    }
+  });
 
   return (
     <svg width={bounds.width} height={bounds.height} style={{ display: "block" }}>
@@ -142,7 +161,7 @@ const VisualizationRenderer = ({ bssC, sectors, selectedSetters, bounds }) => {
 
         <TotalLine xScale={xScale} yScale={yScale} data={data} />
 
-        {data.map((d, i) => (
+        {false && data.map((d, i) => (
           <g key={i}>
             {d.map((v, j) => (
               <circle
@@ -162,7 +181,7 @@ const VisualizationRenderer = ({ bssC, sectors, selectedSetters, bounds }) => {
         <GridLabels width={bounds.width - padding.left - padding.right} yScale={yScale} />
 
         <g
-          transform={`translate(0,${bounds.height - padding.bottom + 10})`}
+          transform={`translate(0,${bounds.height - padding.bottom - padding.top + 12})`}
           ref={el => {
             if (el) {
               select(el).call(axisBottom(xScale));
@@ -243,30 +262,33 @@ interface GridProps {
   yScale: ScaleLinear<number, number>;
 }
 
-class GridLines extends React.PureComponent<GridProps> {
+export class GridLines extends React.PureComponent<GridProps> {
   render() {
     const { width, yScale } = this.props;
     const ticks = yScale.ticks(5);
 
     return (
       <g data-n="grid-lines">
-        {ticks.map((tick, i) => Math.round(tick) === tick && (
-          <g data-n="grid-line" transform={`translate(0, ${yScale(tick)})`} key={i}>
-            <line
-              x1={0}
-              x2={width}
-              strokeWidth={tick === 0 ? 2 : 1}
-              stroke={tick === 0 ? "#666" : "#666"}
-              strokeOpacity={tick === 0 ? 1 : 0.2}
-            />
-          </g>
-        ))}
+        {ticks.map(
+          (tick, i) =>
+            Math.round(tick) === tick && (
+              <g data-n="grid-line" transform={`translate(0, ${yScale(tick)})`} key={i}>
+                <line
+                  x1={0}
+                  x2={width}
+                  strokeWidth={tick === 0 ? 2 : 1}
+                  stroke={tick === 0 ? "#666" : "#666"}
+                  strokeOpacity={tick === 0 ? 1 : 0.2}
+                />
+              </g>
+            )
+        )}
       </g>
     );
   }
 }
 
-class GridLabels extends React.PureComponent<GridProps> {
+export class GridLabels extends React.PureComponent<GridProps> {
   render() {
     const { width, yScale } = this.props;
     const ticks = yScale.ticks(5);

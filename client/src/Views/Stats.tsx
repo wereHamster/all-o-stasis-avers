@@ -1,13 +1,20 @@
 import * as Avers from "avers";
 import * as React from "react";
+import styled from "styled-components";
 
-import { boulderStats } from "../storage";
+import { boulderStats, BoulderStat, gradeCompare } from "../storage";
 import { App } from "../app";
 
 import { Site } from "./Components/Site";
 import { SectorSelector } from "./Components/Stats/SectorSelector";
 import { SetterSelector } from "./Components/Stats/SetterSelector";
 import { Visualization } from "./Components/Stats/Visualization";
+import { Button } from "../Components/Button";
+import { Section } from "./Components/Stats/Internal";
+import { GradeDistributionChart } from "../Components/GradeDistributionChart";
+import Computation from "computation";
+import { useTypeface, heading20 } from "../Materials/Typefaces";
+import { SectorDistributionChart } from "../Components/SectorDistributionChart";
 
 interface StatsPageProps {
   app: App;
@@ -17,6 +24,24 @@ interface StatsPageState {
   sectors: string[];
   selectedSetters: string[]; // ObjId[]
 }
+
+type EventType = "set" | "removed";
+interface Event {
+  bs: BoulderStat;
+  type: EventType;
+  date: Date;
+  setters: string[];
+  sector: string;
+  grade: string;
+}
+
+const matchSector = (sectors: string[]) =>
+  sectors.length === 0 ? () => true : (bs: BoulderStat) => sectors.indexOf(bs.sector) !== -1;
+
+const matchSetter = (setters: string[]) =>
+  setters.length === 0
+    ? () => true
+    : (bs: BoulderStat) => bs.setters.some(setterId => setters.indexOf(setterId) !== -1);
 
 export default class extends React.Component<StatsPageProps, StatsPageState> {
   state: StatsPageState = {
@@ -46,54 +71,203 @@ export default class extends React.Component<StatsPageProps, StatsPageState> {
     }
   };
 
-  render() {
-    const {
-      app,
-      app: {
-        data: { aversH }
-      }
-    } = this.props;
-    const { sectors, selectedSetters } = this.state;
+  bssC = (): Computation<Event[]> => {
+    const { app } = this.props;
 
-    const toEvents = bss =>
+    const toEvents = (bss: BoulderStat[]) =>
       bss
         .map(
-          bs =>
-            bs.removedOn === undefined
-              ? [{ bs, type: "set", date: bs.setOn, setters: bs.setters, sector: bs.sector, grade: bs.grade }]
-              : [
-                  { bs, type: "set", date: bs.setOn, setters: bs.setters, sector: bs.sector, grade: bs.grade },
-                  { bs, type: "removed", date: bs.removedOn, setters: bs.setters, sector: bs.sector, grade: bs.grade }
-                ]
+          (bs: BoulderStat): Event[] => {
+            if (bs.removedOn === undefined) {
+              return [{ bs, type: "set", date: bs.setOn, setters: bs.setters, sector: bs.sector, grade: bs.grade }];
+            } else {
+              return [
+                { bs, type: "set", date: bs.setOn, setters: bs.setters, sector: bs.sector, grade: bs.grade },
+                { bs, type: "removed", date: bs.removedOn, setters: bs.setters, sector: bs.sector, grade: bs.grade }
+              ];
+            }
+          }
         )
-        .reduce((a, x) => a.concat(x), [])
+        .reduce<Event[]>((a, x) => a.concat(x), [])
         .sort((a, b) => +a.date - +b.date)
         .filter(a => a.date.getTime() > 10000);
 
-    const bssC = Avers.staticValue(aversH, boulderStats(aversH)).fmap(toEvents);
+    return Avers.staticValue(app.data.aversH, boulderStats(app.data.aversH)).fmap(toEvents);
+  };
+
+  removeBoulders = (): void => {
+    // const bss = this.bssC().get(undefined);
+    alert("Not implemented yet");
+  };
+
+  render() {
+    const { app } = this.props;
+    const { sectors, selectedSetters } = this.state;
+
+    const bssC = this.bssC();
+
+    const gradeDistribution = (() => {
+      const map = new Map<string, number>();
+      const events = bssC.get<Event[]>([]);
+      events.forEach(ev => {
+        const grade = ev.bs.grade;
+        const count = map.get(grade) || 0;
+        if (matchSector(sectors)(ev.bs) && matchSetter(selectedSetters)(ev.bs)) {
+          if (ev.type === "set") {
+            map.set(grade, count + 1);
+          } else if (ev.type === "removed") {
+            map.set(grade, count - 1);
+          }
+        }
+      });
+
+      const ret = Array.from(map.entries()).map(([k, v]) => {
+        return { grade: k, count: v };
+      });
+      ret.sort((a, b) => {
+        return gradeCompare(a.grade, b.grade);
+      });
+      return ret;
+    })();
+
+    const sectorDistribution = (() => {
+      const map = new Map<string, number>();
+      const events = bssC.get<Event[]>([]);
+      events.forEach(ev => {
+        const sector = ev.bs.sector;
+        const count = map.get(sector) || 0;
+        if (matchSector(sectors)(ev.bs) && matchSetter(selectedSetters)(ev.bs)) {
+          if (ev.type === "set") {
+            map.set(sector, count + 1);
+          } else if (ev.type === "removed") {
+            map.set(sector, count - 1);
+          }
+        }
+      });
+
+      const ret = Array.from(map.entries()).map(([k, v]) => {
+        return { sector: k, count: v };
+      });
+      ret.sort();
+      return ret;
+    })();
 
     return (
       <Site app={app}>
-        <div style={{ margin: "20px 24px", display: "flex", flex: 1 }}>
-          <div style={{ flex: "0 0 300px", width: "300px" }}>
-            <SectorSelector
-              sectors={sectors}
-              clear={sectors.length === 0 ? undefined : this.clearSectors}
-              toggle={this.toggleSector}
-            />
+        <Root>
+          <Side>
+            <SideContent>
+              <SectorSelector
+                sectors={sectors}
+                clear={sectors.length === 0 ? undefined : this.clearSectors}
+                toggle={this.toggleSector}
+              />
 
-            <SetterSelector
-              app={app}
-              selectedSetters={selectedSetters}
-              clear={selectedSetters.length === 0 ? undefined : this.clearSetters}
-              toggle={this.toggleSetter}
-            />
-          </div>
-          <div style={{ marginLeft: 80, flex: 1, display: "flex", flexDirection: "column" }}>
-            <Visualization bssC={bssC} sectors={sectors} selectedSetters={selectedSetters} />
-          </div>
-        </div>
+              <SetterSelector
+                app={app}
+                selectedSetters={selectedSetters}
+                clear={selectedSetters.length === 0 ? undefined : this.clearSetters}
+                toggle={this.toggleSetter}
+              />
+            </SideContent>
+          </Side>
+          <Main>
+            <Toolbar>
+              <div>
+                <Section>Boulders</Section>
+                <div>Sectors: {sectors.length === 0 ? "ALL" : sectors.join(", ")}</div>
+              </div>
+              <div>
+                <ToolbarButton>
+                  <Button onClick={this.removeBoulders}>remove selected boulders</Button>
+                </ToolbarButton>
+              </div>
+            </Toolbar>
+            <Grid>
+              <GridItem>
+                <GridItemTitle>History</GridItemTitle>
+                <GridItemContent>
+                  <Visualization bssC={bssC} sectors={sectors} selectedSetters={selectedSetters} />
+                </GridItemContent>
+              </GridItem>
+              <GridItem>
+                <GridItemTitle>Grade Distribution</GridItemTitle>
+                <GridItemContent>
+                  <GradeDistributionChart data={gradeDistribution} />
+                </GridItemContent>
+              </GridItem>
+              <GridItem>
+                <GridItemTitle>Sector Distribution</GridItemTitle>
+                <GridItemContent>
+                  <SectorDistributionChart data={sectorDistribution} />
+                </GridItemContent>
+              </GridItem>
+              <GridItem />
+            </Grid>
+          </Main>
+        </Root>
       </Site>
     );
   }
 }
+
+const Root = styled.div`
+  flex: 1;
+  padding: 20px 24px;
+  display: flex;
+`;
+
+const Side = styled.div`
+  flex: 0 0 300px;
+  position: relative;
+  margin-right: 24px;
+`;
+
+const SideContent = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+`;
+
+const Main = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+`;
+
+const Toolbar = styled.div`
+  flex: 0 0 120px;
+  display: flex;
+  justify-content: space-between;
+`;
+
+const ToolbarButton = styled.div``;
+
+const Grid = styled.div`
+  flex: 1;
+  display: grid;
+  grid-template: calc(50% - 12px) calc(50% - 12px) / 1fr 1fr;
+  grid-gap: 24px;
+`;
+
+const GridItem = styled.div`
+  background: white;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.16s;
+  display: flex;
+  flex-direction: column;
+`;
+
+const GridItemTitle = styled.div`
+  ${useTypeface(heading20)};
+  margin: 24px 24px 0;
+`;
+
+const GridItemContent = styled.div`
+  flex: 1;
+  display: flex;
+`;

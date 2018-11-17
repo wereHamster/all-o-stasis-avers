@@ -47,16 +47,28 @@ export const SetterSelector = ({ app, selectedSetters, clear, toggle }: SetterSe
     });
 
   return (
-    <>
+    <Root>
       <Section>
         Setter
         <SectionLink onClick={clear}>(reset)</SectionLink>
       </Section>
 
-      <div>{setters}</div>
-    </>
+      <Setters><div>{setters}</div></Setters>
+    </Root>
   );
 };
+
+const Root = styled.div`
+  margin-top: 24px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+`;
+
+const Setters = styled.div`
+  flex-grow: 1;
+  overflow-y: auto;
+`;
 
 const Setter = ({ app, accountId, account, toggle, isSelected }) => (
   <SetterC onClick={() => toggle(accountId)}>

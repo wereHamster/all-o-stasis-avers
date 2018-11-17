@@ -5,7 +5,7 @@ import styled from "styled-components";
 
 import { role, resetBoulderCollections } from "../actions";
 import { App } from "../app";
-import { Account, Boulder } from "../storage";
+import { Boulder } from "../storage";
 
 import { text, darkGrey, primary, secondary, darkSecondary } from "../Materials/Colors";
 import { useTypeface, copy16Bold, copy14 } from "../Materials/Typefaces";
@@ -18,6 +18,7 @@ import { SectorPicker } from "./Components/SectorPicker";
 import { Button } from "../Components/Button";
 import { BoulderSetterCard } from "./Components/BoulderSetterCard";
 import { SetterPicker } from "../Components/SetterPicker";
+import { Loader } from "../Components/Loader";
 
 function BoulderDetailsEditor({ app, boulderE }: { app: App; boulderE: Avers.Editable<Boulder> }) {
   const boulder = boulderE.content;
@@ -149,7 +150,7 @@ export default (boulderId: string) => ({ app }: { app: App }) => {
     })
     .get(
       <Site app={app}>
-        <div>Loading…</div>
+        <Loader />
       </Site>
     );
 };

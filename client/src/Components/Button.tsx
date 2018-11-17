@@ -13,6 +13,8 @@ export const Button = styled.button`
   color: ${primaryText}44;
   outline: none;
 
+  white-space: nowrap;
+
   height: 40px;
   padding: 0 12px;
 
