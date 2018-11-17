@@ -73,7 +73,7 @@ const Chart = ({ bounds, data }: ChartProps) => {
       </g>
       <g transform={`translate(${padding.left},${bounds.height - padding.bottom})`}>
         {data.map(({ grade, count }) => (
-          <Text key={grade} x={(xScale(grade) || 0) + xScale.bandwidth() / 2} y={20}>
+          count && <Text key={grade} x={(xScale(grade) || 0) + xScale.bandwidth() / 2} y={20}>
             {count}
           </Text>
         ))}

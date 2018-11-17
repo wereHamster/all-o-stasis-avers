@@ -9,7 +9,7 @@ import { Site } from "./Components/Site";
 import { SectorSelector } from "./Components/Stats/SectorSelector";
 import { SetterSelector } from "./Components/Stats/SetterSelector";
 import { Visualization } from "./Components/Stats/Visualization";
-import { Button } from "../Components/Button";
+// import { Button } from "../Components/Button";
 import { Section } from "./Components/Stats/Internal";
 import { GradeDistributionChart } from "../Components/GradeDistributionChart";
 import Computation from "computation";
@@ -177,11 +177,11 @@ export default class extends React.Component<StatsPageProps, StatsPageState> {
                 <Section>Boulders</Section>
                 <div>Sectors: {sectors.length === 0 ? "ALL" : sectors.join(", ")}</div>
               </div>
-              <div>
+              {/* <div>
                 <ToolbarButton>
                   <Button onClick={this.removeBoulders}>remove selected boulders</Button>
                 </ToolbarButton>
-              </div>
+              </div> */}
             </Toolbar>
             <Grid>
               <GridItem>
@@ -245,7 +245,7 @@ const Toolbar = styled.div`
   justify-content: space-between;
 `;
 
-const ToolbarButton = styled.div``;
+// const ToolbarButton = styled.div``;
 
 const Grid = styled.div`
   flex: 1;
