@@ -14,6 +14,7 @@ import { Section } from "./Components/Stats/Internal";
 import { GradeDistributionChart } from "../Components/GradeDistributionChart";
 import Computation from "computation";
 import { useTypeface, heading20 } from "../Materials/Typefaces";
+import { SectorDistributionChart } from "../Components/SectorDistributionChart";
 
 interface StatsPageProps {
   app: App;
@@ -105,26 +106,51 @@ export default class extends React.Component<StatsPageProps, StatsPageState> {
 
     const bssC = this.bssC();
 
-    const gradeDistribution = new Map<string, number>();
-    const events = bssC.get<Event[]>([]);
-    events.forEach(ev => {
-      const grade = ev.bs.grade;
-      const count = gradeDistribution.get(grade) || 0;
-      if (matchSector(sectors)(ev.bs) && matchSetter(selectedSetters)(ev.bs)) {
-        if (ev.type === "set") {
-          gradeDistribution.set(grade, count + 1);
-        } else if (ev.type === "removed") {
-          gradeDistribution.set(grade, count - 1);
+    const gradeDistribution = (() => {
+      const map = new Map<string, number>();
+      const events = bssC.get<Event[]>([]);
+      events.forEach(ev => {
+        const grade = ev.bs.grade;
+        const count = map.get(grade) || 0;
+        if (matchSector(sectors)(ev.bs) && matchSetter(selectedSetters)(ev.bs)) {
+          if (ev.type === "set") {
+            map.set(grade, count + 1);
+          } else if (ev.type === "removed") {
+            map.set(grade, count - 1);
+          }
         }
-      }
-    });
+      });
 
-    const boulderFrequencyDistribution = Array.from(gradeDistribution.entries()).map(([k, v]) => {
-      return { grade: k, count: v };
-    });
-    boulderFrequencyDistribution.sort((a, b) => {
-      return gradeCompare(a.grade, b.grade);
-    });
+      const ret = Array.from(map.entries()).map(([k, v]) => {
+        return { grade: k, count: v };
+      });
+      ret.sort((a, b) => {
+        return gradeCompare(a.grade, b.grade);
+      });
+      return ret;
+    })();
+
+    const sectorDistribution = (() => {
+      const map = new Map<string, number>();
+      const events = bssC.get<Event[]>([]);
+      events.forEach(ev => {
+        const sector = ev.bs.sector;
+        const count = map.get(sector) || 0;
+        if (matchSector(sectors)(ev.bs) && matchSetter(selectedSetters)(ev.bs)) {
+          if (ev.type === "set") {
+            map.set(sector, count + 1);
+          } else if (ev.type === "removed") {
+            map.set(sector, count - 1);
+          }
+        }
+      });
+
+      const ret = Array.from(map.entries()).map(([k, v]) => {
+        return { sector: k, count: v };
+      });
+      ret.sort();
+      return ret;
+    })();
 
     return (
       <Site app={app}>
@@ -167,13 +193,13 @@ export default class extends React.Component<StatsPageProps, StatsPageState> {
               <GridItem>
                 <GridItemTitle>Grade Distribution</GridItemTitle>
                 <GridItemContent>
-                  <GradeDistributionChart data={boulderFrequencyDistribution} />
+                  <GradeDistributionChart data={gradeDistribution} />
                 </GridItemContent>
               </GridItem>
               <GridItem>
                 <GridItemTitle>Sector Distribution</GridItemTitle>
                 <GridItemContent>
-                  <GradeDistributionChart data={boulderFrequencyDistribution} />
+                  <SectorDistributionChart data={sectorDistribution} />
                 </GridItemContent>
               </GridItem>
               <GridItem />
