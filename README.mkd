@@ -28,7 +28,7 @@ In order to run the boulder admin install the following dependencies:
 Make sure RethinkDB is running, then start the server with
 
     cd api
-    ./script/serve
+    ./script/server
 
 
 ### Client
@@ -37,7 +37,7 @@ To start the client
 
     cd client
     nix-shell
-    ./script/serve
+    ./script/server
     open localhost:8081 in browser
 
 
