@@ -1652,4 +1652,4 @@ randomWords n = T.intercalate " " <$> sequence (replicate n randomWord)
 mkSecurityCode :: IO Text
 mkSecurityCode = do
     count <- randomRIO (2, 3)
-    randomWords count
+    T.toLower <$> randomWords count
