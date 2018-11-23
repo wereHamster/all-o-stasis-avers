@@ -81,7 +81,7 @@ export default class extends React.Component<{ app: App }, LoginState> {
 
         const awaitPassportConfirmationPromise = (async () => {
           try {
-            await fetch(`${apiHost}/login/verify?passportId=${json.passportId}`);
+            await fetch(`${apiHost}/login/verify?passportId=${json.passportId}`, { credentials: "include" });
             Avers.restoreSession(session);
             navigateTo("/");
           } catch (e) {
