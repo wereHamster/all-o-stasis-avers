@@ -38,12 +38,6 @@ const TeamItem = () => (
   </Item>
 );
 
-const SectorItem = () => (
-  <Item isActive={window.location.pathname === "/sector"} onClick={navigateToFn("/sector")}>
-    Sectors
-  </Item>
-);
-
 const StatsItem = () => (
   <Item onClick={navigateToFn("/stats")}>
     <i className="line chart icon" />
