@@ -21,7 +21,7 @@ cookie = ""
 
 email_mapping = {}
 email_mapping['mt_mouver@gmx.ch'] = 'matthi@minimum.ch'
-email_mapping['gast'] = 'matthi@minimum.ch'
+email_mapping['gast'] = 'gastschrauber@minimum.ch'
 email_mapping['weily@gmx.ch'] = 'weily-@hotmail.com'
 email_mapping['manu@mail.ch'] = 'manuel.wacker@gmx.ch'
 email_mapping['me@mail.ch'] = 'phhaenggli@gmx.net'
