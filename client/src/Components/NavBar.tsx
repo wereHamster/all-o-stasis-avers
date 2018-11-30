@@ -10,7 +10,7 @@ import logo from "!!file-loader!../../assets/logo.svg";
 
 export const NavBar = ({ app }: { app: App }) => (
   <Root>
-    <Logo href="/">
+    <Logo href="https://minimum.ch">
       <LogoImage src={logo} />
     </Logo>
 
