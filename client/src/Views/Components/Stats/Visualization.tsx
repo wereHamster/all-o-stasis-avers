@@ -75,7 +75,7 @@ const VisualizationRenderer = ({ bssC, sectors, selectedSetters, bounds }: Visua
       (acc, ev) => {
         if (matchSector(sectors)(ev.bs) && matchSetter(selectedSetters)(ev.bs)) {
           if (ev.grade in acc.acc) {
-            acc.acc[ev.grade] = Math.max(0, acc.acc[ev.grade] + (ev.type === "set" ? 1 : -1));
+            acc.acc[ev.grade] += (ev.type === "set" ? 1 : -1);
           } else if (ev.type === "set") {
             acc.acc[ev.grade] = 1;
           }
@@ -88,7 +88,7 @@ const VisualizationRenderer = ({ bssC, sectors, selectedSetters, bounds }: Visua
             values: acc.values.concat([
               {
                 date: acc.date,
-                ...Object.keys(acc.acc).reduce((o, k) => ({ ...o, [k]: acc.acc[k] }), {})
+                ...Object.keys(acc.acc).reduce((o, k) => ({ ...o, [k]: Math.max(0, acc.acc[k]) }), {})
               }
             ]),
             date: ev.date,
