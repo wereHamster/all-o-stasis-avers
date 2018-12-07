@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { format } from "date-fns";
 
 import { App } from "../app";
-import { Boulder, gradeCompare } from "../storage";
+import { Boulder, boulderCompare } from "../storage";
 
 import { text } from "../Materials/Colors";
 import { useTypeface, copy16Bold } from "../Materials/Typefaces";
@@ -75,7 +75,7 @@ export default class extends React.Component<{ app: App }, State> {
       ) {
         lastGroup.boulders.push(boulder);
       } else {
-        lastGroup.boulders.sort((a, b) => gradeCompare(a.content.grade, b.content.grade));
+        lastGroup.boulders.sort((a, b) => boulderCompare(a.content, b.content));
         groups.push({ date: createdAt, boulders: [boulder] });
       }
     });
