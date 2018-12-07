@@ -45,11 +45,11 @@ export const sectors = [
 
 export const gradeCompare = (a: string, b: string) => grades.indexOf(a) - grades.indexOf(b);
 
-export function boulderCompare = (a: Boulder, b: Boulder): number {
+export function boulderCompare(a: Boulder, b: Boulder): number {
     if (a.grade == b.grade) {
         return a.gradeNr - b.gradeNr;
     } else {
-        return grades.indexOf(a) - grades.indexOf(b);
+        return grades.indexOf(a.grade) - grades.indexOf(b.grade);
     }
 }
 
