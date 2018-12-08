@@ -1,7 +1,8 @@
 import * as React from "react";
 import styled from "styled-components";
+import Link from "next/link";
 
-import { App, navigateToFn } from "../../app";
+import { App } from "../../app";
 import { Boulder } from "../../storage";
 
 import { text } from "../../Materials/Colors";
@@ -18,7 +19,9 @@ export const BoulderDetails = ({ app, boulder }: { app: App; boulder: Boulder })
     <Section>Setters</Section>
     <div>
       {boulder.setter.map((setterId, index) => (
-        <BoulderSetterCard key={index} app={app} setterId={setterId} onClick={navigateToFn(`/account/${setterId}`)} />
+        <Link key={index} href={{ pathname: "/account", query: { id: setterId } }}>
+          <BoulderSetterCard app={app} setterId={setterId} onClick={() => {}} />
+        </Link>
       ))}
     </div>
   </Root>

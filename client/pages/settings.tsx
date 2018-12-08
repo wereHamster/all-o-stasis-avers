@@ -2,15 +2,15 @@ import * as Avers from "avers";
 import * as React from "react";
 import styled from "styled-components";
 
-import { App, config } from "../app";
-import { Account } from "../storage";
+import { App, config } from "../src/app";
+import { Account } from "../src/storage";
 
-import * as C from "../Materials/Colors";
-import { useTypeface, heading18 } from "../Materials/Typefaces";
+import * as C from "../src/Materials/Colors";
+import { useTypeface, heading18 } from "../src/Materials/Typefaces";
 
-import { Site } from "./Components/Site";
-import { Input } from "../Components/Input";
-import { accountAvatar } from "./Account";
+import { Site } from "../src/Views/Components/Site";
+import { Input } from "../src/Components/Input";
+import { accountAvatar } from "./account";
 
 export default ({ app }: { app: App }) => (
   <Site app={app}>
@@ -35,6 +35,8 @@ export class Settings extends React.Component<SettingsProps> {
           <Editor app={app} accountE={accountE} />
         </Root>
       );
+    } else {
+      return null;
     }
   }
 }

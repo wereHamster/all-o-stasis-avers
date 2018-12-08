@@ -15,35 +15,25 @@ export const aversH = new Avers.Handle({
   infoTable
 });
 const data = new Data(aversH);
-export const app = new App(null as any, data, () => {
-  throw new Error("mkViewFn");
-});
+export const app = new App(data);
 
 export const anonymousApp = app;
 
 export const setterApp = new App(
-  null as any,
   (() => {
     const d = new Data(aversH);
     d.session.objId = "setter-1";
     return d;
-  })(),
-  () => {
-    throw new Error("mkViewFn");
-  }
+  })()
 );
 
 export const adminApp = new App(
-    null as any,
-    (() => {
-      const d = new Data(aversH);
-      d.session.objId = "admin-1";
-      return d;
-    })(),
-    () => {
-      throw new Error("mkViewFn");
-    }
-  );
+  (() => {
+    const d = new Data(aversH);
+    d.session.objId = "admin-1";
+    return d;
+  })()
+);
 
 // ----------------------------------------------------------------------------
 // Fill Avers handle with a few boulders and setters
@@ -88,7 +78,6 @@ Avers.resolveEditable(aversH, setter2Id, {
     name: "Yves Ineichen"
   }
 });
-
 
 export const admin1Id = "admin-1";
 Avers.resolveEditable(aversH, admin1Id, {

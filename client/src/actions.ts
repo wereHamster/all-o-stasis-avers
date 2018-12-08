@@ -1,6 +1,7 @@
 import * as Avers from 'avers'
-import {App, navigateTo, refresh} from './app'
+import {App} from './app'
 import * as Storage from './storage'
+import Router from 'next/router'
 
 function mkBoulder(app: App): Storage.Boulder {
     const now = Date.now()
@@ -22,12 +23,12 @@ createBoulder(app: App) {
     const promise = Avers.createObject(app.data.aversH, 'boulder', mkBoulder(app)).then(id => {
         app.createBoulderPromise = undefined
         resetBoulderCollections(app);
-        navigateTo('/boulder/' + id)
+        Router.push({ pathname: '/boulder', query: { id }});
         return id
     })
 
     app.createBoulderPromise = promise
-    refresh(app)
+    Avers.startNextGeneration(app.data.aversH);
 
     return promise
 }

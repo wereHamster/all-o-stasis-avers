@@ -1,12 +1,13 @@
 import * as React from "react";
 import styled from "styled-components";
+import Link from "next/link";
 
 import { useTypeface, copy14 } from "../Materials/Typefaces";
 import { text } from "../Materials/Colors";
 
-import { App, navigateToFn } from "../app";
+import { App } from "../app";
 
-import logo from "!!file-loader!../../assets/logo.svg";
+const logo = "/static/logo.svg";
 
 export const NavBar = ({ app }: { app: App }) => (
   <Root>
@@ -27,35 +28,39 @@ export const NavBar = ({ app }: { app: App }) => (
 // ----------------------------------------------------------------------------
 
 const HomeItem = () => (
-  <Item isActive={window.location.pathname === "/"} onClick={navigateToFn("/")}>
-    Boulders
-  </Item>
+  <Link href="/" passHref>
+    <Item isActive={window.location.pathname === "/"}>Boulders</Item>
+  </Link>
 );
 
 const TeamItem = () => (
-  <Item isActive={window.location.pathname === "/team"} onClick={navigateToFn("/team")}>
-    Team
-  </Item>
+  <Link href="/team" passHref>
+    <Item isActive={window.location.pathname === "/team"}>Team</Item>
+  </Link>
 );
 
 const StatsItem = () => (
-  <Item onClick={navigateToFn("/stats")}>
-    <i className="line chart icon" />
-  </Item>
+  <Link href="/stats" passHref>
+    <Item isActive={window.location.pathname === "/stats"}>Stats</Item>
+  </Link>
 );
 
 const SignInItem = () => (
-  <Item onClick={navigateToFn("/login")}>
-    <i className="sign in icon" />
-    Login
-  </Item>
+  <Link href="/login" passHref>
+    <Item>
+      <i className="sign in icon" />
+      Login
+    </Item>
+  </Link>
 );
 
 const AccountSettings = ({  }: { app: App }) => (
-  <Item onClick={navigateToFn("/settings")}>
-    <i className="settings icon" />
-    Settings
-  </Item>
+  <Link href="/settings" passHref>
+    <Item>
+      <i className="settings icon" />
+      Settings
+    </Item>
+  </Link>
 );
 
 /*
@@ -110,13 +115,14 @@ const FlexItem = styled.div`
   flex: 1;
 `;
 
-const Item = styled<{ isActive?: boolean }, "div">("div")`
+const Item = styled<{ isActive?: boolean }, "a">("a")`
   display: flex;
   align-items: center;
   align-self: stretch;
   padding-right: 16px;
   cursor: pointer;
   white-space: nowrap;
+  text-decoration: none;
 
   color: ${({ isActive }) => (isActive ? "#000000EE" : "inherit")};
 

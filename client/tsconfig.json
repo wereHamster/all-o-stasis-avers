@@ -1,22 +1,18 @@
 {
-    "compilerOptions": {
-        "target": "esnext",
-        "lib": ["es2015", "dom"],
-        "module": "esnext",
-        "moduleResolution": "node",
-        "declaration": false,
-        "noImplicitAny": false,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "preserveConstEnums": true,
-        "suppressImplicitAnyIndexErrors": true,
-        "allowSyntheticDefaultImports": true,
-        "rootDir": "src/",
-        "outDir": "dist/js/",
-        "jsx": "react",
-        "strict": true
-    },
-    "include": [
-        "src/**/*"
-    ]
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "declaration": false,
+    "noImplicitAny": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "preserveConstEnums": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "allowSyntheticDefaultImports": true,
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "strict": true,
+    "noEmit": true
+  }
 }

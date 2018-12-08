@@ -1,10 +1,10 @@
 import * as React from "react";
 import styled from "styled-components";
 
-import { App, activeSetters } from "../app";
+import { App, activeSetters } from ".././src/app";
 
-import { Site } from "./Components/Site";
-import { SetterBlock } from "../Components/SetterBlock";
+import { Site } from "../src/Views/Components/Site";
+import { SetterBlock } from "../src/Components/SetterBlock";
 
 export default class extends React.Component<{ app: App }> {
   render() {

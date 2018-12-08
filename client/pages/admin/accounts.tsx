@@ -2,11 +2,11 @@ import * as Avers from "avers";
 import * as React from "react";
 import styled from "styled-components";
 
-import { Account, roles } from "../../storage";
-import { App } from "../../app";
+import { Account, roles } from "../../src/storage";
+import { App } from "../../src/app";
 
-import { Site } from "../Components/Site";
-import { DropDownInput } from "../Components/DropdownInput";
+import { Site } from "../../src/Views/Components/Site";
+import { DropDownInput } from "../../src/Views/Components/DropdownInput";
 
 export default ({ app }: { app: App }) => (
   <Site app={app}>

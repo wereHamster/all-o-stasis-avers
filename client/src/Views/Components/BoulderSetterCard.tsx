@@ -5,7 +5,7 @@ import { App } from "../../app";
 
 import { text } from "../../Materials/Colors";
 import { useTypeface, copy16 } from "../../Materials/Typefaces";
-import { accountPublicProfile } from "../Account";
+import { accountPublicProfile } from "../../../pages/account";
 
 export class BoulderSetterCard extends React.Component<{
   app: App;

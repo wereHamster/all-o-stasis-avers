@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 import { Account } from "../../../storage";
 import { App, activeSetters } from "../../../app";
-import { accountAvatar } from "../../Account";
+import { accountAvatar } from "../../../../pages/account";
 
 import { text, lightGrey } from "../../../Materials/Colors";
 import { useTypeface, copy14 } from "../../../Materials/Typefaces";

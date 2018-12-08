@@ -2,19 +2,19 @@ import * as Avers from "avers";
 import * as React from "react";
 import styled from "styled-components";
 
-import { boulderStats, BoulderStat, gradeCompare } from "../storage";
-import { App } from "../app";
+import { boulderStats, BoulderStat, gradeCompare } from "../src/storage";
+import { App } from "../src/app";
 
-import { Site } from "./Components/Site";
-import { SectorSelector } from "./Components/Stats/SectorSelector";
-import { SetterSelector } from "./Components/Stats/SetterSelector";
-import { Visualization } from "./Components/Stats/Visualization";
+import { Site } from "../src/Views/Components/Site";
+import { SectorSelector } from "../src/Views/Components/Stats/SectorSelector";
+import { SetterSelector } from "../src/Views/Components/Stats/SetterSelector";
+import { Visualization } from "../src/Views/Components/Stats/Visualization";
 // import { Button } from "../Components/Button";
-import { Section } from "./Components/Stats/Internal";
-import { GradeDistributionChart } from "../Components/GradeDistributionChart";
+import { Section } from "../src/Views/Components/Stats/Internal";
+import { GradeDistributionChart } from "../src/Components/GradeDistributionChart";
 import Computation from "computation";
-import { useTypeface, heading20 } from "../Materials/Typefaces";
-import { SectorDistributionChart } from "../Components/SectorDistributionChart";
+import { useTypeface, heading20 } from "../src/Materials/Typefaces";
+import { SectorDistributionChart } from "../src/Components/SectorDistributionChart";
 
 interface StatsPageProps {
   app: App;

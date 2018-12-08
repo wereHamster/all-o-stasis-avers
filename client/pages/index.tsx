@@ -3,18 +3,18 @@ import * as React from "react";
 import styled from "styled-components";
 import { format } from "date-fns";
 
-import { App } from "../app";
-import { Boulder, boulderCompare } from "../storage";
+import { App } from "../src/app";
+import { Boulder, boulderCompare } from "../src/storage";
 
-import { text } from "../Materials/Colors";
-import { useTypeface, copy16Bold } from "../Materials/Typefaces";
+import { text } from "../src/Materials/Colors";
+import { useTypeface, copy16Bold } from "../src/Materials/Typefaces";
 
-import { BoulderCard } from "./Components/BoulderCard";
-import { Site } from "./Components/Site";
-import { BoulderId24 } from "./Components/BoulderId";
-import { Input } from "../Components/Input";
-import { Button } from "../Components/Button";
-import { createBoulder, role } from "../actions";
+import { BoulderCard } from "../src/Views/Components/BoulderCard";
+import { Site } from "../src/Views/Components/Site";
+import { BoulderId24 } from "../src/Views/Components/BoulderId";
+import { Input } from "../src/Components/Input";
+import { Button } from "../src/Components/Button";
+import { createBoulder, role } from "../src/actions";
 
 interface State {
   search: string;

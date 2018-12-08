@@ -1,10 +1,5 @@
-import * as React from "react";
-import * as ReactDOM from "react-dom";
-
 import * as Avers from "avers";
 import { Account, Boulder } from "./storage";
-
-import page from "page";
 
 import configObject from "./config";
 import Computation from "computation";
@@ -23,14 +18,7 @@ export const config = Avers.mk<Config>(Config, configObject);
 
 export class App {
   createBoulderPromise: void | Promise<string> = undefined;
-
-  refreshId: undefined | number = undefined;
-
-  constructor(
-    public containerElement: Element,
-    public data: Data,
-    public viewComponent: React.ComponentType<{ app: App }>
-  ) {}
+  constructor(public data: Data) {}
 }
 
 export const infoTable = new Map<string, { new (): any }>();
@@ -67,30 +55,6 @@ export class Data {
     // Collection of boulders for a given user (setter/admin)
     this.ownedBoulderCollection = new Avers.ObjectCollection(aversH, "ownedBoulders");
   }
-}
-
-export function refresh(app: App): void {
-  if (app.refreshId === undefined) {
-    app.refreshId = requestAnimationFrame(() => {
-      app.refreshId = undefined;
-      ReactDOM.render(React.createElement(app.viewComponent, { app }), app.containerElement);
-    });
-  }
-}
-
-export function loadView(app: App, viewComponent: React.ComponentType<{ app: App }>): void {
-  app.viewComponent = viewComponent;
-  refresh(app);
-}
-
-export function navigateTo(p: string) {
-  page(p);
-}
-
-export function navigateToFn(p: string) {
-  return () => {
-    navigateTo(p);
-  };
 }
 
 export const activeSetters = (app: App): Computation<string[]> =>
