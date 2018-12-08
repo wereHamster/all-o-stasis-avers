@@ -41,6 +41,10 @@ const Chart = ({ bounds, data }: ChartProps) => {
     bottom: 48
   };
 
+  if (data.length === 0) {
+    return null;
+  }
+
   const max = Math.max(3, ...data.map(x => x.count));
 
   const xScale = scaleBand()
