@@ -72,13 +72,12 @@ export default withRouter(
 
       const createPassportPromise = (async (): Promise<void> => {
         try {
-          const options: RequestInit = {
+          const res = await fetch(`${apiHost}/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email })
-          };
+            body: JSON.stringify({ email: email.toLowerCase() })
+          });
 
-          const res = await fetch(`${apiHost}/login`, options);
           const json = await res.json();
 
           const awaitPassportConfirmationPromise = (async () => {
