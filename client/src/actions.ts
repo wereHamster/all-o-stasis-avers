@@ -21,13 +21,11 @@ export const resetBoulderCollections = (app: App): void => {
 export function
 createBoulder(app: App) {
     const promise = Avers.createObject(app.data.aversH, 'boulder', mkBoulder(app)).then(id => {
-        app.createBoulderPromise = undefined
         resetBoulderCollections(app);
         Router.push({ pathname: '/boulder', query: { id }});
         return id
     })
 
-    app.createBoulderPromise = promise
     Avers.startNextGeneration(app.data.aversH);
 
     return promise

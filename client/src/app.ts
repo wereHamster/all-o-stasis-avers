@@ -17,7 +17,6 @@ Avers.definePrimitive(Config, "adminEmail", "admin@boulder.app");
 export const config = Avers.mk<Config>(Config, configObject);
 
 export class App {
-  createBoulderPromise: void | Promise<string> = undefined;
   constructor(public data: Data) {}
 }
 
