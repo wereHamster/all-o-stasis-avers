@@ -19,7 +19,12 @@ export default class extends NApp {
   app = ((): App => {
     const aversH = Avers.newHandle({
       apiHost: (config.secure ? "https://" : "http://") + config.apiHost,
-      fetch: typeof window !== "undefined" ? window.fetch.bind(window) : () => {},
+      fetch:
+        typeof window !== "undefined"
+          ? window.fetch.bind(window)
+          : async () => {
+              throw new Error("fetch");
+            },
       createWebSocket: path => new WebSocket((config.secure ? "wss://" : "ws://") + config.apiHost + path),
       now: typeof window !== "undefined" ? window.performance.now.bind(window.performance) : () => 0,
       infoTable
