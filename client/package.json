@@ -19,7 +19,7 @@
     "@types/react-loadable": "^5.4.1",
     "@types/react-measure": "^2.0.4",
     "@zeit/next-typescript": "^1.1.1",
-    "avers": "^0.18.1-alpha.126",
+    "avers": "^0.18.1-alpha.137",
     "computation": "^2.0.1",
     "core-js": "^2.5.7",
     "d3-array": "^1.2.1",
