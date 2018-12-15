@@ -1,5 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
+import Link from "next/link";
 
 import { App } from "../app";
 import { darkSecondary, secondaryText } from "../Materials/Colors";
@@ -15,7 +16,9 @@ export class AdminBar extends React.Component<AdminBarProps> {
       <Root>
         <span>Manage</span>
 
-        <a href="/admin/accounts">Accounts</a>
+        <Link href="/admin/accounts">
+          <a>Accounts</a>
+        </Link>
       </Root>
     );
   }

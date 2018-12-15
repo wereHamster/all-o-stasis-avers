@@ -1,9 +1,10 @@
 import * as Avers from "avers";
 import * as React from "react";
 import styled from "styled-components";
+import Link from 'next/link';
 
-import { accountAvatar } from "../Views/Account";
-import { App, navigateToFn } from "../app";
+import { accountAvatar } from "../../pages/account";
+import { App } from "../app";
 import { grades, Boulder, publicProfile } from "../storage";
 
 import { useTypeface, heading28, copy14 } from "../Materials/Typefaces";
@@ -23,7 +24,7 @@ export class SetterBlock extends React.Component<SetterCardProps> {
 
     const gradeDistribution = new Map<string, number>();
     grades.forEach(grade => {
-      gradeDistribution.set(grade, (gradeDistribution.get(grade) || 0));
+      gradeDistribution.set(grade, gradeDistribution.get(grade) || 0);
       app.data.activeBouldersCollection.ids.get<string[]>([]).forEach(boulderId => {
         const boulder = Avers.lookupContent<Boulder>(app.data.aversH, boulderId).get(undefined);
         if (boulder && boulder.grade === grade && boulder.setter.some(x => x === accountId)) {
@@ -40,7 +41,9 @@ export class SetterBlock extends React.Component<SetterCardProps> {
     return (
       <Root>
         <Top>
-          <Avatar onClick={navigateToFn("/account/" + accountId)} src={accountAvatar(app.data.aversH, accountId)} />
+          <Link href={{ pathname: "/account", query: { id: accountId } }}>
+            <Avatar src={accountAvatar(app.data.aversH, accountId)} />
+          </Link>
           <div>
             <Name>{profile && profile.name !== "" ? profile.name : accountId.slice(0, 5)}</Name>
             <Tagline>Hat {sum} boulder an der wand</Tagline>

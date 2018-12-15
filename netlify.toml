@@ -1,7 +1,7 @@
 [build]
   base = "client"
-  command = "./script/confgen production && npm run build && cp -r -n assets/* dist/"
-  publish = "client/dist"
+  command = "./script/confgen production && npm run build"
+  publish = "client/out"
 
 [build.environment]
   NODE_VERSION = "10.9.0"

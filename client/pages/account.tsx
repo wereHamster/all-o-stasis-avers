@@ -1,16 +1,17 @@
 import * as Avers from "avers";
 import * as React from "react";
 import styled from "styled-components";
+import { withRouter } from 'next/router';
 
-import { role } from "../actions";
-import { App } from "../app";
-import { Account, roles, publicProfile, PublicProfile } from "../storage";
+import { role } from "../src/actions";
+import { App } from "../src/app";
+import { Account, roles, publicProfile, PublicProfile } from "../src/storage";
 
-import { useTypeface, heading18 } from "../Materials/Typefaces";
+import { useTypeface, heading18 } from "../src/Materials/Typefaces";
 
-import { DropDownInput } from "./Components/DropdownInput";
-import { Site } from "./Components/Site";
-import { Input } from "../Components/Input";
+import { DropDownInput } from "../src/Views/Components/DropdownInput";
+import { Site } from "../src/Views/Components/Site";
+import { Input } from "../src/Components/Input";
 
 export const accountPublicProfile = (aversH: Avers.Handle, accountId: string): PublicProfile => {
   const placeholderImageSrc =
@@ -33,7 +34,8 @@ export const accountAvatar = (aversH: Avers.Handle, accountId: string): string =
 
 // only admins can edit all accounts with the exception of users
 // changing their own accounts
-export default (accountId: string) => ({ app }: { app: App }) => {
+export default withRouter(({ app, router }: { app: App, router: any }) => {
+  const accountId = router.query.id;
   return Avers.lookupEditable<Account>(app.data.aversH, accountId)
     .fmap(accountE => {
       const canEdit = role(app) === "admin" || accountId === app.data.session.objId;
@@ -44,7 +46,7 @@ export default (accountId: string) => ({ app }: { app: App }) => {
       );
     })
     .get(<Site app={app} />);
-};
+})
 
 // ----------------------------------------------------------------------------
 

@@ -1,10 +1,8 @@
-import * as Avers from "avers";
 import * as React from "react";
 import styled from "styled-components";
 
-import { Account } from "../../../storage";
 import { App, activeSetters } from "../../../app";
-import { accountAvatar } from "../../Account";
+import { accountPublicProfile } from "../../../../pages/account";
 
 import { text, lightGrey } from "../../../Materials/Colors";
 import { useTypeface, copy14 } from "../../../Materials/Typefaces";
@@ -23,27 +21,15 @@ export const SetterSelector = ({ app, selectedSetters, clear, toggle }: SetterSe
   const setters = activeSetters(app)
     .get<string[]>([])
     .map(accountId => {
-      return Avers.lookupContent<Account>(app.data.aversH, accountId)
-        .fmap(account => (
-          <Setter
-            key={accountId}
-            app={app}
-            accountId={accountId}
-            account={account}
-            toggle={toggle}
-            isSelected={selectedSetters.length === 0 || selectedSetters.indexOf(accountId) !== -1}
-          />
-        ))
-        .get(
-          <Setter
-            key={accountId}
-            app={app}
-            accountId={accountId}
-            account={undefined}
-            toggle={toggle}
-            isSelected={false}
-          />
-        );
+      const isSelected = selectedSetters.length === 0 || selectedSetters.indexOf(accountId) !== -1;
+      const { name, avatar } = accountPublicProfile(app.data.aversH, accountId);
+
+      return (
+        <Setter key={accountId} onClick={() => toggle(accountId)}>
+          <SetterImage isSelected={isSelected} src={avatar} />
+          <SetterName isSelected={isSelected}>{name}</SetterName>
+        </Setter>
+      );
     });
 
   return (
@@ -53,7 +39,7 @@ export const SetterSelector = ({ app, selectedSetters, clear, toggle }: SetterSe
         <SectionLink onClick={clear}>(reset)</SectionLink>
       </Section>
 
-      <Setters><div>{setters}</div></Setters>
+      <Setters>{setters}</Setters>
     </Root>
   );
 };
@@ -70,16 +56,7 @@ const Setters = styled.div`
   overflow-y: auto;
 `;
 
-const Setter = ({ app, accountId, account, toggle, isSelected }) => (
-  <SetterC onClick={() => toggle(accountId)}>
-    <SetterImage isSelected={isSelected} src={accountAvatar(app.data.aversH, accountId)} />
-    <SetterName isSelected={isSelected}>
-      {account && account.name !== "" ? account.name : accountId.slice(0, 7)}
-    </SetterName>
-  </SetterC>
-);
-
-const SetterC = styled.div`
+const Setter = styled.div`
 display: flex;
 align-items: center;
 margin: 4px 0;

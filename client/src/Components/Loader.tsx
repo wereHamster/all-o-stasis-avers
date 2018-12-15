@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { useTypeface, heading24 } from "../Materials/Typefaces";
 
-import logo from "!!file-loader!../../assets/logo.svg";
+const logo = "/static/logo.svg";
 
 export const Loader = () => (
   <Root>

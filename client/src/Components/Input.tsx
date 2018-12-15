@@ -13,8 +13,11 @@ export const Input = styled.input`
 
   outline: none;
   border: 1px solid ${primary};
+  border-radius: 0;
 
   transition: all 0.16s;
+
+  -webkit-appearance: none;
 
   &:focus {
     border-color: ${darkPrimary};

@@ -20,7 +20,7 @@ export class GradeDistributionChart extends React.Component<GradeDistributionCha
       <Measure bounds>
         {({ measureRef, contentRect }) => (
           <div ref={measureRef} style={{ position: "relative", flex: 1 }}>
-            {contentRect.bounds && <Chart bounds={contentRect.bounds} data={data} />}
+            {contentRect.bounds && contentRect.bounds.width > 0 && <Chart bounds={contentRect.bounds} data={data} />}
           </div>
         )}
       </Measure>

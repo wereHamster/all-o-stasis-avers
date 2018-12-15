@@ -2,23 +2,24 @@ import * as Avers from "avers";
 import DayPicker from "react-day-picker";
 import * as React from "react";
 import styled from "styled-components";
+import { withRouter } from 'next/router';
 
-import { role, resetBoulderCollections } from "../actions";
-import { App } from "../app";
-import { Boulder } from "../storage";
+import { role, resetBoulderCollections } from "../src/actions";
+import { App } from "../src/app";
+import { Boulder } from "../src/storage";
 
-import { text, darkGrey, primary, secondary, darkSecondary } from "../Materials/Colors";
-import { useTypeface, copy16Bold, copy14 } from "../Materials/Typefaces";
+import { text, darkGrey, primary, secondary, darkSecondary } from "../src/Materials/Colors";
+import { useTypeface, copy16Bold, copy14 } from "../src/Materials/Typefaces";
 
-import { NumberInput } from "./Components/NumberInput";
-import { Site } from "./Components/Site";
-import { BoulderDetails } from "./Components/BoulderDetails";
-import { BoulderId } from "./Components/BoulderId";
-import { SectorPicker } from "./Components/SectorPicker";
-import { Button } from "../Components/Button";
-import { BoulderSetterCard } from "./Components/BoulderSetterCard";
-import { SetterPicker } from "../Components/SetterPicker";
-import { Loader } from "../Components/Loader";
+import { NumberInput } from "../src/Views/Components/NumberInput";
+import { Site } from "../src/Views/Components/Site";
+import { BoulderDetails } from "../src/Views/Components/BoulderDetails";
+import { BoulderId } from "../src/Views/Components/BoulderId";
+import { SectorPicker } from "../src/Views/Components/SectorPicker";
+import { Button } from "../src/Components/Button";
+import { BoulderSetterCard } from "../src/Views/Components/BoulderSetterCard";
+import { SetterPicker } from "../src/Components/SetterPicker";
+import { Loader } from "../src/Components/Loader";
 
 function BoulderDetailsEditor({ app, boulderE }: { app: App; boulderE: Avers.Editable<Boulder> }) {
   const boulder = boulderE.content;
@@ -129,7 +130,12 @@ function BoulderDetailsEditor({ app, boulderE }: { app: App; boulderE: Avers.Edi
   );
 }
 
-export default (boulderId: string) => ({ app }: { app: App }) => {
+export default withRouter(({ app, router }: { app: App, router: any }) => {
+  const boulderId = router.query.id;
+  if (boulderId === undefined) {
+    return <div>No id query param</div>
+  }
+
   return Avers.lookupEditable<Boulder>(app.data.aversH, boulderId)
     .fmap(boulderE => {
       const boulderRep =
@@ -153,7 +159,7 @@ export default (boulderId: string) => ({ app }: { app: App }) => {
         <Loader />
       </Site>
     );
-};
+});
 
 class Header extends React.Component<{ app: App; boulder: Boulder }> {
   render() {

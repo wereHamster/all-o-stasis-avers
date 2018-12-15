@@ -1,11 +1,11 @@
 import * as React from 'react'
 import styled from 'styled-components'
 
-import {useTypeface, h1, copy16} from '../Materials/Typefaces'
+import {useTypeface, h1, copy16} from '../src/Materials/Typefaces'
 
-import {App} from '../app'
+import {App} from '../src/app'
 
-import {Site} from './Components/Site'
+import {Site} from '../src/Views/Components/Site'
 
 export default function
 emailConfirmedView({ app }: { app: App }) {
