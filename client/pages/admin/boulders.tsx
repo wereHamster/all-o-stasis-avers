@@ -6,6 +6,7 @@ import { App } from "../../src/app";
 import { removeBoulders, activeBoulders, sectorBoulders } from "../../src/actions";
 
 import { Site } from "../../src/Views/Components/Site";
+import { BoulderId24 } from "../../src/Views/Components/BoulderId";
 import { Button } from "../../src/Components/Button";
 
 
@@ -70,7 +71,7 @@ export default class extends React.Component<Props, State> {
               </tr>
               {sectorBoulders(app, sectorName).map(boulderE => {
                 return (<tr key={boulderE.objectId}>
-                  <td>{boulderE.content.gradeNr}, {boulderE.content.grade}</td>
+                  <td><BoulderId24 grade={boulderE.content.grade}>{boulderE.content.gradeNr}</BoulderId24></td>
                   <td>
                     <Button onClick={() => {
                       const now = Date.now()
