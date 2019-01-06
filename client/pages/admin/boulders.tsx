@@ -1,7 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
 
-import { Boulder, sectors, prettyPrintSector } from "../../src/storage";
+import { Boulder, boulderCompare, sectors, prettyPrintSector } from "../../src/storage";
 import { App } from "../../src/app";
 import { removeBoulders, activeBoulders, sectorBoulders } from "../../src/actions";
 
@@ -69,14 +69,16 @@ export default class extends React.Component<Props, State> {
                   <Button onClick={() => this.removeAllSectorBoulders()}>Remove Sector</Button>
                 </td>
               </tr>
-              {sectorBoulders(app, sectorName).map(boulderE => {
-                return (<tr key={boulderE.objectId}>
-                  <td><BoulderId24 grade={boulderE.content.grade}>{boulderE.content.gradeNr}</BoulderId24></td>
-                  <td>
-                    <Button onClick={() => {
-                      const now = Date.now()
-                      boulderE.content.removed = now.valueOf()
-                    }}>Remove Boulder</Button>
+              {sectorBoulders(app, sectorName)
+                .sort((a, b) => boulderCompare(a.content, b.content))
+                .map(boulderE => {
+                  return (<tr key={boulderE.objectId}>
+                    <td><BoulderId24 grade={boulderE.content.grade}>{boulderE.content.gradeNr}</BoulderId24></td>
+                    <td>
+                      <Button onClick={() => {
+                        const now = Date.now()
+                        boulderE.content.removed = now.valueOf()
+                      }}>Remove Boulder</Button>
                   </td>
                 </tr>
               )})}
