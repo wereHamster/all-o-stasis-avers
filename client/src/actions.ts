@@ -61,7 +61,7 @@ activeBoulders(app: App): Array<Avers.Editable<Storage.Boulder>> {
 export function
 removeBoulders(app: App, boulders: Array<Avers.Editable<Storage.Boulder>>) {
     // remove all boulders on the currently active sector
-    if (window.confirm('Wirklich alle Boulder entfernen?')) {
+    if (window.confirm('Wirklich alle (' + boulders.length + ') Boulder entfernen?')) {
         const now = Date.now()
         boulders.forEach(boulder => {
             boulder.content.removed = now.valueOf()

@@ -19,6 +19,9 @@ export class AdminBar extends React.Component<AdminBarProps> {
         <Link href="/admin/accounts">
           <a>Accounts</a>
         </Link>
+        <Link href="/admin/boulders">
+          <a>Boulders</a>
+        </Link>
       </Root>
     );
   }
