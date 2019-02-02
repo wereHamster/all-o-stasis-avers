@@ -23,8 +23,8 @@ export class Site extends React.Component<SiteProps> {
 
     return (
       <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }} onClick={this.onClick}>
-        {role(app) === "admin" && <AdminBar app={app} />}
         <Header app={app} />
+        {role(app) === "admin" && <AdminBar app={app} />}
         {children}
         <TransientNotification app={app} />
       </div>
