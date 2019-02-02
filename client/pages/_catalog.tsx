@@ -52,7 +52,7 @@ const pages = [
       {
         path: "/components/navbar",
         title: "NavBar",
-        component: pageLoader(() => import("../src/Components/NavBar.doc"))
+        component: pageLoader(() => import("../src/Components/Header/doc"))
       },
       {
         path: "/components/boulder-id",

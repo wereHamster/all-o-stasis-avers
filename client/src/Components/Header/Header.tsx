@@ -2,14 +2,18 @@ import * as React from "react";
 import styled from "styled-components";
 import Link from "next/link";
 
-import { useTypeface, copy14 } from "../Materials/Typefaces";
-import { text } from "../Materials/Colors";
+import { useTypeface, copy14 } from "../../Materials/Typefaces";
+import { text } from "../../Materials/Colors";
 
-import { App } from "../app";
+import { App } from "../../app";
 
 const logo = "/static/logo.svg";
 
-export const NavBar = ({ app }: { app: App }) => (
+interface HeaderProps {
+  app: App
+}
+
+export const Header = ({ app }: HeaderProps) => (
   <Root>
     <Logo href="https://minimum.ch">
       <LogoImage src={logo} />

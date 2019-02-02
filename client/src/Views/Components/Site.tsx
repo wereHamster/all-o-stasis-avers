@@ -5,7 +5,7 @@ import { role } from "../../actions";
 import { App } from "../../app";
 
 import { AdminBar } from "../../Components/AdminBar";
-import { NavBar } from "../../Components/NavBar";
+import { NavBar } from "../../Components/Header/NavBar";
 import { TransientNotification } from "./TransientNotification";
 
 interface SiteProps {
