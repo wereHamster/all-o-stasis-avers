@@ -5,7 +5,7 @@ import { role } from "../../actions";
 import { App } from "../../app";
 
 import { AdminBar } from "../../Components/AdminBar";
-import { NavBar } from "../../Components/Header/NavBar";
+import { Header } from "../../Components/Header/Header";
 import { TransientNotification } from "./TransientNotification";
 
 interface SiteProps {
@@ -24,7 +24,7 @@ export class Site extends React.Component<SiteProps> {
     return (
       <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }} onClick={this.onClick}>
         {role(app) === "admin" && <AdminBar app={app} />}
-        <NavBar app={app} />
+        <Header app={app} />
         {children}
         <TransientNotification app={app} />
       </div>

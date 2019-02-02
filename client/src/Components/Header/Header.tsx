@@ -10,24 +10,34 @@ import { App } from "../../app";
 const logo = "/static/logo.svg";
 
 interface HeaderProps {
-  app: App
+  app: App;
 }
 
-export const Header = ({ app }: HeaderProps) => (
-  <Root>
-    <Logo href="https://minimum.ch">
-      <LogoImage src={logo} />
-    </Logo>
+interface State {
+  showMenu: boolean;
+}
 
-    <HomeItem />
-    <TeamItem />
-    <StatsItem />
+export class Header extends React.PureComponent<HeaderProps, State> {
+  render() {
+    const { app } = this.props;
 
-    <FlexItem />
+    return (
+      <Root>
+        <Logo href="https://minimum.ch">
+          <LogoImage src={logo} />
+        </Logo>
 
-    {app.data.session.objId ? <AccountSettings app={app} /> : <SignInItem />}
-  </Root>
-);
+        <HomeItem />
+        <TeamItem />
+        <StatsItem />
+
+        <FlexItem />
+
+        {app.data.session.objId ? <AccountSettings app={app} /> : <SignInItem />}
+      </Root>
+    );
+  }
+}
 
 // ----------------------------------------------------------------------------
 
