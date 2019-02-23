@@ -146,10 +146,11 @@ const BoulderGradeToggleButton = ({ grade, grades, onToggle }) => (
 
 // ----------------------------------------------------------------------------
 const BoulderFilter = styled.div`
-  display: flex;
+  display: none;
   align-items: flex-start;
   padding: 20px 16px 12px;
   @media (min-width: 600px) {
+    display: flex;
     padding: 20px 24px 20px;
   }
 `;
