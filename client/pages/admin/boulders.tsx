@@ -1,7 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
 
-import { Boulder, boulderCompare, sectors, prettyPrintSector } from "../../src/storage";
+import { boulderCompare, sectors, prettyPrintSector } from "../../src/storage";
 import { App } from "../../src/app";
 import { removeBoulders, activeBoulders, sectorBoulders } from "../../src/actions";
 
@@ -60,7 +60,7 @@ export default class extends React.Component<Props, State> {
               <tr>
                 <td>
                   <select id='sector_selection' defaultValue={sectorName} onChange={(e) => this.setSector(e.currentTarget.value)}>
-                    {sectors.map((entry, index) => ( 
+                    {sectors.map((entry, index) => (
                       <option value={entry} key={index}>{prettyPrintSector(entry)}</option>
                     ))}
                   </select>

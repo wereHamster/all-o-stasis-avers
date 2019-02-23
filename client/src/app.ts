@@ -20,7 +20,7 @@ export class App {
   constructor(public data: Data) {}
 }
 
-export const infoTable = new Map<string, { new (): any }>();
+export const infoTable = new Map<string, new () => any>();
 
 infoTable.set("account", Account);
 infoTable.set("boulder", Boulder);

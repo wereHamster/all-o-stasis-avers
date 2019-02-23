@@ -3,7 +3,7 @@ export const primary = "#a5d6a7";
 export const lightPrimary = "#d7ffd9";
 export const darkPrimary = "#75a478";
 
-export const primaryText = "#000000";
+export const primaryText = "#333333";
 
 export const secondary = "#424242";
 export const lightSecondary = "#6d6d6d";
