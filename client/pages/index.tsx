@@ -102,7 +102,7 @@ export default class extends React.Component<{ app: App }, State> {
             </div>
           </div>
 
-        {role(app) != "user" && (
+        {role(app) !== "user" && (
               <div style={{ marginRight: 32, display: 'block' }}>
                 <BoulderFilterHeader>Actions</BoulderFilterHeader>
                 <div>
