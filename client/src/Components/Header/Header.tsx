@@ -2,7 +2,7 @@ import * as React from "react";
 import styled, { css } from "styled-components";
 import Link from "next/link";
 
-import { useTypeface, copy14, heading20 } from "../../Materials/Typefaces";
+import { useTypeface, heading20 } from "../../Materials/Typefaces";
 import { primary, primaryText, darkPrimary } from "../../Materials/Colors";
 
 import { App } from "../../app";
