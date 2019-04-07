@@ -83,7 +83,7 @@ export class Header extends React.PureComponent<HeaderProps, State> {
         <Container>
           <Inner>
             <Top>
-              <Link href="/" passHref>
+              <Link href="https://minimum.ch" passHref>
                 <Logo>
                   <img src={logo} />
                 </Logo>
