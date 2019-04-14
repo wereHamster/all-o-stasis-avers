@@ -11,6 +11,8 @@ import { useTypeface, copy16Bold } from "../src/Materials/Typefaces";
 
 import { BoulderCard } from "../src/Views/Components/BoulderCard";
 import { Site } from "../src/Views/Components/Site";
+import { SetterBar } from "../src/Components/SetterBar";
+import { role } from "../src/actions";
 
 interface State {
   search: string;
@@ -78,6 +80,7 @@ export default class extends React.Component<{ app: App }, State> {
 
     return (
       <Site app={app}>
+        {(role(app) === "admin" || role(app) === "setter") && <SetterBar app={app} />}
         <Boulders>
           {groups.map(({ date, boulders }) => (
             <React.Fragment key={date.toISOString()}>
