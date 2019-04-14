@@ -2,32 +2,29 @@ import * as Avers from "avers";
 import * as React from "react";
 
 import { role } from "../../actions";
-import { App } from "../../app";
 
 import { AdminBar } from "../../Components/AdminBar";
 import { Header } from "../../Components/Header/Header";
 import { TransientNotification } from "./TransientNotification";
+import { useEnv } from "../../env";
 
 interface SiteProps {
-  app: App;
   children?: React.ReactNode;
 }
 
-export class Site extends React.Component<SiteProps> {
-  onClick = () => {
-    Avers.startNextGeneration(this.props.app.data.aversH);
-  };
+export const Site = ({ children }: SiteProps) => {
+  const { app } = useEnv();
 
-  render() {
-    const { app, children } = this.props;
+  const onClick = React.useCallback(() => {
+    Avers.startNextGeneration(app.data.aversH);
+  }, [app.data.aversH]);
 
-    return (
-      <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }} onClick={this.onClick}>
-        <Header app={app} />
-        {role(app) === "admin" && <AdminBar />}
-        {children}
-        <TransientNotification app={app} />
-      </div>
-    );
-  }
-}
+  return (
+    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }} onClick={onClick}>
+      <Header app={app} />
+      {role(app) === "admin" && <AdminBar />}
+      {children}
+      <TransientNotification />
+    </div>
+  );
+};

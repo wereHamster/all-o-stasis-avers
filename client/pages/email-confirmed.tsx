@@ -3,14 +3,11 @@ import styled from 'styled-components'
 
 import {useTypeface, h1, copy16} from '../src/Materials/Typefaces'
 
-import {App} from '../src/app'
-
 import {Site} from '../src/Views/Components/Site'
 
-export default function
-emailConfirmedView({ app }: { app: App }) {
+export default function emailConfirmedView() {
   return (
-    <Site app={app}>
+    <Site>
       <Root>
         <div style={{textAlign: 'center', maxWidth: 528}}>
           <H1>Email Address Confirmed</H1>

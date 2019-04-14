@@ -1,61 +1,58 @@
 import * as Avers from "avers";
 import * as React from "react";
 import styled from "styled-components";
-import Link from 'next/link';
+import Link from "next/link";
 
 import { accountAvatar } from "../../pages/account";
-import { App } from "../app";
 import { grades, Boulder, publicProfile } from "../storage";
 
 import { useTypeface, heading28, copy14 } from "../Materials/Typefaces";
 import { text } from "../Materials/Colors";
 import { GradeDistributionChart } from "./GradeDistributionChart";
+import { useEnv } from "../env";
 
 export interface SetterCardProps {
-  app: App;
   accountId: string;
 }
 
-export class SetterBlock extends React.Component<SetterCardProps> {
-  render() {
-    const { app, accountId } = this.props;
+export const SetterBlock = ({ accountId }: SetterCardProps) => {
+  const { app } = useEnv();
 
-    const profile = Avers.staticValue(app.data.aversH, publicProfile(app.data.aversH, accountId)).get(undefined);
+  const profile = Avers.staticValue(app.data.aversH, publicProfile(app.data.aversH, accountId)).get(undefined);
 
-    const gradeDistribution = new Map<string, number>();
-    grades.forEach(grade => {
-      gradeDistribution.set(grade, gradeDistribution.get(grade) || 0);
-      app.data.activeBouldersCollection.ids.get<string[]>([]).forEach(boulderId => {
-        const boulder = Avers.lookupContent<Boulder>(app.data.aversH, boulderId).get(undefined);
-        if (boulder && boulder.grade === grade && boulder.setter.some(x => x === accountId)) {
-          gradeDistribution.set(grade, (gradeDistribution.get(grade) || 0) + 1);
-        }
-      });
+  const gradeDistribution = new Map<string, number>();
+  grades.forEach(grade => {
+    gradeDistribution.set(grade, gradeDistribution.get(grade) || 0);
+    app.data.activeBouldersCollection.ids.get<string[]>([]).forEach(boulderId => {
+      const boulder = Avers.lookupContent<Boulder>(app.data.aversH, boulderId).get(undefined);
+      if (boulder && boulder.grade === grade && boulder.setter.some(x => x === accountId)) {
+        gradeDistribution.set(grade, (gradeDistribution.get(grade) || 0) + 1);
+      }
     });
-    const sum = Array.from(gradeDistribution.values()).reduce((a, c) => a + c, 0);
+  });
+  const sum = Array.from(gradeDistribution.values()).reduce((a, c) => a + c, 0);
 
-    const boulderFrequencyDistribution = Array.from(gradeDistribution.entries()).map(([k, v]) => {
-      return { grade: k, count: v };
-    });
+  const boulderFrequencyDistribution = Array.from(gradeDistribution.entries()).map(([k, v]) => {
+    return { grade: k, count: v };
+  });
 
-    return (
-      <Root>
-        <Top>
-          <Link href={{ pathname: "/account", query: { id: accountId } }}>
-            <Avatar src={accountAvatar(app.data.aversH, accountId)} />
-          </Link>
-          <div>
-            <Name>{profile && profile.name !== "" ? profile.name : accountId.slice(0, 5)}</Name>
-            <Tagline>Hat {sum} boulder an der wand</Tagline>
-          </div>
-        </Top>
-        <Bottom>
-          <GradeDistributionChart data={boulderFrequencyDistribution} />
-        </Bottom>
-      </Root>
-    );
-  }
-}
+  return (
+    <Root>
+      <Top>
+        <Link href={{ pathname: "/account", query: { id: accountId } }}>
+          <Avatar src={accountAvatar(app.data.aversH, accountId)} />
+        </Link>
+        <div>
+          <Name>{profile && profile.name !== "" ? profile.name : accountId.slice(0, 5)}</Name>
+          <Tagline>Hat {sum} boulder an der wand</Tagline>
+        </div>
+      </Top>
+      <Bottom>
+        <GradeDistributionChart data={boulderFrequencyDistribution} />
+      </Bottom>
+    </Root>
+  );
+};
 
 const Root = styled.div`
   background: white;

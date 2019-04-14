@@ -153,7 +153,7 @@ export default class extends React.Component<StatsPageProps, StatsPageState> {
     })();
 
     return (
-      <Site app={app}>
+      <Site>
         <Root>
           <Side>
             <SideContent>

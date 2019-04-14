@@ -112,12 +112,11 @@ export default withRouter(
     };
 
     render() {
-      const { app } = this.props;
       const { email, createPassportPromise, createPassportResponse, awaitPassportConfirmationPromise } = this.state;
 
       if (!awaitPassportConfirmationPromise || createPassportResponse instanceof Error) {
         return (
-          <Site app={app}>
+          <Site>
             <Container>
               <Form
                 email={email}
@@ -131,7 +130,7 @@ export default withRouter(
         );
       } else if (createPassportResponse && awaitPassportConfirmationPromise) {
         return (
-          <Site app={app}>
+          <Site>
             <Container>
               <AwaitingConfirmation
                 email={email}

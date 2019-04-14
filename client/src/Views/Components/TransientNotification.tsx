@@ -2,11 +2,12 @@ import * as Avers from "avers";
 import * as React from "react";
 import styled from "styled-components";
 
-import { App } from "../../app";
-
 import * as C from "../../Materials/Colors";
+import { useEnv } from "../../env";
 
-export const TransientNotification = ({ app }: { app: App }) => {
+export const TransientNotification = () => {
+  const { app } = useEnv();
+
   const numNetworkRequests = Avers.networkRequests(app.data.aversH).length;
   if (numNetworkRequests > 0) {
     return <Root>Loading ({numNetworkRequests}) …</Root>;

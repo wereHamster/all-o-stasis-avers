@@ -1,7 +1,5 @@
 import * as React from "react";
 
-import { App } from "./app";
-
 import { Site } from "./Views/Components/Site";
 import { Loader } from "./Components/Loader";
 
@@ -13,9 +11,9 @@ export function loadingView() {
   );
 }
 
-export function notFoundView({ app }: { app: App }) {
+export function notFoundView() {
   return (
-    <Site app={app}>
+    <Site>
       <div className="login">
         <div className="logo">Ooops..</div>
         <div className="about">

@@ -32,7 +32,6 @@ export class SetterPicker extends React.Component<SetterPickerProps> {
       return (
         <div key={index} style={{ marginRight: 8 }}>
           <BoulderSetterCard
-            app={app}
             setterId={accountId}
             onClick={() => {
               addSetter(accountId);
