@@ -10,25 +10,21 @@ interface SetterBarProps {
   app: App;
 }
 
-export class SetterBar extends React.Component<SetterBarProps> {
-  render() {
-    const { app } = this.props;
+export const SetterBar = React.memo<SetterBarProps>(({ app }) => {
+  const onClick = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    createBoulder(app);
+  };
 
-    const onClick = (e: React.SyntheticEvent) => {
-      e.preventDefault();
-      createBoulder(app);
-    };
-
-    return (
-      <Root>
-        <a href="#" onClick={onClick}>
-          Hier
-        </a>{" "}
-        klicken um einen neuen Boulder einzutragen.
-      </Root>
-    );
-  }
-}
+  return (
+    <Root>
+      <a href="#" onClick={onClick}>
+        Hier
+      </a>{" "}
+      klicken um einen neuen Boulder einzutragen.
+    </Root>
+  );
+});
 
 const Root = styled.div`
   padding: 16px 24px;
