@@ -1,33 +1,33 @@
 import * as React from "react";
 import styled from "styled-components";
 
-import { App } from "../../app";
-
 import { text } from "../../Materials/Colors";
 import { useTypeface, copy16 } from "../../Materials/Typefaces";
 import { accountPublicProfile } from "../../../pages/account";
+import { useEnv } from "../../env";
 
-export class BoulderSetterCard extends React.Component<{
-  app: App;
+interface BoulderSetterCardProps {
   setterId: string;
   onClick: (setterId: string) => void;
-}> {
-  onClick = () => {
-    this.props.onClick(this.props.setterId);
+}
+
+export const BoulderSetterCard = (props: BoulderSetterCardProps) => {
+  const { app } = useEnv();
+  const { setterId } = props;
+
+  const onClick = () => {
+    props.onClick(setterId);
   };
 
-  render() {
-    const { app, setterId } = this.props;
-    const { name, avatar } = accountPublicProfile(app.data.aversH, setterId);
+  const { name, avatar } = accountPublicProfile(app.data.aversH, setterId);
 
-    return (
-      <SetterContainer onClick={this.onClick}>
-        <SetterImage src={avatar} />
-        <SetterName>{name}</SetterName>
-      </SetterContainer>
-    );
-  }
-}
+  return (
+    <SetterContainer onClick={onClick}>
+      <SetterImage src={avatar} />
+      <SetterName>{name}</SetterName>
+    </SetterContainer>
+  );
+};
 
 const SetterContainer = styled.div`
   pointer: cursor;

@@ -79,14 +79,14 @@ export default class extends React.Component<{ app: App }, State> {
     });
 
     return (
-      <Site app={app}>
+      <Site>
         {(role(app) === "admin" || role(app) === "setter") && <SetterBar app={app} />}
         <Boulders>
           {groups.map(({ date, boulders }) => (
             <React.Fragment key={date.toISOString()}>
               <BoulderSeparator key={`separator-${date.toISOString()}`}>{format(date, "dd. MMMM")}</BoulderSeparator>
               {boulders.map(boulder => (
-                <BoulderCard key={boulder.objectId} app={app} boulderE={boulder} />
+                <BoulderCard key={boulder.objectId} boulderE={boulder} />
               ))}
             </React.Fragment>
           ))}

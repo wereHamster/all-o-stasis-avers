@@ -13,7 +13,7 @@ import { Input } from "../src/Components/Input";
 import { accountAvatar } from "./account";
 
 export default ({ app }: { app: App }) => (
-  <Site app={app}>
+  <Site>
     <Settings app={app} accountId={app.data.session.objId} />
   </Site>
 );

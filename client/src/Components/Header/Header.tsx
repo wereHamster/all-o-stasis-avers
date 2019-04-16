@@ -5,8 +5,8 @@ import Link from "next/link";
 import { useTypeface, heading20 } from "../../Materials/Typefaces";
 import { primary, primaryText, darkPrimary } from "../../Materials/Colors";
 
-import { App } from "../../app";
 import { Backdrop } from "./Backdrop";
+import { useEnv } from "../../env";
 
 const logo = "/static/logo.svg";
 
@@ -29,35 +29,27 @@ const mq = {
   desktop: "@media screen and (min-width: 600px)"
 };
 
-interface HeaderProps {
-  app: App;
-}
+export const Header = React.memo(() => {
+  const [showMenu, setShowMenu] = React.useState(false);
+  const closeMenu = React.useCallback(() => {
+    setShowMenu(false);
+  }, [setShowMenu]);
 
-interface State {
-  showMenu: boolean;
-}
+  const toggleMenu = React.useCallback(() => {
+    setShowMenu(x => !x);
+  }, [setShowMenu]);
 
-export class Header extends React.Component<HeaderProps, State> {
-  state: State = {
-    showMenu: false
-  };
+  const clickNavigationContainer = React.useCallback(
+    (ev: React.SyntheticEvent) => {
+      if (ev.target === ev.currentTarget) {
+        closeMenu();
+      }
+    },
+    [closeMenu]
+  );
 
-  closeMenu = () => {
-    this.setState({ showMenu: false });
-  };
-
-  toggleMenu = () => {
-    this.setState({ showMenu: !this.state.showMenu });
-  };
-
-  clickNavigationContainer = (ev: React.SyntheticEvent) => {
-    if (ev.target === ev.currentTarget) {
-      this.closeMenu();
-    }
-  };
-
-  componentDidUpdate() {
-    if (this.state.showMenu) {
+  React.useLayoutEffect(() => {
+    if (showMenu) {
       document.documentElement.style.top = `0px`;
       document.documentElement.style.position = "relative";
       document.body.style.overflow = "hidden";
@@ -72,75 +64,70 @@ export class Header extends React.Component<HeaderProps, State> {
       document.body.style.left = "";
       document.body.style.right = "";
     }
-  }
+  }, [showMenu]);
 
-  render() {
-    const { showMenu } = this.state;
-    const { app } = this.props;
+  const { app } = useEnv();
 
-    return (
-      <Root>
-        <Container>
-          <Inner>
-            <Top>
-              <Link href="https://minimum.ch" passHref>
-                <Logo>
-                  <img src={logo} />
-                </Logo>
-              </Link>
+  return (
+    <Root>
+      <Container>
+        <Inner>
+          <Top>
+            <Link href="https://minimum.ch" passHref>
+              <Logo>
+                <img src={logo} />
+              </Logo>
+            </Link>
 
-              <Buttons>
-                <MenuButton onClick={this.toggleMenu}>
-                  {showMenu ? <M.IcMenuClose24 /> : <M.IcMenuDefault24 />}
-                </MenuButton>
-              </Buttons>
-            </Top>
+            <Buttons>
+              <MenuButton onClick={toggleMenu}>{showMenu ? <M.IcMenuClose24 /> : <M.IcMenuDefault24 />}</MenuButton>
+            </Buttons>
+          </Top>
 
-            <BackdropWrapper>
-              <Backdrop open={showMenu} />
-            </BackdropWrapper>
+          <BackdropWrapper>
+            <Backdrop open={showMenu} />
+          </BackdropWrapper>
 
-            <NavigationContainer visible={showMenu} onClick={this.clickNavigationContainer}>
-              <Navigation visible={showMenu}>
-                <PrimaryNavigation onClick={this.closeMenu}>
-                  <Link href="/" passHref>
-                    <PrimaryNavigationLink active={window.location.pathname === "/"}>Boulders</PrimaryNavigationLink>
-                  </Link>
-                  <Link href="/team" passHref>
-                    <PrimaryNavigationLink active={window.location.pathname === "/team"}>Team</PrimaryNavigationLink>
-                  </Link>
-                  <Link href="/stats" passHref>
-                    <PrimaryNavigationLink active={window.location.pathname === "/stats"}>Stats</PrimaryNavigationLink>
-                  </Link>
-                </PrimaryNavigation>
+          <NavigationContainer visible={showMenu} onClick={clickNavigationContainer}>
+            <Navigation visible={showMenu}>
+              <PrimaryNavigation onClick={closeMenu}>
+                <Link href="/" passHref>
+                  <PrimaryNavigationLink active={window.location.pathname === "/"}>Boulders</PrimaryNavigationLink>
+                </Link>
+                <Link href="/team" passHref>
+                  <PrimaryNavigationLink active={window.location.pathname === "/team"}>Team</PrimaryNavigationLink>
+                </Link>
+                <Link href="/stats" passHref>
+                  <PrimaryNavigationLink active={window.location.pathname === "/stats"}>Stats</PrimaryNavigationLink>
+                </Link>
+              </PrimaryNavigation>
 
-                <SecondaryNavigation>
-                  {(() => {
-                    if (app.data.session.objId) {
-                      return (
-                        <Link href="/settings" passHref>
-                          <a>Settings</a>
-                        </Link>
-                      );
-                    } else {
-                      return (
-                        <Link href="/login" passHref>
-                          <a>Login</a>
-                        </Link>
-                      );
-                    }
-                  })()}
+              <SecondaryNavigation>
+                {(() => {
+                  if (app.data.session.objId) {
+                    return (
+                      <Link href="/settings" passHref>
+                        <a>Settings</a>
+                      </Link>
+                    );
+                  } else {
+                    return (
+                      <Link href="/login" passHref>
+                        <a>Login</a>
+                      </Link>
+                    );
+                  }
+                })()}
 
-                  {/* <a href="https://minimum.ch">minimum.ch</a> */}
-                </SecondaryNavigation>
-              </Navigation>
-            </NavigationContainer>
-          </Inner>
-        </Container>
-      </Root>
-    );
-  }
-}
+                {/* <a href="https://minimum.ch">minimum.ch</a> */}
+              </SecondaryNavigation>
+            </Navigation>
+          </NavigationContainer>
+        </Inner>
+      </Container>
+    </Root>
+  );
+});
 
 // ----------------------------------------------------------------------------
 

@@ -10,7 +10,7 @@ import { Site } from "../../src/Views/Components/Site";
 import { DropDownInput } from "../../src/Views/Components/DropdownInput";
 
 export default ({ app }: { app: App }) => (
-  <Site app={app}>
+  <Site>
     <Root>
       <table>
         <thead>

@@ -6,14 +6,14 @@ import {markdown, ReactSpecimen} from '@catalog/core'
 import {Boulder} from '../../storage'
 
 import {BoulderCard} from './BoulderCard'
-import {aversH, app, boulder1Id} from '../../Catalog/App'
+import {aversH, boulder1Id} from '../../Catalog/App'
 
 export default () => markdown`
 A yellow BoulderCard.
 
 ${
 <ReactSpecimen noSource>
-    <BoulderCard app={app} boulderE={Avers.lookupEditable<Boulder>(aversH, boulder1Id).get(undefined as any)} />
+    <BoulderCard boulderE={Avers.lookupEditable<Boulder>(aversH, boulder1Id).get(undefined as any)} />
 </ReactSpecimen>
 }
 `

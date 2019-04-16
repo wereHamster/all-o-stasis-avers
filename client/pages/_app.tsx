@@ -4,6 +4,7 @@ import * as Avers from "avers";
 import { config, Data, App, infoTable } from "../src/app";
 import { parse } from "url";
 import shallowEqual from "fbjs/lib/shallowEqual";
+import { Env } from "../src/env";
 
 export default class extends NApp {
   static async getInitialProps({ Component, ctx }) {
@@ -82,9 +83,11 @@ export default class extends NApp {
     }
 
     return (
-      <Container>
-        <Component generationNumber={this.state.generationNumber} app={this.app} {...pageProps} />
-      </Container>
+      <Env.Provider value={{ app: new App(this.app.data) }}>
+        <Container>
+          <Component generationNumber={this.state.generationNumber} app={this.app} {...pageProps} />
+        </Container>
+      </Env.Provider>
     );
   }
 }

@@ -4,44 +4,40 @@ import styled from "styled-components";
 import Link from "next/link";
 
 import { accountAvatar } from "../../../pages/account";
-import { App } from "../../app";
 import { Boulder, prettyPrintSector } from "../../storage";
 
 import { useTypeface, copy16 } from "../../Materials/Typefaces";
 
 import { BoulderId } from "./BoulderId";
+import { useEnv } from "../../env";
 
 export interface BoulderCardProps {
-  app: App;
   boulderE: Avers.Editable<Boulder>;
 }
 
-export class BoulderCard extends React.Component<BoulderCardProps> {
-  render() {
-    const { app, boulderE } = this.props;
-    const { content } = boulderE;
-    const { grade, gradeNr, sector, setter } = content;
+export const BoulderCard = ({ boulderE }: BoulderCardProps) => {
+  const { content } = boulderE;
+  const { grade, gradeNr, sector, setter } = content;
 
-    return (
-      <Link href={{ pathname: "/boulder", query: { id: this.props.boulderE.objectId } }}>
-        <Card grade={grade}>
-          <BoulderId grade={grade}>{gradeNr}</BoulderId>
-          <Meta>
-            <Sector>{prettyPrintSector(sector)}</Sector>
-            <Setters>
-              {setter.map((setterId, index) => (
-                <BoulderCardSetter key={index} app={app} setterId={setterId} />
-              ))}
-            </Setters>
-          </Meta>
-        </Card>
-      </Link>
-    );
-  }
-}
+  return (
+    <Link href={{ pathname: "/boulder", query: { id: boulderE.objectId } }}>
+      <Card grade={grade}>
+        <BoulderId grade={grade}>{gradeNr}</BoulderId>
+        <Meta>
+          <Sector>{prettyPrintSector(sector)}</Sector>
+          <Setters>
+            {setter.map((setterId, index) => (
+              <BoulderCardSetter key={index} setterId={setterId} />
+            ))}
+          </Setters>
+        </Meta>
+      </Card>
+    </Link>
+  );
+};
 
-const BoulderCardSetter = ({ app, setterId }: { app: App; setterId: string }) => (
-  <Setter src={accountAvatar(app.data.aversH, setterId)} />
+const BoulderCardSetter = ({ setterId }: { setterId: string }) => (
+  <Setter src={accountAvatar(useEnv().app.data.aversH, setterId)} />
 );
 
 // ----------------------------------------------------------------------------

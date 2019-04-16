@@ -2,30 +2,21 @@ import * as React from "react";
 import styled from "styled-components";
 import Link from "next/link";
 
-import { App } from "../app";
 import { darkSecondary, secondaryText } from "../Materials/Colors";
 import { useTypeface, copy16 } from "../Materials/Typefaces";
 
-interface AdminBarProps {
-  app: App;
-}
+export const AdminBar = () => (
+  <Root>
+    <span>Manage</span>
 
-export class AdminBar extends React.Component<AdminBarProps> {
-  render() {
-    return (
-      <Root>
-        <span>Manage</span>
-
-        <Link href="/admin/accounts">
-          <a>Accounts</a>
-        </Link>
-        <Link href="/admin/boulders">
-          <a>Boulders</a>
-        </Link>
-      </Root>
-    );
-  }
-}
+    <Link href="/admin/accounts">
+      <a>Accounts</a>
+    </Link>
+    <Link href="/admin/boulders">
+      <a>Boulders</a>
+    </Link>
+  </Root>
+);
 
 const Root = styled.div`
   padding: 16px 24px;

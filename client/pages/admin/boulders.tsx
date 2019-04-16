@@ -41,7 +41,7 @@ export default class extends React.Component<Props, State> {
     const { sectorName } = this.state;
 
     return (
-      <Site app={app}>
+      <Site>
         <Root>
           <table>
             <thead>

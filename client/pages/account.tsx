@@ -40,12 +40,12 @@ export default withRouter(({ app, router }: { app: App, router: any }) => {
     .fmap(accountE => {
       const canEdit = role(app) === "admin" || accountId === app.data.session.objId;
       return (
-        <Site app={app}>
+        <Site>
           {canEdit ? <AccountView app={app} accountE={accountE} /> : accountRep(app.data.aversH, accountE)}
         </Site>
       );
     })
-    .get(<Site app={app} />);
+    .get(<Site />);
 })
 
 // ----------------------------------------------------------------------------

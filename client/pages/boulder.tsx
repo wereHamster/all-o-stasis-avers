@@ -2,7 +2,7 @@ import * as Avers from "avers";
 import DayPicker from "react-day-picker";
 import * as React from "react";
 import styled from "styled-components";
-import { withRouter } from 'next/router';
+import { withRouter } from "next/router";
 
 import { role, resetBoulderCollections } from "../src/actions";
 import { App } from "../src/app";
@@ -74,7 +74,7 @@ function BoulderDetailsEditor({ app, boulderE }: { app: App; boulderE: Avers.Edi
       <Section>Setters</Section>
       <div>
         {boulder.setter.map((setterId, index) => (
-          <BoulderSetterCard key={index} app={app} setterId={setterId} onClick={removeSetter} />
+          <BoulderSetterCard key={index} setterId={setterId} onClick={removeSetter} />
         ))}
         <AddSetter app={app} addSetter={addSetter} />
       </div>
@@ -130,23 +130,23 @@ function BoulderDetailsEditor({ app, boulderE }: { app: App; boulderE: Avers.Edi
   );
 }
 
-export default withRouter(({ app, router }: { app: App, router: any }) => {
+export default withRouter(({ app, router }: { app: App; router: any }) => {
   const boulderId = router.query.id;
   if (boulderId === undefined) {
-    return <div>No id query param</div>
+    return <div>No id query param</div>;
   }
 
   return Avers.lookupEditable<Boulder>(app.data.aversH, boulderId)
     .fmap(boulderE => {
       const boulderRep =
         role(app) === "user" ? (
-          <BoulderDetails app={app} boulder={boulderE.content} />
+          <BoulderDetails boulder={boulderE.content} />
         ) : (
           <BoulderDetailsEditor app={app} boulderE={boulderE} />
         );
 
       return (
-        <Site app={app}>
+        <Site>
           <Header app={app} boulder={boulderE.content} />
           <div style={{ margin: 24, display: "flex" }}>
             <div style={{ width: "400px", flex: "0 1 400px" }}>{boulderRep}</div>
@@ -155,7 +155,7 @@ export default withRouter(({ app, router }: { app: App, router: any }) => {
       );
     })
     .get(
-      <Site app={app}>
+      <Site>
         <Loader />
       </Site>
     );
