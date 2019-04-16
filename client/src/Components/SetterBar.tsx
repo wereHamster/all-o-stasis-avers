@@ -1,16 +1,14 @@
 import * as React from "react";
 import styled from "styled-components";
 
-import { App } from "../app";
 import { primaryText, darkPrimary } from "../Materials/Colors";
 import { useTypeface, copy14 } from "../Materials/Typefaces";
 import { createBoulder } from "../actions";
+import { useEnv } from "../env";
 
-interface SetterBarProps {
-  app: App;
-}
+export const SetterBar = React.memo(() => {
+  const { app } = useEnv();
 
-export const SetterBar = React.memo<SetterBarProps>(({ app }) => {
   const onClick = (e: React.SyntheticEvent) => {
     e.preventDefault();
     createBoulder(app);
