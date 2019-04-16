@@ -11,10 +11,8 @@ import { useTypeface, copy16Bold } from "../src/Materials/Typefaces";
 
 import { BoulderCard } from "../src/Views/Components/BoulderCard";
 import { Site } from "../src/Views/Components/Site";
-import { BoulderId24 } from "../src/Views/Components/BoulderId";
-import { Input } from "../src/Components/Input";
-import { Button } from "../src/Components/Button";
-import { createBoulder, role } from "../src/actions";
+import { SetterBar } from "../src/Components/SetterBar";
+import { role } from "../src/actions";
 
 interface State {
   search: string;
@@ -82,43 +80,7 @@ export default class extends React.Component<{ app: App }, State> {
 
     return (
       <Site app={app}>
-        <BoulderFilter>
-          <div style={{ marginRight: 32 }}>
-            <BoulderFilterHeader>Filter</BoulderFilterHeader>
-            <div style={{ display: "flex" }}>
-              <BoulderGradeToggleButton grade="yellow" grades={grades} onToggle={this.toggleGrade} />
-              <BoulderGradeToggleButton grade="green" grades={grades} onToggle={this.toggleGrade} />
-              <BoulderGradeToggleButton grade="orange" grades={grades} onToggle={this.toggleGrade} />
-              <BoulderGradeToggleButton grade="blue" grades={grades} onToggle={this.toggleGrade} />
-              <BoulderGradeToggleButton grade="red" grades={grades} onToggle={this.toggleGrade} />
-              <BoulderGradeToggleButton grade="white" grades={grades} onToggle={this.toggleGrade} />
-            </div>
-          </div>
-
-          <div style={{ marginRight: 32 }}>
-            <BoulderFilterHeader>Search</BoulderFilterHeader>
-            <div style={{ width: 200, maxWidth: 200 }}>
-              <Input placeholder="Grade Nr." value={search} onChange={this.changeSearch} />
-            </div>
-          </div>
-
-        {role(app) !== "user" && (
-              <div style={{ marginRight: 32, display: 'block' }}>
-                <BoulderFilterHeader>Actions</BoulderFilterHeader>
-                <div>
-                  <Button
-                    onClick={e => {
-                      e.stopPropagation();
-                      createBoulder(app);
-                    }}
-                  >
-                    Create new boulder
-                  </Button>
-                </div>
-              </div>
-            )}
-        </BoulderFilter>
-
+        {(role(app) === "admin" || role(app) === "setter") && <SetterBar app={app} />}
         <Boulders>
           {groups.map(({ date, boulders }) => (
             <React.Fragment key={date.toISOString()}>
@@ -134,36 +96,7 @@ export default class extends React.Component<{ app: App }, State> {
   }
 }
 
-const BoulderGradeToggleButton = ({ grade, grades, onToggle }) => (
-  <BoulderGradeToggle
-    onClick={() => {
-      onToggle(grade);
-    }}
-  >
-    <BoulderId24 grade={grade}>{grades.indexOf(grade) === -1 ? "" : <Cross />}</BoulderId24>
-  </BoulderGradeToggle>
-);
-
 // ----------------------------------------------------------------------------
-const BoulderFilter = styled.div`
-  display: none;
-  align-items: flex-start;
-  padding: 20px 16px 12px;
-  @media (min-width: 600px) {
-    display: flex;
-    padding: 20px 24px 20px;
-  }
-`;
-const BoulderFilterHeader = styled.div`
-  ${useTypeface(copy16Bold)};
-  color: ${text};
-  padding-right: 20px;
-`;
-
-const BoulderGradeToggle = styled.div`
-  cursor: pointer;
-  margin: 8px 4px 8px 0;
-`;
 
 const Boulders = styled.div`
   margin-top: 1rem;
@@ -191,10 +124,3 @@ const BoulderSeparator = styled.div`
     }
   }
 `;
-
-const Cross = () => (
-  <svg width="18" height="18">
-    <path stroke="currentColor" strokeWidth="2" d="M 2 2 L 16 16" />
-    <path stroke="currentColor" strokeWidth="2" d="M 16 2 L 2 16" />
-  </svg>
-);
