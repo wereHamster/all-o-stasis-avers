@@ -37,7 +37,7 @@ interface State {
   showMenu: boolean;
 }
 
-export class Header extends React.PureComponent<HeaderProps, State> {
+export class Header extends React.Component<HeaderProps, State> {
   state: State = {
     showMenu: false
   };
