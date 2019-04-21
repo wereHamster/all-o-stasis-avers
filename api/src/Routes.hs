@@ -131,6 +131,10 @@ type LocalAPI
     = "revision"
       :> Get '[PlainText] Text
 
+    -- health check endpoint
+    :<|> "healthz"
+      :> Get '[PlainText] Text
+
     -- serve a list of all active bouldersIds in the gym
     :<|> "collection" :> "activeBoulders"
       :> Get '[JSON] [ObjId]
@@ -172,6 +176,7 @@ type LocalAPI
 serveLocalAPI :: PassportConfig -> Avers.Handle -> Server LocalAPI
 serveLocalAPI pc aversH =
          serveRevision
+    :<|> serveHealthz
     :<|> serveActiveBouldersCollection
     :<|> serveOwnBouldersCollection
     :<|> serveAccounts
@@ -206,6 +211,14 @@ serveLocalAPI pc aversH =
 
     serveRevision =
         pure $ T.pack $ fromMaybe "HEAD" $(revision)
+
+    serveHealthz = do
+        -- Run a really simple query to check that the database is also alive.
+        void $ reqAvers2 aversH $ runQueryCollect $
+            R.Filter (hasAccess "admin") $
+            viewTable accountsView
+
+        pure "ok"
 
     serveActiveBouldersCollection = do
         boulders <- reqAvers2 aversH $ do
