@@ -1,6 +1,9 @@
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     box-sizing: inherit;
 }
+
 html {
     box-sizing: border-box;
 }
@@ -232,6 +235,11 @@ body {
 
 .white {
     fill: #ffffff;
+    fill-opacity: 0.8;
+}
+
+.black {
+    fill: #000000;
     fill-opacity: 0.8;
 }
 

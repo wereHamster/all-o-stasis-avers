@@ -30,7 +30,7 @@ Avers.definePrimitive(Boulder, "removed", 0);
 Avers.definePrimitive(Boulder, "name", "");
 
 export const roles: string[] = ["user", "setter", "admin"];
-export const grades: string[] = ["yellow", "green", "orange", "blue", "red", "white"];
+export const grades: string[] = ["yellow", "green", "orange", "blue", "red", "white", "black"];
 export const sectors = [
   "starship",
   "bigboss",
@@ -69,6 +69,7 @@ export interface SetterMonthlyStats {
   Blue?: number;
   Red?: number;
   White?: number;
+  Black?: number;
 }
 
 const aosNS = Symbol("all-o-stasis");
