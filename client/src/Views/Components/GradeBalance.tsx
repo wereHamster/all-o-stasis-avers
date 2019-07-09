@@ -28,7 +28,7 @@ export class GradeBalance extends React.Component<GradeBalanceProps, {}> {
             x: {field: 'grade', type: 'nominal', sort: null},
             y: {field: 'count', type: 'quantitative'},
             color: {field: 'grade', type: 'nominal',
-                    scale: {range: [blue100, green100, orange100, red100, '#FFFFFF', yellow100]},
+                    scale: {range: ['#000000', blue100, green100, orange100, red100, '#FFFFFF', yellow100]},
                    },
         },
         config: {

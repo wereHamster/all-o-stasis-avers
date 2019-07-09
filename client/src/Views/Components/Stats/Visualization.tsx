@@ -115,7 +115,7 @@ const VisualizationRenderer = ({ bssC, sectors, selectedSetters, bounds }: Visua
 
   const xScale = scaleTime().range([0, bounds.width - padding.left - padding.right]);
   const yScale = scaleLinear().range([bounds.height - padding.top - padding.bottom, 0]);
-  const colorScale = scaleOrdinal([yellow100, green100, orange100, blue100, red100, "#FFFFFF"]);
+  const colorScale = scaleOrdinal([yellow100, green100, orange100, blue100, red100, "#FFFFFF", '#000000']);
 
   const skeys = grades;
   const s = stack()
