@@ -111,14 +111,14 @@ type PassportAPI
     :<|> AwaitPassportConfirmation
 
 
-type SetterMonthlyStats = Map BoulderGrade Int
+type SetterMonthlyStats = Map Text Int
 
 data BoulderStat = BoulderStat
     { bsSetOn :: Day
     , bsRemovedOn :: Maybe Day
     , bsSetters :: [ObjId]
-    , bsSector :: BoulderSector
-    , bsGrade :: BoulderGrade
+    , bsSector :: Text
+    , bsGrade :: Text
     }
 
 data PublicProfile = PublicProfile
