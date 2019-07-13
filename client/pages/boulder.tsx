@@ -88,6 +88,7 @@ function BoulderDetailsEditor({ app, boulderE }: { app: App; boulderE: Avers.Edi
           <GradeSelect boulder={boulder} grade="blue" />
           <GradeSelect boulder={boulder} grade="red" />
           <GradeSelect boulder={boulder} grade="white" />
+          <GradeSelect boulder={boulder} grade="black" />
         </div>
         <div style={{ marginTop: 12 }}>
           <NumberInput object={boulder} field="gradeNr" />
