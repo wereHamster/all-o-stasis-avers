@@ -6,10 +6,6 @@ module Storage.Objects.Boulder.Types where
 import GHC.Generics
 
 import Data.Text
-import qualified Data.Text as T
-
-import Data.Aeson
-import Data.Aeson.Encoding
 
 import Avers
 import Avers.TH
@@ -27,4 +23,4 @@ data Boulder = Boulder
     }
     deriving (Show, Generic)
 
-$(deriveEncoding (deriveJSONOptions "boulder")   ''Boulder)
+$(deriveEncoding (deriveJSONOptions "boulder") ''Boulder)
