@@ -57,6 +57,9 @@ export default class extends React.Component<Props, State> {
                   <Button onClick={() => this.removeAllBoulders()}>Remove all Boulders</Button>
                 </td>
               </tr>
+	      <tr height="80px">
+	      	<td colspan="2"></td>
+	      </tr>
               <tr>
                 <td>
                   <select id='sector_selection' defaultValue={sectorName} onChange={(e) => this.setSector(e.currentTarget.value)}>
