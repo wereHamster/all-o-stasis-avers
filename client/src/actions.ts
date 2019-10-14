@@ -48,14 +48,14 @@ export function
 sectorBoulders(app: App, sectorName: string): Array<Avers.Editable<Storage.Boulder>> {
     return app.data.activeBouldersCollection.ids.get<string[]>([])
         .map(boulderId => Avers.lookupEditable<Storage.Boulder>(app.data.aversH, boulderId).get(null))
-        .filter(x => x !== null && x.content.sector === sectorName && !x.content.removed) as any
+        .filter(x => x !== null && x.content.sector === sectorName) as any
 }
 
 export function
 activeBoulders(app: App): Array<Avers.Editable<Storage.Boulder>> {
     return app.data.activeBouldersCollection.ids.get<string[]>([])
         .map(boulderId => Avers.lookupEditable<Storage.Boulder>(app.data.aversH, boulderId).get(null))
-        .filter(x => x !== null && !x.content.removed) as any
+        .filter(x => x !== null) as any
 }
 
 export function
