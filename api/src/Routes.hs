@@ -206,6 +206,8 @@ serveLocalAPI pc aversH =
             , setCookiePath = Just "/"
             , setCookieExpires = Just $ addUTCTime sessionExpirationTime now
             , setCookieHttpOnly = True
+            , setCookieSameSite = Just sameSiteNone
+            , setCookieSecure = True
             }
 
 
