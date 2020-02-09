@@ -47,12 +47,12 @@ ${({sectors}: {sectors: string[]}) => sectors.length === 0 ? '& .ignore' : secto
     fill: red;
 }
 
-& svg #sectors > g > path {
+& svg #sectors > path {
     cursor: pointer;
     fill: #1E2A4C;
     transition: fill .12s;
 }
-& svg #sectors > g > path:hover {
+& svg #sectors > path:hover {
     fill: red;
 }
 `
