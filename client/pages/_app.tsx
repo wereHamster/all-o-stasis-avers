@@ -1,5 +1,5 @@
 import React from "react";
-import NApp, { Container } from "next/app";
+import NApp from "next/app";
 import * as Avers from "avers";
 import { config, Data, App, infoTable } from "../src/app";
 import { parse } from "url";
@@ -20,12 +20,7 @@ export default class extends NApp {
   app = ((): App => {
     const aversH = Avers.newHandle({
       apiHost: (config.secure ? "https://" : "http://") + config.apiHost,
-      fetch:
-        typeof window !== "undefined"
-          ? window.fetch.bind(window)
-          : async () => {
-              throw new Error("fetch");
-            },
+      fetch: typeof window !== "undefined" ? window.fetch.bind(window) : () => new Promise(() => {}),
       createWebSocket: path => new WebSocket((config.secure ? "wss://" : "ws://") + config.apiHost + path),
       now: typeof window !== "undefined" ? window.performance.now.bind(window.performance) : () => 0,
       infoTable
@@ -76,17 +71,10 @@ export default class extends NApp {
 
   render() {
     const { Component, pageProps } = this.props;
-    const { isMounted } = this.state;
-
-    if (!isMounted) {
-      return <></>;
-    }
 
     return (
       <Env.Provider value={{ app: new App(this.app.data) }}>
-        <Container>
-          <Component generationNumber={this.state.generationNumber} app={this.app} {...pageProps} />
-        </Container>
+        <Component generationNumber={this.state.generationNumber} app={this.app} {...pageProps} />
       </Env.Provider>
     );
   }

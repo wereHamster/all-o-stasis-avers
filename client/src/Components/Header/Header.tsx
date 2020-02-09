@@ -48,7 +48,7 @@ export const Header = React.memo(() => {
     [closeMenu]
   );
 
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     if (showMenu) {
       document.documentElement.style.top = `0px`;
       document.documentElement.style.position = "relative";
@@ -73,11 +73,9 @@ export const Header = React.memo(() => {
       <Container>
         <Inner>
           <Top>
-            <Link href="https://minimum.ch" passHref>
-              <Logo>
-                <img src={logo} />
-              </Logo>
-            </Link>
+            <Logo href="https://minimum.ch">
+              <img src={logo} />
+            </Logo>
 
             <Buttons>
               <MenuButton onClick={toggleMenu}>{showMenu ? <M.IcMenuClose24 /> : <M.IcMenuDefault24 />}</MenuButton>
@@ -92,13 +90,21 @@ export const Header = React.memo(() => {
             <Navigation visible={showMenu}>
               <PrimaryNavigation onClick={closeMenu}>
                 <Link href="/" passHref>
-                  <PrimaryNavigationLink active={window.location.pathname === "/"}>Boulders</PrimaryNavigationLink>
+                  <PrimaryNavigationLink active={typeof window !== "undefined" && window.location.pathname === "/"}>
+                    Boulders
+                  </PrimaryNavigationLink>
                 </Link>
                 <Link href="/team" passHref>
-                  <PrimaryNavigationLink active={window.location.pathname === "/team"}>Team</PrimaryNavigationLink>
+                  <PrimaryNavigationLink active={typeof window !== "undefined" && window.location.pathname === "/team"}>
+                    Team
+                  </PrimaryNavigationLink>
                 </Link>
                 <Link href="/stats" passHref>
-                  <PrimaryNavigationLink active={window.location.pathname === "/stats"}>Stats</PrimaryNavigationLink>
+                  <PrimaryNavigationLink
+                    active={typeof window !== "undefined" && window.location.pathname === "/stats"}
+                  >
+                    Stats
+                  </PrimaryNavigationLink>
                 </Link>
               </PrimaryNavigation>
 
