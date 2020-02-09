@@ -79,7 +79,7 @@ export default class extends NApp {
     const { isMounted } = this.state;
 
     if (!isMounted) {
-      return null;
+      return <></>;
     }
 
     return (

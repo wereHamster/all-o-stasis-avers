@@ -1,11 +1,10 @@
-const withTypescript = require("@zeit/next-typescript");
+module.exports = {
+  typescript: {
+    ignoreDevErrors: true,
+    ignoreBuildErrors: true
+  },
 
-module.exports = withTypescript({
   webpack: config => {
-    config.node = {
-      fs: "empty"
-    };
-
     config.module.rules.push({
       test: /\.svg$/,
       loader: "svg-react-loader"
@@ -17,4 +16,4 @@ module.exports = withTypescript({
 
     return config;
   }
-});
+};
