@@ -5,7 +5,6 @@
   "license": "MIT",
   "author": "Yves Ineichen <yves.ineichen@gmail.com>",
   "dependencies": {
-    "@babel/preset-react": "^7.0.0",
     "@catalog/core": "^4.0.0",
     "@catalog/loader": "^4.0.0",
     "@types/d3": "^5.7.2",
@@ -14,7 +13,6 @@
     "@types/react-dom": "^16.9.5",
     "@types/react-loadable": "^5.5.1",
     "@types/react-measure": "^2.0.5",
-    "@zeit/next-typescript": "^1.1.1",
     "avers": "^0.18.1-alpha.155",
     "computation": "^2.0.2",
     "d3-array": "^2.0.3",
