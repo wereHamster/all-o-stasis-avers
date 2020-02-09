@@ -16,7 +16,7 @@ export class SectorPicker extends React.Component<SectorPickerProps> {
 
     componentDidMount() {
         if (this.ref) {
-            Array.from(this.ref.querySelectorAll('#sectors > g')).forEach(el => {
+            Array.from(this.ref.querySelectorAll('#sectors > rect')).forEach(el => {
                 el.addEventListener('click', () => {
                     this.props.onChange(el.id)
                 })
