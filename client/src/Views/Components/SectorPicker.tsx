@@ -43,16 +43,16 @@ const Root: any = styled.div`
     height: 100%;
 }
 
-${({sectors}: {sectors: string[]}) => sectors.length === 0 ? '& .ignore' : sectors.map(s => `& svg #sectors g[id="${s}"] > use`).join(', ')} {
+${({sectors}: {sectors: string[]}) => sectors.length === 0 ? '& .ignore' : sectors.map(s => `& svg #sectors path[id="${s}"]`).join(', ')} {
     fill: red;
 }
 
-& svg #sectors > g > use {
+& svg #sectors > g > path {
     cursor: pointer;
     fill: #1E2A4C;
     transition: fill .12s;
 }
-& svg #sectors > g > use:hover {
+& svg #sectors > g > path:hover {
     fill: red;
 }
 `
