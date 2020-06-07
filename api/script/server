@@ -1,0 +1,8 @@
+#!/bin/sh
+set -e
+cd "$(dirname "$0")/.."
+
+
+git rev-parse HEAD > GIT-REVISION-FILE
+stack build
+stack exec all-o-stasis-api -- --config-file config/local.yaml

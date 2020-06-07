@@ -1,0 +1,22 @@
+<svg width="2379" height="1393" viewBox="0 0 2379 1393" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="SectorPicker">
+<g id="background">
+<path id="background_2" d="M549 148V651H38.8223L197.664 148H549Z" fill="#FECB93" stroke="black" stroke-width="10"/>
+<path id="background_3" d="M1245 169H1250V164V106H1287.5H1694.35L1823.32 168.499L1824.35 169H1825.5H1907.19L2192 328.927V800.652L2055.63 881.5H1394.07L1111.05 753.942L1107.91 752.523L1105.46 754.964L978.929 881.5H680.557L632.5 833.914V546.129L728.883 169H1245Z" fill="#FECB93" stroke="black" stroke-width="10"/>
+<path id="background_4" d="M184.021 768H480V1092.42L419.865 1178H183.012L184.021 768Z" fill="#FECB93" stroke="black" stroke-width="10"/>
+<path id="background_5" d="M2191 1337H789V1000H2191V1337Z" fill="#FECB93" stroke="black" stroke-width="10"/>
+</g>
+<g id="sectors">
+<path id="hoefli" d="M192 1178.5H395V1325H37V736.5H411V766H192H187V771V1173.5V1178.5H192Z" fill="#1E2A4C" stroke="black" stroke-width="10"/>
+<path id="kurswand" d="M286.872 556.685H483.995V651H36.7316L204.214 96H549V211.556H286.872H283.114L282.069 215.165L206.399 476.61L205.566 479.49L207.714 481.582L283.383 555.267L284.839 556.685H286.872Z" fill="#1E2A4C" stroke="black" stroke-width="10"/>
+<path id="plaettliwand" d="M1297.54 60.5H1867V107.874L1815.84 157.152L1699.33 137.569L1698.87 137.492L1698.4 137.501L1325.32 144.963L1290.88 115.247L1282.99 101.954L1297.54 60.5Z" fill="#1E2A4C" stroke="black" stroke-width="10"/>
+<path id="starship" d="M800.5 410H804.491L805.376 406.109L855.991 183.5H919.5H976.5V683.212L851.078 760.692L736.341 736.311L711.188 593.135L742.07 523.528L742.693 522.124L742.421 520.613L722.482 410H800.5Z" fill="#1E2A4C" stroke="black" stroke-width="10"/>
+<path id="dune" d="M1286.82 278.786L1500.03 302.258L1557.27 367.196L1611.79 735.472L1591.23 770.039L1358.36 696.502L1289.21 642.83L1251.2 327.363L1286.82 278.786Z" fill="#1E2A4C" stroke="black" stroke-width="10"/>
+<path id="bigboss" d="M1864.32 314.105L1909.5 304.71L2072.2 372.624L2133.18 638.651L2090.16 710.19L2068.71 727.91L1907.71 766.703L1849.05 647.941L1864.32 314.105Z" fill="#1E2A4C" stroke="black" stroke-width="10"/>
+<path id="spektrumfour" d="M789 1238H1134V1337H789V1238Z" fill="#1E2A4C" stroke="black" stroke-width="10"/>
+<path id="spektrumthree" d="M1501 1219V1337H1156V1219H1501Z" fill="#1E2A4C" stroke="black" stroke-width="10"/>
+<path id="spektrumtwo" d="M1880 1175V1337H1524V1175H1880Z" fill="#1E2A4C" stroke="black" stroke-width="10"/>
+<path id="spektrumone" d="M2243.96 1337H1904V1174.87L2160.68 1168.08L2243.96 1337Z" fill="#1E2A4C" stroke="black" stroke-width="10"/>
+</g>
+</g>
+</svg>

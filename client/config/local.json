@@ -1,0 +1,5 @@
+{
+  "apiHost": "localhost:8000",
+  "secure": false,
+  "adminEmail": "admin@boulder.app"
+}

@@ -1,0 +1,16 @@
+#!/usr/bin/env node
+
+const fs = require("fs");
+
+const fragments = process.argv.slice(2);
+const configObject = fragments.reduce((a, frag) => {
+  const file = __dirname + "/../config/" + frag + ".json";
+  return Object.assign(a, JSON.parse(fs.readFileSync(file)));
+}, {});
+
+console.log("config:", configObject);
+
+fs.writeFileSync(
+  __dirname + "/../src/config.ts",
+  ["", "export default " + JSON.stringify(configObject) + ";", ""].join("\n")
+);

@@ -1,0 +1,95 @@
+# All-o-stasis
+
+["Allostasis is essential in order to maintain internal viability amid
+changing conditions"](http://en.wikipedia.org/wiki/Allostasis)
+
+All-o-stasis is a very app to track boulders in a gym. The framework provides
+the following functionality:
+
+* tracking of currently available boulders
+* retaining a history of removed boulders
+* statistics for grade distribution for each sector and setter
+
+The project uses [Avers](https://github.com/wereHamster/avers) for the backend
+and [RethinkDB](https://rethinkdb.com/) as storage.
+
+
+## Quick start
+
+In order to run the boulder admin install the following dependencies:
+
+* [stack](https://docs.haskellstack.org/en/stable/README/)
+* [NixOs](https://nixos.org/)
+* [RethinkDB](https://rethinkdb.com/)
+
+
+### Api Server
+
+Make sure RethinkDB is running, then start the server with
+
+    cd api
+    ./script/server
+
+
+### Client
+
+To start the client
+
+    cd client
+    nix-shell
+    ./script/server
+    open localhost:8081 in browser
+
+
+### Populating the DB
+
+The Database should be populated with tables the first time you start the API
+server. The required tables are:
+
+- objects
+- snapshots
+    ```
+    r.db('allostasis').table('snapshots').indexCreate('objectSnapshotSequence',
+        [r.row('objectId'), r.row('revisionId')]);
+    ```
+- patches
+    ```
+    r.db('allostasis').table('patches').indexCreate('objectPatchSequence',
+            [r.row('objectId'), r.row('revisionId')]);
+    ```
+- secrets
+- sessions
+- blobs
+
+
+#### Creating an ADMIN user
+
+In order to have a user with admin rights, execute the following in the
+RethinkDB explorer:
+
+    TODO
+
+
+## Using all-o-stasis in your gym?
+
+Currently the code probably needs quite some tweaking to work for your gym. If
+you need further assistance feel free to contact me.
+
+
+## Contribute
+
+Send me pull requests or email me patches.
+
+
+## Contributors
+
+Many thanks [wereHamster](https://github.com/wereHamster) for the numerous help
+with the code and design.
+
+
+## License
+
+The Minimum Logo and sector images are under copyright by the Minimum Boulder
+Gym.
+
+The code is under MIT license, see LICENSE.
