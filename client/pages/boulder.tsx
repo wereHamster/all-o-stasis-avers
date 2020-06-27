@@ -4,7 +4,7 @@ import * as React from "react";
 import styled from "styled-components";
 import { withRouter } from "next/router";
 
-import { role, resetBoulderCollections } from "../src/actions";
+import { role, resetBoulderCollections, cloneBoulder } from "../src/actions";
 import { App } from "../src/app";
 import { Boulder } from "../src/storage";
 
@@ -41,6 +41,10 @@ function BoulderDetailsEditor({ app, boulderE }: { app: App; boulderE: Avers.Edi
 
   function setRemoved() {
     changeRemovedDate(Date.now());
+  }
+
+  function clone() {
+    cloneBoulder(app, boulderE);
   }
 
   function clearRemoved() {
@@ -99,6 +103,9 @@ function BoulderDetailsEditor({ app, boulderE }: { app: App; boulderE: Avers.Edi
       <DayPickerWrapper>
         <DayPicker fixedWeeks initialMonth={getSetDate()} selectedDays={[getSetDate()]} onDayClick={changeSetDate} />
       </DayPickerWrapper>
+
+      <Section>Utilities</Section>
+        <DangerButton onClick={clone}>Add another boulder like this</DangerButton>
 
       <Section>Danger Zone</Section>
       {(() => {
