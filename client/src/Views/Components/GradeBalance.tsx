@@ -1,6 +1,6 @@
 import * as Avers from 'avers'
 import * as React from 'react'
-import Loadable from "react-loadable";
+import dynamic from 'next/dynamic';
 
 import {Boulder, grades} from '../../storage'
 
@@ -12,11 +12,8 @@ export interface GradeBalanceProps {
     width: number
 }
 
-const AsyncVegaLite: React.ComponentType<any> = Loadable({
-    loader: () => import("react-vega-lite"),
-    render: (VegaLite, props) => <VegaLite.default {...props} />,
-    loading: () => <div />
-})
+const AsyncVegaLite: React.ComponentType<any> = dynamic(() =>
+    import("react-vega-lite").then(m => m.default))
 
 export class GradeBalance extends React.Component<GradeBalanceProps, {}> {
     spec = {
