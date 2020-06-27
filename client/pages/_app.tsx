@@ -5,8 +5,18 @@ import { parse } from "url";
 import shallowEqual from "fbjs/lib/shallowEqual";
 import { Env } from "../src/env";
 import { useRouter } from "next/router";
+import theme from "../src/theme";
+import { ThemeProvider } from "@material-ui/core/styles";
 
 export default ({ Component, pageProps }) => {
+  React.useEffect(() => {
+    // Remove the server-side injected CSS.
+    const jssStyles = document.querySelector("#jss-server-side");
+    if (jssStyles) {
+      jssStyles.parentElement!.removeChild(jssStyles);
+    }
+  }, []);
+
   const router = useRouter();
   React.useEffect(() => {
     // If window.location.href contains any additional query params, reflect them into
@@ -23,9 +33,9 @@ export default ({ Component, pageProps }) => {
     const aversH = Avers.newHandle({
       apiHost: (config.secure ? "https://" : "http://") + config.apiHost,
       fetch: typeof window !== "undefined" ? window.fetch.bind(window) : () => new Promise(() => {}),
-      createWebSocket: path => new WebSocket((config.secure ? "wss://" : "ws://") + config.apiHost + path),
+      createWebSocket: (path) => new WebSocket((config.secure ? "wss://" : "ws://") + config.apiHost + path),
       now: typeof window !== "undefined" ? window.performance.now.bind(window.performance) : () => 0,
-      infoTable
+      infoTable,
     });
 
     const data = new Data(aversH);
@@ -60,8 +70,10 @@ export default ({ Component, pageProps }) => {
   }, [app, setGenerationNumber]);
 
   return (
-    <Env.Provider value={{ app: new App(app.data) }}>
-      <Component generationNumber={generationNumber} app={app} {...pageProps} />
-    </Env.Provider>
+    <ThemeProvider theme={theme}>
+      <Env.Provider value={{ app: new App(app.data) }}>
+        <Component generationNumber={generationNumber} app={app} {...pageProps} />
+      </Env.Provider>
+    </ThemeProvider>
   );
 };

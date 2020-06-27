@@ -1,6 +1,7 @@
 import * as Avers from "avers";
 import * as React from "react";
 import styled from "styled-components";
+import * as MUI from "@material-ui/core";
 
 import { App, config } from "../src/app";
 import { Account } from "../src/storage";
@@ -9,7 +10,6 @@ import * as C from "../src/Materials/Colors";
 import { useTypeface, heading18 } from "../src/Materials/Typefaces";
 
 import { Site } from "../src/Views/Components/Site";
-import { Input } from "../src/Components/Input";
 import { accountAvatar } from "./account";
 
 export default ({ app }: { app: App }) => (
@@ -86,7 +86,10 @@ class Editor extends React.Component<{ app: App; accountE: Avers.Editable<Accoun
               Please enter your full name, or a display name you are comfortable with.
             </FieldDescription>
             <FieldContent>
-              <Input
+              <MUI.TextField
+                variant="outlined"
+                size="small"
+                fullWidth
                 className="wide"
                 type="text"
                 value={account.name}

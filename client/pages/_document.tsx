@@ -1,5 +1,7 @@
 import Document, { Head, Main, NextScript } from "next/document";
 import { ServerStyleSheet } from "styled-components";
+import * as MUI from "@material-ui/core/styles";
+import React from "react";
 
 export default class extends Document {
   static async getInitialProps(ctx) {
@@ -9,10 +11,10 @@ export default class extends Document {
     try {
       ctx.renderPage = () =>
         originalRenderPage({
-          enhanceApp: App => props => sheet.collectStyles(<App {...props} />)
+          enhanceApp: (App) => (props) => sheet.collectStyles(<App {...props} />),
         });
 
-      const initialProps = await Document.getInitialProps(ctx);
+      const initialProps = await muiGetInitialProps(ctx);
       return {
         ...initialProps,
         styles: (
@@ -20,7 +22,7 @@ export default class extends Document {
             {initialProps.styles}
             {sheet.getStyleElement()}
           </>
-        )
+        ),
       };
     } finally {
       sheet.seal();
@@ -46,3 +48,20 @@ export default class extends Document {
     );
   }
 }
+
+const muiGetInitialProps = async (ctx) => {
+  const sheets = new MUI.ServerStyleSheets();
+  const originalRenderPage = ctx.renderPage;
+
+  ctx.renderPage = () =>
+    originalRenderPage({
+      enhanceApp: (App) => (props) => sheets.collect(<App {...props} />),
+    });
+
+  const initialProps = await Document.getInitialProps(ctx);
+
+  return {
+    ...initialProps,
+    styles: [...React.Children.toArray(initialProps.styles), sheets.getStyleElement()],
+  };
+};

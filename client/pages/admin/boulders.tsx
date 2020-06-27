@@ -7,8 +7,7 @@ import { removeBoulders, activeBoulders, sectorBoulders } from "../../src/action
 
 import { Site } from "../../src/Views/Components/Site";
 import { BoulderId24 } from "../../src/Views/Components/BoulderId";
-import { Button } from "../../src/Components/Button";
-
+import * as MUI from "@material-ui/core";
 
 interface Props {
   app: App;
@@ -54,7 +53,7 @@ export default class extends React.Component<Props, State> {
               <tr>
                 <td>all</td>
                 <td>
-                  <Button onClick={() => this.removeAllBoulders()}>Remove all Boulders</Button>
+                  <MUI.Button variant="contained" color="primary" onClick={() => this.removeAllBoulders()}>Remove all Boulders</MUI.Button>
                 </td>
               </tr>
               <tr height="80px">
@@ -69,7 +68,7 @@ export default class extends React.Component<Props, State> {
                   </select>
                 </td>
                 <td>
-                  <Button onClick={() => this.removeAllSectorBoulders()}>Remove Sector</Button>
+                  <MUI.Button variant="contained" color="primary" onClick={() => this.removeAllSectorBoulders()}>Remove Sector</MUI.Button>
                 </td>
               </tr>
               {sectorBoulders(app, sectorName)
@@ -78,10 +77,10 @@ export default class extends React.Component<Props, State> {
                   return (<tr key={boulderE.objectId}>
                     <td><BoulderId24 grade={boulderE.content.grade}>{boulderE.content.gradeNr}</BoulderId24></td>
                     <td>
-                      <Button onClick={() => {
+                      <MUI.Button variant="contained" color="primary" onClick={() => {
                         const now = Date.now()
                         boulderE.content.removed = now.valueOf()
-                      }}>Remove Boulder</Button>
+                      }}>Remove Boulder</MUI.Button>
                   </td>
                 </tr>
               )})}

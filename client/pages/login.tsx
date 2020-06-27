@@ -1,14 +1,11 @@
+import * as MUI from "@material-ui/core";
 import * as Avers from "avers";
+import { withRouter } from "next/router";
 import * as React from "react";
 import styled from "styled-components";
-import { withRouter } from "next/router";
-
-import { text, secondary, secondaryText } from "../src/Materials/Colors";
-import { useTypeface, h1, copy16, copy16Bold, copy14 } from "../src/Materials/Typefaces";
-
 import { App } from "../src/app";
-import { Button } from "../src/Components/Button";
-import { Input } from "../src/Components/Input";
+import { secondary, secondaryText, text } from "../src/Materials/Colors";
+import { copy14, copy16, copy16Bold, h1, useTypeface } from "../src/Materials/Typefaces";
 import { Site } from "../src/Views/Components/Site";
 
 interface LoginState {
@@ -28,21 +25,21 @@ export default withRouter(
       createPassportPromise: undefined,
       createPassportResponse: undefined,
 
-      awaitPassportConfirmationPromise: undefined
+      awaitPassportConfirmationPromise: undefined,
     };
 
-    onChangeEmail = e => {
+    onChangeEmail = (e) => {
       this.setState({
         email: e.target.value,
 
         createPassportPromise: undefined,
         createPassportResponse: undefined,
 
-        awaitPassportConfirmationPromise: undefined
+        awaitPassportConfirmationPromise: undefined,
       });
     };
 
-    onReset = e => {
+    onReset = (e) => {
       e.preventDefault();
       this.setState({
         email: "",
@@ -50,20 +47,20 @@ export default withRouter(
         createPassportPromise: undefined,
         createPassportResponse: undefined,
 
-        awaitPassportConfirmationPromise: undefined
+        awaitPassportConfirmationPromise: undefined,
       });
     };
 
-    doLogin = e => {
+    doLogin = (e) => {
       const {
         app: {
           data: {
             aversH: {
-              config: { fetch, apiHost }
+              config: { fetch, apiHost },
             },
-            session
-          }
-        }
+            session,
+          },
+        },
       } = this.props;
       const { email } = this.state;
 
@@ -75,7 +72,7 @@ export default withRouter(
           const res = await fetch(`${apiHost}/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email: email.toLowerCase() })
+            body: JSON.stringify({ email: email.toLowerCase() }),
           });
 
           const json = await res.json();
@@ -89,7 +86,7 @@ export default withRouter(
               } catch (e) {
                 await go();
               }
-            }
+            };
 
             await go();
           })();
@@ -97,13 +94,13 @@ export default withRouter(
           this.setState({
             createPassportPromise: undefined,
             createPassportResponse: json,
-            awaitPassportConfirmationPromise
+            awaitPassportConfirmationPromise,
           });
         } catch (e) {
           this.setState({
             createPassportPromise: undefined,
             createPassportResponse: e,
-            awaitPassportConfirmationPromise: undefined
+            awaitPassportConfirmationPromise: undefined,
           });
         }
       })();
@@ -169,11 +166,27 @@ export const Form = ({ email, onChangeEmail, doLogin, isSubmitting, error }) => 
   <form>
     <H1>Authenticate</H1>
     <P>To sign up or log in, fill in your email address below:</P>
-    <Input type="email" placeholder="you@domain.com" value={email} onChange={onChangeEmail} disabled={isSubmitting} />
+    <MUI.TextField
+      variant="outlined"
+      size="small"
+      fullWidth
+      type="email"
+      placeholder="you@domain.com"
+      value={email}
+      onChange={onChangeEmail}
+      disabled={isSubmitting}
+    />
     <div style={{ marginTop: 12 }}>
-      <Button onClick={doLogin} disabled={isSubmitting || email.length === 0}>
+      <MUI.Button
+        variant="contained"
+        fullWidth
+        color="primary"
+        size="large"
+        onClick={doLogin}
+        disabled={isSubmitting || email.length === 0}
+      >
         LOGIN
-      </Button>
+      </MUI.Button>
     </div>
     <FormErrorContainer>
       {error && (
