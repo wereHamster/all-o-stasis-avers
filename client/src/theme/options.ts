@@ -1,6 +1,6 @@
 export default {
   shape: {
-    borderRadius: 0,
+    borderRadius: 4,
   },
 
   palette: {

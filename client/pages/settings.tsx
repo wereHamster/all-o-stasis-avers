@@ -55,7 +55,7 @@ class Header extends React.Component<{ app: App; accountE: Avers.Editable<Accoun
 }
 
 class Editor extends React.Component<{ app: App; accountE: Avers.Editable<Account> }> {
-  changeAccountName = (e: React.FormEvent<HTMLInputElement>) => {
+  changeAccountName = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     this.props.accountE.content.name = e.currentTarget.value;
   };
 
@@ -70,7 +70,7 @@ class Editor extends React.Component<{ app: App; accountE: Avers.Editable<Accoun
     return (
       <div>
         <Form>
-          <Field>
+          <MUI.Paper style={{ maxWidth: 600, padding: 20, marginBottom: 20 }}>
             <FieldLabel>Your Email</FieldLabel>
             <FieldDescription>
               The email address can not be changed at this time. If you'd like to change it please contact the admins.
@@ -78,9 +78,9 @@ class Editor extends React.Component<{ app: App; accountE: Avers.Editable<Accoun
             <FieldContent>
               <span style={{ color: C.darkPrimary }}>{account.email}</span>
             </FieldContent>
-          </Field>
+          </MUI.Paper>
 
-          <Field>
+          <MUI.Paper style={{ maxWidth: 600, padding: 20, marginBottom: 20 }}>
             <FieldLabel>Your Name</FieldLabel>
             <FieldDescription>
               Please enter your full name, or a display name you are comfortable with.
@@ -97,9 +97,9 @@ class Editor extends React.Component<{ app: App; accountE: Avers.Editable<Accoun
                 onClick={onClick}
               />
             </FieldContent>
-          </Field>
+          </MUI.Paper>
 
-          <Field>
+          <MUI.Paper style={{ maxWidth: 600, padding: 20, marginBottom: 20 }}>
             <FieldLabel>Permissions</FieldLabel>
             <FieldDescription>
               Your role is: <span style={{ color: C.darkPrimary }}>{account.role}</span>.
@@ -110,7 +110,7 @@ class Editor extends React.Component<{ app: App; accountE: Avers.Editable<Accoun
                 </p>
               )}
             </FieldDescription>
-          </Field>
+          </MUI.Paper>
         </Form>
       </div>
     );
@@ -119,11 +119,7 @@ class Editor extends React.Component<{ app: App; accountE: Avers.Editable<Accoun
 
 const requestPermissionsHref = (account: Account) => {
   const subject = `Please make me a setter`;
-  const body = `Hi admin,\n\nI'm ${
-    account.email
-  } and am requesting permissions to manage my own boulders.\nPlease head over to ${
-    window.location.origin
-  }/admin/accounts and give me the 'setter' role.\n\nThank you.`;
+  const body = `Hi admin,\n\nI'm ${account.email} and am requesting permissions to manage my own boulders.\nPlease head over to ${window.location.origin}/admin/accounts and give me the 'setter' role.\n\nThank you.`;
 
   return `mailto:${config.adminEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 };
@@ -151,17 +147,6 @@ const Name = styled.div`
 
 const Form = styled.div`
   padding: 0 20px;
-`;
-
-const Field = styled.div`
-    position: relative;
-    border-radius: 5px;
-    border 1px solid rgb(234, 234, 234);
-    background-color: white;
-    padding: 20px;
-    margin-bottom: 20px;
-
-    max-width: 600px;
 `;
 
 const FieldLabel = styled.div`
