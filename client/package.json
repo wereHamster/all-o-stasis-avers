@@ -27,7 +27,7 @@
     "raw-loader": "^1.0.0",
     "react": "^16.13.1",
     "react-csv": "^2.0.3",
-    "react-day-picker": "^7.2.4",
+    "react-day-picker": "^7.4.8",
     "react-dom": "^16.13.0",
     "react-measure": "^2.3.0",
     "react-motion": "^0.5.2",
