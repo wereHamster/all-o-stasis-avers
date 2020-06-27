@@ -40,16 +40,6 @@ const pages = [
     title: "Components",
     pages: [
       {
-        path: "/components/button",
-        title: "Button",
-        component: pageLoader(() => import("../src/Components/Button.doc"))
-      },
-      {
-        path: "/components/input",
-        title: "Input",
-        component: pageLoader(() => import("../src/Components/Input.doc"))
-      },
-      {
         path: "/components/navbar",
         title: "NavBar",
         component: pageLoader(() => import("../src/Components/Header/doc"))
