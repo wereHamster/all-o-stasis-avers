@@ -4,7 +4,7 @@
   publish = "client/out"
 
 [build.environment]
-  NODE_VERSION = "10.9.0"
+  NODE_VERSION = "14"
 
 [[redirects]]
   from = "/*"
