@@ -40,7 +40,10 @@ export const SetterBlock = ({ accountId }: SetterCardProps) => {
     <MUI.Paper>
       <Top>
         <Link href={{ pathname: "/account", query: { id: accountId } }}>
-          <Avatar src={accountAvatar(app.data.aversH, accountId)} />
+          <MUI.Avatar
+            src={accountAvatar(app.data.aversH, accountId)}
+            style={{ width: 64, height: 64, marginRight: 10 }}
+          />
         </Link>
         <div>
           <Name>{profile && profile.name !== "" ? profile.name : accountId.slice(0, 5)}</Name>
@@ -64,14 +67,6 @@ const Bottom = styled.div`
   margin-left: 74px;
   display: flex;
   height: 160px;
-`;
-
-const Avatar = styled.img`
-  height: 64px;
-  width: 64px;
-  border: 1px solid #999;
-  border-radius: 50%;
-  margin-right: 10px;
 `;
 
 const Name = styled.div`
