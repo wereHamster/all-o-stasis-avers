@@ -3,7 +3,7 @@ let
 
 in pkgs.mkShell {
   buildInputs = [
-    pkgs.nodejs-10_x
+    pkgs.nodejs-14_x
     pkgs.libjpeg
     pkgs.zlib
   ];
